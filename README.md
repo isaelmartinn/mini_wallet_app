@@ -96,18 +96,31 @@ yarn lint
 - **Error Handling**: Inline validation feedback
 - **Logout Functionality**: Clear session and redirect
 
+### ✅ Plan 03: Wallet Core - Balance & History (Completed)
+
+- **Balance Card**: Apple Wallet-style display with MXN formatting
+- **Transaction List**: FlatList with pull-to-refresh and virtualización
+- **Transaction Items**: Visual icons, relative dates, status badges
+- **State Management**: walletStore with Zustand (loading, error, empty states)
+- **Mock API**: Realistic network simulation with 10 diverse transactions
+- **Custom Hook**: `useWallet` for clean UI/logic separation
+- **Tests**: 18 tests covering store, utils, and components
+- **Performance**: Optimized with FlatList, prevented duplicate calls
+
+**Quick Start**: `./scripts/verify-wallet.sh`
+
 ### ✅ Infrastructure
 
 - TypeScript strict mode (no `any` allowed)
 - Path aliases (`@/`) configured in Babel, Metro, and TypeScript
 - Feature-based architecture
 - Centralized theme system
-- Reusable components (Input, Button)
+- Reusable components (Input, Button, BalanceCard, TransactionItem, TransactionList)
 - Development rules documented in `.ai/rules.md`
+- Automated testing with Jest & React Native Testing Library
 
 ### 🚧 Upcoming Features
 
-- Plan 03: Wallet & Balance Display
 - Plan 04: Transactions & Transfers
 - Plan 05: Native Contacts Module (Bonus)
 
@@ -157,8 +170,10 @@ Centralized in `src/theme/Theme.ts`:
 
 **Zustand** stores with TypeScript:
 - `authStore`: User session, login/logout
-- Persist middleware for AsyncStorage
+- `walletStore`: Balance, transactions, fetch/refresh actions
+- Persist middleware for AsyncStorage (authStore)
 - Optimized selectors to prevent re-renders
+- Separate loading states (initial vs refresh)
 
 ### Components
 
