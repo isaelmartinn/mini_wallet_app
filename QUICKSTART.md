@@ -85,22 +85,47 @@ src/
   └── App.tsx       # Root component
 ```
 
-## Current Features
+## Current Features (Plan 02 Completed)
 
-- ✅ TypeScript setup
-- ✅ React Navigation (Stack Navigator)
-- ✅ Zustand state management
-- ✅ Theme system with colors and typography
-- ✅ Two example screens (Splash, Wallet)
+### Authentication & Session
+- ✅ Login screen with email/phone validation
+- ✅ Session persistence with AsyncStorage
+- ✅ Navigation guard (AuthStack vs AppStack)
+- ✅ Mock authentication API
+- ✅ Logout functionality
+
+### Infrastructure
+- ✅ TypeScript strict mode (no `any`)
+- ✅ Path aliases (`@/`) configured
+- ✅ React Navigation setup
+- ✅ Zustand with persist middleware
+- ✅ Centralized theme system
+- ✅ Reusable components (Input, Button)
+- ✅ Development rules in `.ai/rules.md`
 - ✅ Jest testing setup
 - ✅ ESLint + Prettier
 
+## Testing the App
+
+### Login Flow
+1. Run the app
+2. You'll see the Login screen
+3. Enter any of these test credentials:
+   - `juan@example.com` or `+52 55 1234 5678`
+   - `maria@example.com` or `+52 55 8765 4321`
+   - Or any valid email/phone format
+4. Tap "Iniciar Sesión"
+5. You'll be redirected to Home screen
+6. Session persists on app reload
+7. Tap "Cerrar Sesión" to logout
+
 ## Next Steps
 
-1. **Run the app** to verify everything works
-2. **Explore the code** in `src/` directory
-3. **Add new features** following the feature-based structure
-4. **Write tests** for new components in `__tests__/` directories
+1. **Test authentication flow** with different credentials
+2. **Verify session persistence** by reloading the app
+3. **Review code structure** in `src/features/auth/`
+4. **Check development rules** in `.ai/rules.md`
+5. **Implement Plan 03**: Wallet & Balance Display
 
 ## Troubleshooting
 

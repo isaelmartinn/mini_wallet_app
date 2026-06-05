@@ -87,30 +87,93 @@ yarn lint
 
 ## Features
 
-- ✅ TypeScript configuration
-- ✅ React Navigation setup (Stack Navigator)
-- ✅ Zustand state management
-- ✅ Theme system with colors, spacing, and typography
-- ✅ Feature-based folder structure
-- ✅ Jest and Testing Library configuration
-- ✅ ESLint and Prettier setup
+### ✅ Plan 02: Authentication & Session (Completed)
+
+- **Login Screen**: Modern UI with email/phone validation
+- **Session Persistence**: AsyncStorage integration via Zustand persist
+- **Navigation Guard**: Conditional rendering (AuthStack vs AppStack)
+- **Mock Authentication**: Simulated API with validation
+- **Error Handling**: Inline validation feedback
+- **Logout Functionality**: Clear session and redirect
+
+### ✅ Infrastructure
+
+- TypeScript strict mode (no `any` allowed)
+- Path aliases (`@/`) configured in Babel, Metro, and TypeScript
+- Feature-based architecture
+- Centralized theme system
+- Reusable components (Input, Button)
+- Development rules documented in `.ai/rules.md`
+
+### 🚧 Upcoming Features
+
+- Plan 03: Wallet & Balance Display
+- Plan 04: Transactions & Transfers
+- Plan 05: Native Contacts Module (Bonus)
 
 ## Development
 
-The app follows a feature-based architecture where each feature module contains its own screens, components, and logic. Global utilities, hooks, and stores are kept in their respective directories.
+### Architecture
+
+The app follows a **feature-based architecture** where each domain is self-contained:
+
+```
+features/
+  auth/
+    screens/      # LoginScreen
+    hooks/        # useLogin
+  wallet/
+    screens/      # HomeScreen
+  transactions/
+    screens/      # (upcoming)
+```
+
+**Benefits**:
+- Scalability: Features grow independently
+- Maintainability: Changes are localized
+- Clarity: Structure reflects business domains
+
+### Development Rules
+
+All code must follow the rules in `.ai/rules.md`:
+- ❌ No `any` types
+- ❌ No inline styles
+- ❌ No relative paths
+- ✅ Use `@/` aliases
+- ✅ StyleSheet.create() in `.styles.ts` files
+- ✅ Validations in services/hooks, not just UI
+- ✅ Props typed with interfaces
 
 ### Theme
 
-The theme is centralized in `src/theme/Theme.ts` and includes:
-- Color palette (primary, secondary, success, error, etc.)
-- Spacing scale
-- Typography styles
-- Border radius values
-- Shadow presets
+Centralized in `src/theme/Theme.ts`:
+- **Colors**: primary, secondary, success, error, backgrounds, text
+- **Spacing**: xs (4) → xxl (48)
+- **Typography**: h1-h4, body, caption, button
+- **Border Radius**: sm → full
+- **Shadows**: sm, md, lg
 
 ### State Management
 
-Zustand stores are located in `src/store/`. The main app store (`useAppStore`) manages global state like loading and error states.
+**Zustand** stores with TypeScript:
+- `authStore`: User session, login/logout
+- Persist middleware for AsyncStorage
+- Optimized selectors to prevent re-renders
+
+### Components
+
+**Reusable UI Components**:
+- `Input`: Labeled input with validation, icons, error states
+- `Button`: Variants (primary, secondary, outline, ghost), sizes, loading state
+
+### Mock Data
+
+Test credentials in `src/utils/constants.ts`:
+- `juan@example.com` / `+52 55 1234 5678`
+- `maria@example.com` / `+52 55 8765 4321`
+- `carlos@example.com` / `+52 55 5555 5555`
+
+Or use any valid email/phone format for demo user.
 
 ## License
 
