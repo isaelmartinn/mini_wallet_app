@@ -6,6 +6,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Theme.colors.background,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Theme.colors.background,
+  },
   content: {
     flex: 1,
     paddingHorizontal: Theme.spacing.lg,

@@ -1,29 +1,34 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {Button} from '@/components';
+import {SafeAreaView, View, ActivityIndicator} from 'react-native';
 import {useAuthStore} from '@/store/authStore';
+import {BalanceCard, TransactionList} from '../components';
+import {useWallet} from '../hooks';
 import {styles} from './HomeScreen.styles';
+import {Theme} from '@/theme';
 
 export const HomeScreen: React.FC = () => {
-  const {user, logout} = useAuthStore();
+  const {user} = useAuthStore();
+  const {balance, transactions, isLoading, isRefreshing, error, handleRefresh, handleRetry} = useWallet();
+
+  if (isLoading && transactions.length === 0) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={Theme.colors.primary} />
+      </SafeAreaView>
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Hola, {user?.name}!</Text>
-        <Text style={styles.subtitle}>Bienvenido a tu wallet</Text>
+    <SafeAreaView style={styles.container}>
+      <BalanceCard balance={balance} userName={user?.name} />
 
-        <View style={styles.userInfo}>
-          {user?.email && (
-            <Text style={styles.infoText}>Email: {user.email}</Text>
-          )}
-          {user?.phone && (
-            <Text style={styles.infoText}>Teléfono: {user.phone}</Text>
-          )}
-        </View>
-
-        <Button title="Cerrar Sesión" onPress={logout} variant="outline" />
-      </View>
-    </View>
+      <TransactionList
+        transactions={transactions}
+        isRefreshing={isRefreshing}
+        onRefresh={handleRefresh}
+        hasError={!!error}
+        onRetry={handleRetry}
+      />
+    </SafeAreaView>
   );
 };

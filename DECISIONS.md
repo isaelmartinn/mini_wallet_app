@@ -168,16 +168,119 @@ partialize: state => ({
 
 ---
 
-## Testing (Próximos Pasos)
+## Testing
 
-### Estrategia de Testing
-**Plan**:
-1. **Validaciones**: Tests unitarios (`validation.ts`)
-2. **Hooks**: Tests de hooks personalizados (`useLogin`)
-3. **Stores**: Tests de acciones y estado
-4. **Componentes**: Tests de integración para flujos críticos
+### Estrategia de Testing Implementada
+**Cobertura actual**:
+1. ✅ **Stores**: Tests de walletStore (fetch, refresh, error handling)
+2. ✅ **Utilidades**: Tests de formatCurrency
+3. ✅ **Componentes**: Tests de BalanceCard
+4. ⏳ **Validaciones**: Tests unitarios (`validation.ts`) - Pendiente
+5. ⏳ **Hooks**: Tests de hooks personalizados (`useLogin`) - Pendiente
 
 **Herramientas**: Jest + React Native Testing Library
+
+**Filosofía**:
+- Tests para lógica crítica de negocio
+- Mocks para servicios externos
+- Tests de integración para flujos completos
+- Evitar tests triviales de presentación
+
+---
+
+## Wallet Feature - Decisiones de Implementación
+
+### Arquitectura de Componentes
+**Decisión**: Separar en componentes atómicos y composables.
+
+**Componentes creados**:
+- **BalanceCard**: Muestra balance con diseño tipo Apple Wallet
+- **TransactionItem**: Item individual con iconos y formato de fecha relativo
+- **TransactionList**: FlatList optimizado con pull-to-refresh
+
+**Razones**:
+- **Reutilización**: Componentes pueden usarse en otras pantallas
+- **Testing**: Más fácil testear componentes pequeños
+- **Mantenibilidad**: Cambios localizados
+- **Performance**: React.memo en componentes específicos
+
+### Hook Personalizado useWallet
+**Decisión**: Encapsular lógica de wallet en hook custom.
+
+**Responsabilidades**:
+- Fetch automático al montar componente
+- Manejo de refresh y retry
+- Exposición de API limpia al componente
+
+**Beneficios**:
+- **Separación de responsabilidades**: UI solo presenta
+- **Testeable**: Hook puede testearse independientemente
+- **Reutilizable**: Puede usarse en múltiples pantallas
+- **Legibilidad**: Componente más limpio
+
+### Manejo de Estados
+**Decisión**: Implementar todos los estados posibles (loading, success, error, empty).
+
+**Estados implementados**:
+1. **Loading inicial**: Spinner mientras carga primera vez
+2. **Success**: Muestra balance y transacciones
+3. **Empty**: Mensaje cuando no hay transacciones
+4. **Error**: Mensaje con botón de retry
+5. **Refreshing**: Pull-to-refresh sin bloquear UI
+
+**Razón**: UX profesional requiere feedback en todos los escenarios
+
+### FlatList sobre ScrollView
+**Decisión**: Usar FlatList para lista de transacciones.
+
+**Razones**:
+- **Performance**: Virtualización de items (solo renderiza visibles)
+- **Memoria**: No carga todos los items a la vez
+- **Escalabilidad**: Funciona con miles de transacciones
+- **Features**: Pull-to-refresh nativo, keyExtractor, etc.
+
+### Formato de Moneda
+**Decisión**: Crear utilidad `formatCurrency` con Intl.NumberFormat.
+
+**Configuración**:
+- Locale: `es-MX`
+- Currency: `MXN`
+- Siempre 2 decimales
+
+**Beneficios**:
+- **Consistencia**: Mismo formato en toda la app
+- **Internacionalización**: Fácil cambiar locale
+- **Nativo**: Usa API del navegador/OS
+
+### Formato de Fecha Relativo
+**Decisión**: Mostrar fechas en formato relativo (hace 2h, ayer).
+
+**Razones**:
+- **UX**: Más natural para el usuario
+- **Contexto**: Fácil identificar transacciones recientes
+- **Espacio**: Ocupa menos espacio que fecha completa
+
+### Mock API con Simulación Realista
+**Decisión**: API mock con delay y errores aleatorios.
+
+**Características**:
+- Delay de 800-1500ms (simula red real)
+- 10% probabilidad de error
+- 10 transacciones diversas (diferentes montos, fechas, tipos)
+
+**Razón**: Testing de estados de error y loading sin backend real
+
+### Diseño Visual Financiero
+**Decisión**: Estilo inspirado en Apple Wallet / Revolut.
+
+**Características**:
+- Alto contraste para balance (legibilidad)
+- Colores diferenciados para ingresos/egresos
+- Iconos visuales para tipo de transacción
+- Sombras sutiles para profundidad
+- Espaciado generoso
+
+**Razón**: Apps financieras requieren confianza y claridad visual
 
 ---
 
