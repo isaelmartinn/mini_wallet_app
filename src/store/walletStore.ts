@@ -71,6 +71,18 @@ export const useWalletStore = create<WalletState>((set, get) => ({
     }
   },
 
+  addTransaction: transaction => {
+    set(state => ({
+      transactions: [transaction, ...state.transactions],
+    }));
+  },
+
+  updateBalance: amount => {
+    set(state => ({
+      balance: state.balance - amount,
+    }));
+  },
+
   clearError: () => {
     set({error: null});
   },
