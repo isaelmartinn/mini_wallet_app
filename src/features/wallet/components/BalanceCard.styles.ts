@@ -30,4 +30,7 @@ export const styles = StyleSheet.create({
     color: Theme.colors.background,
     letterSpacing: -1,
   },
+  actions: {
+    marginTop: Theme.spacing.lg,
+  },
 });

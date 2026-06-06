@@ -20,5 +20,7 @@ export interface WalletState {
   error: string | null;
   fetchWalletData: () => Promise<void>;
   refreshWalletData: () => Promise<void>;
+  addTransaction: (transaction: Transaction) => void;
+  updateBalance: (amount: number) => void;
   clearError: () => void;
 }
