@@ -302,6 +302,84 @@ partialize: state => ({
 
 ---
 
+## Módulo Nativo de Contactos
+
+### Legacy Bridge sobre TurboModules
+**Decisión**: Implementar módulo nativo usando Legacy Bridge (React Native Bridge).
+
+**Razones**:
+- **Compatibilidad**: Funciona en todas las versiones de RN 0.60+
+- **Estabilidad**: Arquitectura madura y probada en producción
+- **Documentación**: Amplia documentación y ejemplos disponibles
+- **Debugging**: Herramientas de debugging bien establecidas
+- **Simplicidad**: Para un módulo de demostración, ofrece implementación directa
+
+**Consideración**: TurboModules es el futuro, pero requiere configuración adicional y puede tener edge cases no documentados.
+
+### Arquitectura en 3 Capas
+**Decisión**: Separar en capa nativa, servicio y UI.
+
+**Capas**:
+1. **Nativa**: `ContactsModule` (Android Kotlin + iOS Objective-C)
+2. **Servicio**: `ContactsService.ts` (abstracción del módulo nativo)
+3. **Hook**: `useContacts.ts` (gestión de estado y permisos)
+4. **UI**: `ContactPicker` (componente modal)
+
+**Beneficios**:
+- **Testabilidad**: Cada capa puede testearse independientemente
+- **Desacoplamiento**: UI no conoce detalles de implementación nativa
+- **Mantenibilidad**: Cambios en una capa no afectan otras
+- **Reutilización**: Hook y servicio pueden usarse en otros componentes
+
+### Manejo de Permisos con Fallback
+**Decisión**: Solicitar permisos en tiempo de ejecución con fallback manual completo.
+
+**Flujo**:
+1. Verificar disponibilidad del módulo nativo
+2. Mostrar botón de contactos solo si está disponible
+3. Solicitar permiso al abrir picker
+4. Si se niega: mantener formulario manual funcional
+5. No bloquear flujo de transacción en ningún caso
+
+**Razón**: Cumple con requisito de negocio: "El flujo debe funcionar aunque el usuario niegue todos los permisos"
+
+### Optimización: Límite de 100 Contactos
+**Decisión**: Limitar fetch a 100 contactos máximo.
+
+**Razones**:
+- **Performance**: Evitar lag en dispositivos con miles de contactos
+- **UX**: 100 contactos es suficiente para búsqueda rápida
+- **Memoria**: Reduce consumo de memoria en el bridge
+- **Red**: Menos datos transferidos entre nativo y JS
+
+**Alternativa considerada**: Paginación (más complejo, no necesario para MVP)
+
+### Búsqueda Local vs Nativa
+**Decisión**: Implementar búsqueda en JavaScript, no en capa nativa.
+
+**Razones**:
+- **Simplicidad**: Evita múltiples llamadas al bridge
+- **Performance**: Búsqueda en memoria es instantánea para 100 items
+- **Flexibilidad**: Fácil ajustar algoritmo de búsqueda
+- **Menos código nativo**: Reduce superficie de bugs nativos
+
+### Deduplicación por ID
+**Decisión**: Usar ID del contacto para evitar duplicados.
+
+**Razón**: Un contacto puede tener múltiples números, pero solo mostramos uno para simplificar UX.
+
+### Testing con Mocks
+**Decisión**: Mockear NativeModules en tests.
+
+**Implementación**:
+- Mock de `NativeModules.ContactsModule`
+- Tests de casos de éxito, error y edge cases
+- Cobertura de servicio y hook
+
+**Beneficio**: Tests rápidos y determinísticos sin dependencia de dispositivo real
+
+---
+
 ## Decisiones Pendientes
 
 ### Manejo de Errores Global

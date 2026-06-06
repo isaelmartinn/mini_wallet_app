@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
-import {View, Text, SafeAreaView, KeyboardAvoidingView, Platform} from 'react-native';
+import {View, Text, SafeAreaView, KeyboardAvoidingView, Platform, TouchableOpacity} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTransactionFlowStore} from '@/store/transactionFlowStore';
-import {validateRecipient} from '../utils';
+import {validateRecipient, normalizePhoneNumber} from '../utils';
 import {Recipient} from '../types';
-import {Button, Input} from '@/components';
+import {Button, Input, ContactPicker} from '@/components';
+import {Contact} from '@/types/contacts';
+import {contactsService} from '@/services/ContactsService';
 import {styles} from './RecipientScreen.styles';
 
 type RecipientScreenProps = {
@@ -16,11 +18,17 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) =>
   const [name, setName] = useState('');
   const [accountOrPhone, setAccountOrPhone] = useState('');
   const [errors, setErrors] = useState<{name?: string; accountOrPhone?: string}>({});
+  const [showContactPicker, setShowContactPicker] = useState(false);
+  const [isFromContact, setIsFromContact] = useState(false);
+  const isContactsAvailable = contactsService.isAvailable();
+  console.log('isContactsAvailable', isContactsAvailable);
 
   const handleContinue = (): void => {
+    const normalizedPhone = normalizePhoneNumber(accountOrPhone.trim());
+    
     const recipient: Recipient = {
       name: name.trim(),
-      accountOrPhone: accountOrPhone.trim(),
+      accountOrPhone: normalizedPhone,
     };
 
     const validation = validateRecipient(recipient);
@@ -42,11 +50,38 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) =>
   };
 
   const handleAccountChange = (text: string): void => {
-    const numericValue = text.replace(/\D/g, '');
-    setAccountOrPhone(numericValue);
+    let processedValue = text;
+    
+    if (isFromContact && text.startsWith('+')) {
+      processedValue = text;
+    } else {
+      processedValue = text.replace(/\D/g, '');
+    }
+    
+    setAccountOrPhone(processedValue);
+    
+    if (!text.startsWith('+')) {
+      setIsFromContact(false);
+    }
+    
     if (errors.accountOrPhone) {
       setErrors(prev => ({...prev, accountOrPhone: undefined}));
     }
+  };
+
+  const handleOpenContactPicker = (): void => {
+    setShowContactPicker(true);
+  };
+
+  const handleCloseContactPicker = (): void => {
+    setShowContactPicker(false);
+  };
+
+  const handleSelectContact = (contact: Contact): void => {
+    setName(contact.name);
+    setIsFromContact(true);
+    setAccountOrPhone(contact.phoneNumber);
+    setErrors({});
   };
 
   const isButtonDisabled = !name.trim() || !accountOrPhone.trim();
@@ -63,6 +98,15 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) =>
           </View>
 
           <View style={styles.form}>
+            {isContactsAvailable && (
+              <TouchableOpacity
+                style={styles.contactButton}
+                onPress={handleOpenContactPicker}
+                activeOpacity={0.7}>
+                <Text style={styles.contactButtonText}>📱 Seleccionar de contactos</Text>
+              </TouchableOpacity>
+            )}
+
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Nombre completo</Text>
               <Input
@@ -71,7 +115,7 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) =>
                 placeholder="Ej: Juan Pérez"
                 error={errors.name}
                 autoCapitalize="words"
-                autoFocus
+                autoFocus={!isContactsAvailable}
               />
             </View>
 
@@ -80,10 +124,10 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) =>
               <Input
                 value={accountOrPhone}
                 onChangeText={handleAccountChange}
-                placeholder="10 dígitos"
+                placeholder={isFromContact ? "Ej: +521234567890" : "10 dígitos"}
                 error={errors.accountOrPhone}
-                keyboardType="number-pad"
-                maxLength={10}
+                keyboardType={isFromContact ? "phone-pad" : "number-pad"}
+                maxLength={isFromContact ? 13 : 10}
               />
             </View>
           </View>
@@ -97,6 +141,12 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) =>
           />
         </View>
       </KeyboardAvoidingView>
+
+      <ContactPicker
+        visible={showContactPicker}
+        onClose={handleCloseContactPicker}
+        onSelectContact={handleSelectContact}
+      />
     </SafeAreaView>
   );
 };

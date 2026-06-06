@@ -42,4 +42,17 @@ export const styles = StyleSheet.create({
     padding: Theme.spacing.lg,
     paddingBottom: Theme.spacing.xl,
   },
+  contactButton: {
+    backgroundColor: Theme.colors.primaryLight,
+    paddingVertical: Theme.spacing.md,
+    paddingHorizontal: Theme.spacing.lg,
+    borderRadius: Theme.borderRadius.md,
+    alignItems: 'center',
+    marginBottom: Theme.spacing.lg,
+    ...Theme.shadows.sm,
+  },
+  contactButtonText: {
+    ...Theme.typography.button,
+    color: Theme.colors.background,
+  },
 });
