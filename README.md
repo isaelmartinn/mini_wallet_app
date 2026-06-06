@@ -119,10 +119,23 @@ yarn lint
 - Development rules documented in `.ai/rules.md`
 - Automated testing with Jest & React Native Testing Library
 
+### ✅ Plan 05: Native Contacts Module (Completed)
+
+- **Custom Native Module**: Legacy Bridge implementation for iOS & Android
+- **Contact Picker**: Modal with search, FlatList optimization, avatar initials
+- **Permission Handling**: Runtime permission requests with graceful fallback
+- **Service Layer**: `ContactsService` abstraction over NativeModules
+- **Custom Hook**: `useContacts` for state management (contacts, loading, error, permissions)
+- **Fallback Support**: Manual input always available if permission denied
+- **Performance**: Limited to 100 contacts, local search, deduplication
+- **Tests**: Unit tests for service and hook with mocked NativeModules
+- **Documentation**: Complete setup guide in `NATIVE_MODULE_SETUP.md`
+
+**⚠️ iOS Setup Required**: See `NATIVE_MODULE_SETUP.md` for Xcode configuration
+
 ### 🚧 Upcoming Features
 
-- Plan 04: Transactions & Transfers
-- Plan 05: Native Contacts Module (Bonus)
+- Plan 04: Transaction Flow & Validations (In Progress)
 
 ## Development
 

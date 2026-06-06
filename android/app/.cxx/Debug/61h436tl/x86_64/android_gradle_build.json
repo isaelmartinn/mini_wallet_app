@@ -1,5 +1,6 @@
 {
   "buildFiles": [
+    "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt",
     "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt",
     "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt",
@@ -34,6 +35,11 @@
         "/Users/brandon.bautista/.gradle/caches/8.10.2/transforms/1ae2c2bcce3cae52224b57e1fa01bdc7/transformed/react-android-0.76.5-debug/prefab/modules/jsi/libs/android.x86_64/libjsi.so",
         "/Users/brandon.bautista/.gradle/caches/8.10.2/transforms/1ae2c2bcce3cae52224b57e1fa01bdc7/transformed/react-android-0.76.5-debug/prefab/modules/reactnative/libs/android.x86_64/libreactnative.so"
       ]
+    },
+    "react_codegen_rnasyncstorage::@1596841e19ec5b9eeffe": {
+      "toolchain": "toolchain",
+      "abi": "x86_64",
+      "artifactName": "react_codegen_rnasyncstorage"
     },
     "react_codegen_rngesturehandler_codegen::@39f233abcd2c728bc6ec": {
       "toolchain": "toolchain",

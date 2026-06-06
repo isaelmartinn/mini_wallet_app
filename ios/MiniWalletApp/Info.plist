@@ -32,6 +32,8 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSContactsUsageDescription</key>
+	<string>Esta app necesita acceso a tus contactos para facilitar el envío de dinero a tus conocidos.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>
