@@ -6,6 +6,8 @@ import {useTransactionFlowStore} from '@/store/transactionFlowStore';
 import {validateAmount} from '../utils';
 import {Button, Input} from '@/components';
 import {formatCurrency} from '@/utils/currency';
+import {useInactivityTimeout} from '../hooks/useInactivityTimeout';
+import {TRANSACTION_TIMEOUT_MS} from '../constants';
 import {styles} from './AmountScreen.styles';
 
 type AmountScreenProps = {
@@ -29,7 +31,17 @@ export const AmountScreen: React.FC<AmountScreenProps> = ({navigation}) => {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState<string | undefined>();
 
+  const {resetTimer} = useInactivityTimeout({
+    timeoutMs: TRANSACTION_TIMEOUT_MS,
+    onTimeout: () => {
+      navigation.replace('Timeout');
+    },
+    enabled: true,
+  });
+
   const handleAmountChange = (text: string): void => {
+    resetTimer();
+    
     let numericValue = text.replace(/[^0-9.]/g, '');
     
     const parts = numericValue.split('.');
@@ -51,6 +63,8 @@ export const AmountScreen: React.FC<AmountScreenProps> = ({navigation}) => {
   };
 
   const handleContinue = (): void => {
+    resetTimer();
+    
     const amount = parseFloat(inputValue);
 
     if (isNaN(amount)) {

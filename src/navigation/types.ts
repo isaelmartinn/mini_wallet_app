@@ -8,6 +8,7 @@ export type AppStackParamList = {
   Recipient: undefined;
   Summary: undefined;
   Result: undefined;
+  Timeout: undefined;
 };
 
 export type RootStackParamList = AuthStackParamList & AppStackParamList;

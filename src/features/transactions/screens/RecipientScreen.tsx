@@ -21,7 +21,6 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) =>
   const [showContactPicker, setShowContactPicker] = useState(false);
   const [isFromContact, setIsFromContact] = useState(false);
   const isContactsAvailable = contactsService.isAvailable();
-  console.log('isContactsAvailable', isContactsAvailable);
 
   const handleContinue = (): void => {
     const normalizedPhone = normalizePhoneNumber(accountOrPhone.trim());

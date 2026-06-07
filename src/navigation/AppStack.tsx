@@ -7,6 +7,7 @@ import {
   RecipientScreen,
   SummaryScreen,
   ResultScreen,
+  TimeoutScreen,
 } from '@/features/transactions/screens';
 import {AppStackParamList} from './types';
 import {CustomDrawerContent} from './CustomDrawerContent';
@@ -59,6 +60,14 @@ const MainStack: React.FC = () => {
           headerShown: true,
           title: 'Resultado',
           headerLeft: () => null,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="Timeout"
+        component={TimeoutScreen}
+        options={{
+          headerShown: false,
           gestureEnabled: false,
         }}
       />
