@@ -10,29 +10,38 @@ const generateId = (): string => {
 const delay = (ms: number): Promise<void> =>
   new Promise(resolve => setTimeout(resolve, ms));
 
+const TRANSACTION_OUTCOME_PERCENTAGES = {
+  SUCCESS: 60,
+  INSUFFICIENT_FUNDS: 10,
+  NETWORK_ERROR: 15,
+  TIMEOUT: 10,
+  UNKNOWN: 5,
+};
+
 const getRandomOutcome = (): {
   success: boolean;
   errorType?: TransactionErrorType;
 } => {
-  const random = Math.random();
+  const random = Math.random() * 100;
+  console.log('Random:', random);
 
-  if (random < 0.6) {
+  if (random < TRANSACTION_OUTCOME_PERCENTAGES.SUCCESS) {
     return {success: true};
   }
 
-  if (random < 0.7) {
-    return {success: false, errorType: 'insufficient_funds'};
+  if (random < TRANSACTION_OUTCOME_PERCENTAGES.SUCCESS + TRANSACTION_OUTCOME_PERCENTAGES.INSUFFICIENT_FUNDS) {
+    return {success: false, errorType: TransactionErrorType.INSUFFICIENT_FUNDS};
   }
 
-  if (random < 0.85) {
-    return {success: false, errorType: 'network_error'};
+  if (random < TRANSACTION_OUTCOME_PERCENTAGES.SUCCESS + TRANSACTION_OUTCOME_PERCENTAGES.INSUFFICIENT_FUNDS + TRANSACTION_OUTCOME_PERCENTAGES.NETWORK_ERROR) {
+    return {success: false, errorType: TransactionErrorType.NETWORK_ERROR};
   }
 
-  if (random < 0.95) {
-    return {success: false, errorType: 'timeout'};
+  if (random < TRANSACTION_OUTCOME_PERCENTAGES.SUCCESS + TRANSACTION_OUTCOME_PERCENTAGES.INSUFFICIENT_FUNDS + TRANSACTION_OUTCOME_PERCENTAGES.NETWORK_ERROR + TRANSACTION_OUTCOME_PERCENTAGES.TIMEOUT) {
+    return {success: false, errorType: TransactionErrorType.TIMEOUT};
   }
 
-  return {success: false, errorType: 'unknown'};
+  return {success: false, errorType: TransactionErrorType.UNKNOWN};
 };
 
 export const transactionsApi = {
@@ -52,10 +61,10 @@ export const transactionsApi = {
     }
 
     const errorMessages: Record<TransactionErrorType, string> = {
-      insufficient_funds: 'No tienes saldo suficiente para completar esta transacción',
-      network_error: 'Error de conexión. Por favor, intenta nuevamente',
-      timeout: 'La transacción tardó demasiado. Intenta de nuevo',
-      unknown: 'Ocurrió un error inesperado. Por favor, intenta más tarde',
+      [TransactionErrorType.INSUFFICIENT_FUNDS]: 'No tienes saldo suficiente para completar esta transacción',
+      [TransactionErrorType.NETWORK_ERROR]: 'Error de conexión. Por favor, intenta nuevamente',
+      [TransactionErrorType.TIMEOUT]: 'La transacción tardó demasiado. Intenta de nuevo',
+      [TransactionErrorType.UNKNOWN]: 'Ocurrió un error inesperado. Por favor, intenta más tarde',
     };
 
     return {

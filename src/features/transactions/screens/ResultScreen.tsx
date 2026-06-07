@@ -4,6 +4,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {CheckCircle, XCircle, WifiOff, Clock, AlertCircle} from 'lucide-react-native';
 import {useTransactionFlowStore} from '@/store/transactionFlowStore';
 import {useWalletStore} from '@/store/walletStore';
+import {TransactionErrorType} from '@/types';
 import {Button} from '@/components';
 import {formatAmount} from '@/utils/currency';
 import {Theme} from '@/theme';
@@ -16,10 +17,15 @@ type ResultScreenProps = {
 export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
   const {result, draft, reset, processTransaction, isProcessing} = useTransactionFlowStore();
   const {addTransaction, updateBalance} = useWalletStore();
-  const transactionAddedRef = useRef(false);
+  const processedTransactionIdRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (result?.success && result.transactionId && draft.recipient && !transactionAddedRef.current) {
+    if (
+      result?.success && 
+      result.transactionId && 
+      draft.recipient && 
+      processedTransactionIdRef.current !== result.transactionId
+    ) {
       const newTransaction = {
         id: result.transactionId,
         amount: draft.amount,
@@ -32,23 +38,32 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
       
       addTransaction(newTransaction);
       updateBalance(draft.amount);
-      transactionAddedRef.current = true;
+      processedTransactionIdRef.current = result.transactionId;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result?.success, result?.transactionId]);
 
   const handleRetry = async (): Promise<void> => {
-    transactionAddedRef.current = false;
     await processTransaction();
   };
 
   const handleGoHome = (): void => {
     reset();
-    navigation.navigate('Home');
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Home'}],
+    });
   };
 
   const handleNewTransaction = (): void => {
     reset();
-    navigation.navigate('Amount');
+    navigation.reset({
+      index: 1,
+      routes: [
+        {name: 'Home'},
+        {name: 'Amount'},
+      ],
+    });
   };
 
   if (!result) {
@@ -107,18 +122,18 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
 
   const getErrorIcon = (): JSX.Element => {
     switch (result.errorType) {
-      case 'insufficient_funds':
+      case TransactionErrorType.INSUFFICIENT_FUNDS:
         return <AlertCircle size={80} color={Theme.colors.error} />;
-      case 'network_error':
+      case TransactionErrorType.NETWORK_ERROR:
         return <WifiOff size={80} color={Theme.colors.error} />;
-      case 'timeout':
+      case TransactionErrorType.TIMEOUT:
         return <Clock size={80} color={Theme.colors.warning} />;
       default:
         return <XCircle size={80} color={Theme.colors.error} />;
     }
   };
 
-  const canRetry = result.errorType === 'network_error' || result.errorType === 'timeout';
+  const canRetry = result.errorType === TransactionErrorType.NETWORK_ERROR || result.errorType === TransactionErrorType.TIMEOUT;
 
   return (
     <SafeAreaView style={styles.container}>

@@ -72,9 +72,15 @@ export const useWalletStore = create<WalletState>((set, get) => ({
   },
 
   addTransaction: transaction => {
-    set(state => ({
-      transactions: [transaction, ...state.transactions],
-    }));
+    set(state => {
+      const exists = state.transactions.some(t => t.id === transaction.id);
+      if (exists) {
+        return state;
+      }
+      return {
+        transactions: [transaction, ...state.transactions],
+      };
+    });
   },
 
   updateBalance: amount => {

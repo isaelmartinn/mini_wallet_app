@@ -1,5 +1,6 @@
 import {renderHook, act} from '@testing-library/react-native';
 import {useTransactionFlowStore} from '../transactionFlowStore';
+import {TransactionErrorType} from '@/types';
 
 jest.mock('@/api/transactions', () => ({
   transactionsApi: {
@@ -82,7 +83,7 @@ describe('useTransactionFlowStore', () => {
   it('should handle transaction error', async () => {
     const mockError = {
       success: false,
-      errorType: 'network_error',
+      errorType: TransactionErrorType.NETWORK_ERROR,
       errorMessage: 'Error de conexión',
     };
     (transactionsApi.sendMoney as jest.Mock).mockResolvedValue(mockError);
@@ -102,7 +103,7 @@ describe('useTransactionFlowStore', () => {
     });
 
     expect(result.current.result?.success).toBe(false);
-    expect(result.current.result?.errorType).toBe('network_error');
+    expect(result.current.result?.errorType).toBe(TransactionErrorType.NETWORK_ERROR);
     expect(result.current.isProcessing).toBe(false);
   });
 
@@ -139,6 +140,6 @@ describe('useTransactionFlowStore', () => {
     });
 
     expect(result.current.result?.success).toBe(false);
-    expect(result.current.result?.errorType).toBe('unknown');
+    expect(result.current.result?.errorType).toBe(TransactionErrorType.UNKNOWN);
   });
 });

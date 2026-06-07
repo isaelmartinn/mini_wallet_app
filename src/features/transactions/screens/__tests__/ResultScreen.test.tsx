@@ -4,6 +4,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {ResultScreen} from '../ResultScreen';
 import {useTransactionFlowStore} from '@/store/transactionFlowStore';
 import {useWalletStore} from '@/store/walletStore';
+import {TransactionErrorType} from '@/types';
 
 jest.mock('@/store/transactionFlowStore');
 jest.mock('@/store/walletStore');
@@ -122,7 +123,7 @@ describe('ResultScreen', () => {
       (useTransactionFlowStore as unknown as jest.Mock).mockReturnValue({
         result: {
           success: false,
-          errorType: 'network_error',
+          errorType: TransactionErrorType.NETWORK_ERROR,
           errorMessage: 'Error de conexión. Por favor, intenta nuevamente',
         },
         draft: {
@@ -215,7 +216,7 @@ describe('ResultScreen', () => {
       (useTransactionFlowStore as unknown as jest.Mock).mockReturnValue({
         result: {
           success: false,
-          errorType: 'timeout',
+          errorType: TransactionErrorType.TIMEOUT,
           errorMessage: 'La transacción tardó demasiado. Intenta de nuevo',
         },
         draft: {
@@ -244,7 +245,7 @@ describe('ResultScreen', () => {
       (useTransactionFlowStore as unknown as jest.Mock).mockReturnValue({
         result: {
           success: false,
-          errorType: 'insufficient_funds',
+          errorType: TransactionErrorType.INSUFFICIENT_FUNDS,
           errorMessage:
             'No tienes saldo suficiente para completar esta transacción',
         },
@@ -282,7 +283,7 @@ describe('ResultScreen', () => {
       (useTransactionFlowStore as unknown as jest.Mock).mockReturnValue({
         result: {
           success: false,
-          errorType: 'network_error',
+          errorType: TransactionErrorType.NETWORK_ERROR,
           errorMessage: 'Error de conexión. Por favor, intenta nuevamente',
         },
         draft: {
