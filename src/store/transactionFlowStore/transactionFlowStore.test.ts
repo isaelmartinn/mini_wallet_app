@@ -1,5 +1,5 @@
 import {renderHook, act} from '@testing-library/react-native';
-import {useTransactionFlowStore} from '../transactionFlowStore';
+import {useTransactionFlowStore} from './transactionFlowStore';
 import {TransactionErrorType} from '@/types';
 
 jest.mock('@/api/transactions', () => ({

@@ -1,9 +1,9 @@
 import React from 'react';
 import {render} from '@testing-library/react-native';
 import {WalletScreen} from './WalletScreen';
-import {useAppStore} from '@/store';
+import {useAppStore} from '@/store/useAppStore';
 
-jest.mock('@/store', () => ({
+jest.mock('@/store/useAppStore', () => ({
   useAppStore: jest.fn(),
 }));
 

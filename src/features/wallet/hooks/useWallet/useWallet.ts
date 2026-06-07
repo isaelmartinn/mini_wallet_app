@@ -1,4 +1,4 @@
-import {useWalletStore} from '@/store';
+import {useWalletStore} from '@/store/walletStore';
 
 export const useWallet = () => {
   const {

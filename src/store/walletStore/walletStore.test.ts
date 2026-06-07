@@ -1,5 +1,5 @@
 import {renderHook, act, waitFor} from '@testing-library/react-native';
-import {useWalletStore} from '../walletStore';
+import {useWalletStore} from './walletStore';
 import {walletApi} from '@/api/wallet';
 
 jest.mock('@/api/wallet');

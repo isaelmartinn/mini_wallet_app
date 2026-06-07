@@ -1,8 +1,8 @@
 import {renderHook} from '@testing-library/react-native';
 import {useWallet} from './useWallet';
-import {useWalletStore} from '@/store';
+import {useWalletStore} from '@/store/walletStore';
 
-jest.mock('@/store', () => ({
+jest.mock('@/store/walletStore', () => ({
   useWalletStore: jest.fn(),
 }));
 
