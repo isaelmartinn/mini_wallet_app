@@ -1,15 +1,15 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {SplashScreen} from '../features/auth/screens/SplashScreen';
+import {SplashScreen} from '@/features/auth/screens/SplashScreen';
 import {WalletScreen} from '@/features/wallet/screens/WalletScreen';
 
-export type RootStackParamList = {
+type MainStackParamList = {
   Splash: undefined;
   Wallet: undefined;
 };
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<MainStackParamList>();
 
 export const MainNavigator = () => {
   return (

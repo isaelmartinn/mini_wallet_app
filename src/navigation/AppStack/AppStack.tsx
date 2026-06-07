@@ -9,8 +9,8 @@ import {
   ResultScreen,
   TimeoutScreen,
 } from '@/features/transactions/screens';
-import {AppStackParamList} from './types';
-import {CustomDrawerContent} from './CustomDrawerContent';
+import {AppStackParamList} from '@/navigation/types';
+import {CustomDrawerContent} from '@/navigation/CustomDrawerContent';
 import {useWalletStore} from '@/store/walletStore';
 
 const Drawer = createDrawerNavigator();
