@@ -9,11 +9,12 @@ export interface TransactionDraft {
   fee: number;
 }
 
-export type TransactionErrorType = 
-  | 'insufficient_funds'
-  | 'network_error'
-  | 'timeout'
-  | 'unknown';
+export enum TransactionErrorType {
+  INSUFFICIENT_FUNDS = 'INSUFFICIENT_FUNDS',
+  NETWORK_ERROR = 'NETWORK_ERROR',
+  TIMEOUT = 'TIMEOUT',
+  UNKNOWN = 'UNKNOWN',
+}
 
 export interface TransactionResult {
   success: boolean;

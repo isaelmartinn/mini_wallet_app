@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import {TransactionFlowState, TransactionResult} from '@/types';
+import {TransactionFlowState, TransactionResult, TransactionErrorType} from '@/types';
 import {transactionsApi} from '@/api/transactions';
 import {TRANSACTION_RULES} from '@/features/transactions/constants';
 
@@ -38,7 +38,7 @@ export const useTransactionFlowStore = create<TransactionFlowState>((set, get) =
     if (!draft.recipient) {
       const errorResult: TransactionResult = {
         success: false,
-        errorType: 'unknown',
+        errorType: TransactionErrorType.UNKNOWN,
         errorMessage: 'Destinatario no válido',
       };
       set({result: errorResult, isProcessing: false});
@@ -58,7 +58,7 @@ export const useTransactionFlowStore = create<TransactionFlowState>((set, get) =
     } catch (error) {
       const errorResult: TransactionResult = {
         success: false,
-        errorType: 'unknown',
+        errorType: TransactionErrorType.UNKNOWN,
         errorMessage: 'Error al procesar la transacción',
       };
       set({result: errorResult, isProcessing: false});
