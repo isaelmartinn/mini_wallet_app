@@ -39,6 +39,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Theme.spacing.md,
+    alignSelf: 'center',
   },
   currencySymbol: {
     ...Theme.typography.h1,
@@ -47,10 +48,14 @@ export const styles = StyleSheet.create({
   },
   amountInput: {
     ...Theme.typography.h1,
-    textAlign: 'center',
-    minWidth: 200,
+    color: Theme.colors.text,
+    textAlign: 'left',
+    minWidth: 100,
+    maxWidth: 250,
     padding: 0,
     margin: 0,
+    borderWidth: 0,
+    backgroundColor: 'transparent',
   },
   errorContainer: {
     marginTop: Theme.spacing.md,
