@@ -1,5 +1,6 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
+import {Text, RefreshControl, FlatList} from 'react-native';
 import {TransactionList} from './TransactionList';
 import {Transaction} from '@/types';
 
@@ -65,14 +66,12 @@ describe('TransactionList', () => {
 
     it('should call onRefresh when pull to refresh is triggered', () => {
       const onRefresh = jest.fn();
-      const {getByTestId} = render(
+      const {UNSAFE_getByType} = render(
         <TransactionList {...defaultProps} onRefresh={onRefresh} />
       );
 
-      const flatList = getByTestId('transaction-1').parent?.parent?.parent;
-      if (flatList) {
-        fireEvent(flatList, 'refresh');
-      }
+      const refreshControl = UNSAFE_getByType(RefreshControl);
+      refreshControl.props.onRefresh();
 
       expect(onRefresh).toHaveBeenCalledTimes(1);
     });
@@ -143,7 +142,6 @@ describe('TransactionList', () => {
         <TransactionList {...defaultProps} isRefreshing={true} />
       );
 
-      const RefreshControl = require('react-native').RefreshControl;
       const refreshControl = UNSAFE_getByType(RefreshControl);
 
       expect(refreshControl.props.refreshing).toBe(true);
@@ -154,7 +152,6 @@ describe('TransactionList', () => {
         <TransactionList {...defaultProps} isRefreshing={false} />
       );
 
-      const RefreshControl = require('react-native').RefreshControl;
       const refreshControl = UNSAFE_getByType(RefreshControl);
 
       expect(refreshControl.props.refreshing).toBe(false);
@@ -182,18 +179,20 @@ describe('TransactionList', () => {
         status: 'completed',
       }));
 
-      const {getByTestId} = render(
+      const {UNSAFE_getByType} = render(
         <TransactionList {...defaultProps} transactions={manyTransactions} />
       );
 
-      expect(getByTestId('transaction-0')).toBeTruthy();
-      expect(getByTestId('transaction-99')).toBeTruthy();
+      const flatList = UNSAFE_getByType(FlatList);
+
+      expect(flatList.props.data).toHaveLength(100);
+      expect(flatList.props.data[0].id).toBe('0');
+      expect(flatList.props.data[99].id).toBe('99');
     });
 
     it('should use transaction id as key', () => {
       const {UNSAFE_getByType} = render(<TransactionList {...defaultProps} />);
 
-      const FlatList = require('react-native').FlatList;
       const flatList = UNSAFE_getByType(FlatList);
 
       expect(flatList.props.keyExtractor(mockTransactions[0])).toBe('1');
