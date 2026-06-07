@@ -1,5 +1,5 @@
 import {renderHook, act, waitFor} from '@testing-library/react-native';
-import {useContacts} from '../useContacts';
+import {useContacts} from './useContacts';
 import {contactsService} from '@/services/ContactsService';
 import {Contact} from '@/types/contacts';
 
