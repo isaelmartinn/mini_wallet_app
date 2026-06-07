@@ -62,6 +62,31 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/brandon.bautista/Documents/personal/mini_wallet_app/android/app/.cxx/Debug/61h436tl/x86/CMakeFiles/cmake.verify_globs")
 endif()
 
+# react_codegen_SRCS at /Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/*.cpp")
+set(OLD_GLOB
+  "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/rnreanimated-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/brandon.bautista/Documents/personal/mini_wallet_app/android/app/.cxx/Debug/61h436tl/x86/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/react/renderer/components/rnreanimated/*.cpp")
+set(OLD_GLOB
+  "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/react/renderer/components/rnreanimated/ComponentDescriptors.cpp"
+  "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/react/renderer/components/rnreanimated/EventEmitters.cpp"
+  "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/react/renderer/components/rnreanimated/Props.cpp"
+  "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/react/renderer/components/rnreanimated/ShadowNodes.cpp"
+  "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/react/renderer/components/rnreanimated/States.cpp"
+  "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/react/renderer/components/rnreanimated/rnreanimatedJSI-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/brandon.bautista/Documents/personal/mini_wallet_app/android/app/.cxx/Debug/61h436tl/x86/CMakeFiles/cmake.verify_globs")
+endif()
+
 # LIB_CUSTOM_SRCS at /Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt:21 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/brandon.bautista/Documents/personal/mini_wallet_app/node_modules/react-native-safe-area-context/android/src/main/jni/*.cpp")
 set(OLD_GLOB

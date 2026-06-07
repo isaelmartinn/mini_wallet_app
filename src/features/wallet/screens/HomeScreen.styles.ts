@@ -12,6 +12,23 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Theme.colors.background,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: Theme.spacing.lg,
+    paddingVertical: Theme.spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: Theme.colors.border,
+  },
+  headerTitle: {
+    fontSize: Theme.typography.h3.fontSize,
+    fontWeight: Theme.typography.h3.fontWeight,
+    color: Theme.colors.text,
+  },
+  menuButton: {
+    padding: Theme.spacing.sm,
+  },
   content: {
     flex: 1,
     paddingHorizontal: Theme.spacing.lg,

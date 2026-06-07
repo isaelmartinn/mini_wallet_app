@@ -1,4 +1,5 @@
 import React from 'react';
+import {createDrawerNavigator, DrawerContentComponentProps} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import {HomeScreen} from '@/features/wallet/screens';
 import {
@@ -8,45 +9,77 @@ import {
   ResultScreen,
 } from '@/features/transactions/screens';
 import {AppStackParamList} from './types';
+import {CustomDrawerContent} from './CustomDrawerContent';
 
+const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator<AppStackParamList>();
 
-export const AppStack: React.FC = () => {
+const MainStack: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: true,
-        headerBackTitleVisible: false,
+        headerShown: false,
       }}>
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Amount"
         component={AmountScreen}
-        options={{title: 'Enviar dinero'}}
+        options={{
+          headerShown: true,
+          title: 'Enviar dinero',
+          headerBackTitleVisible: false,
+        }}
       />
       <Stack.Screen
         name="Recipient"
         component={RecipientScreen}
-        options={{title: 'Destinatario'}}
+        options={{
+          headerShown: true,
+          title: 'Destinatario',
+          headerBackTitleVisible: false,
+        }}
       />
       <Stack.Screen
         name="Summary"
         component={SummaryScreen}
-        options={{title: 'Confirmar'}}
+        options={{
+          headerShown: true,
+          title: 'Confirmar',
+          headerBackTitleVisible: false,
+        }}
       />
       <Stack.Screen
         name="Result"
         component={ResultScreen}
         options={{
+          headerShown: true,
           title: 'Resultado',
           headerLeft: () => null,
           gestureEnabled: false,
         }}
       />
     </Stack.Navigator>
+  );
+};
+
+export const AppStack: React.FC = () => {
+  return (
+    <Drawer.Navigator
+      drawerContent={(props: DrawerContentComponentProps) => <CustomDrawerContent {...props} />}
+      screenOptions={{
+        headerShown: false,
+        drawerPosition: 'right',
+      }}>
+      <Drawer.Screen
+        name="MainStack"
+        component={MainStack}
+        options={{
+          drawerItemStyle: {display: 'none'},
+        }}
+      />
+    </Drawer.Navigator>
   );
 };

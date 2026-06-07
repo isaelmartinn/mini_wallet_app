@@ -6,6 +6,8 @@ const config = {
     extraNodeModules: {
       '@': path.resolve(__dirname, 'src'),
     },
+    sourceExts: ['js', 'jsx', 'json', 'ts', 'tsx', 'cjs', 'mjs'],
+    resolverMainFields: ['react-native', 'browser', 'main'],
   },
   watchFolders: [path.resolve(__dirname, 'src')],
 };

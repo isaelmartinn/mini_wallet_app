@@ -23,4 +23,5 @@ export interface WalletState {
   addTransaction: (transaction: Transaction) => void;
   updateBalance: (amount: number) => void;
   clearError: () => void;
+  reset: () => void;
 }
