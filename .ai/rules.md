@@ -1,136 +1,135 @@
-# Reglas de Desarrollo - Mini Wallet App
+# Development Rules - Mini Wallet App
 
-Este archivo contiene las reglas obligatorias que **TODA** implementación de código debe seguir. La IA debe consultar y aplicar estas reglas en cada sesión de desarrollo.
+This file contains the mandatory rules that **ALL** code implementations must follow. The AI must consult and apply these rules in every development session.
 
 ---
 
-## 🎯 Reglas Obligatorias
+## 🎯 Mandatory Rules
 
-### 1. TypeScript Estricto
-- ❌ **PROHIBIDO** usar `any` como tipado
-- ✅ Usar tipos específicos, interfaces o `unknown` cuando sea necesario
-- ✅ Definir tipos para props, estados, y retornos de funciones
-- ✅ Crear tipos de dominio en `src/types/`
+### 1. Strict TypeScript
+- ❌ **FORBIDDEN** to use `any` as a type
+- ✅ Use specific types, interfaces, or `unknown` when necessary
+- ✅ Define types for props, states, and function returns
+- ✅ Create domain types in `src/types/`
 
-### 2. Estilos
-- ❌ **PROHIBIDO** usar inline styles
-- ✅ Usar StyleSheet.create() en archivos separados `.styles.ts`
-- ✅ Centralizar tokens de diseño (colores, espaciados, tipografía) en `src/theme/`
-- ✅ Seguir convención: `ComponentName.styles.ts` junto a `ComponentName.tsx`
+### 2. Styles
+- ❌ **FORBIDDEN** to use inline styles
+- ✅ Use StyleSheet.create() in separate `.styles.ts` files
+- ✅ Centralize design tokens (colors, spacing, typography) in `src/theme/`
+- ✅ Follow convention: `ComponentName.styles.ts` next to `ComponentName.tsx`
 
-### 3. Imports y Paths
-- ❌ **PROHIBIDO** usar paths relativos (`../../components`)
-- ✅ Usar alias configurados: `@/components`, `@/api`, `@/store`, etc.
-- ✅ Mantener imports ordenados: externos → alias → relativos
-- ✅ Agrupar imports por tipo (React, librerías, componentes, tipos, estilos)
+### 3. Imports and Paths
+- ❌ **FORBIDDEN** to use relative paths (`../../components`)
+- ✅ Use configured aliases: `@/components`, `@/api`, `@/store`, etc.
+- ✅ Keep imports ordered: external → aliases → relative
+- ✅ Group imports by type (React, libraries, components, types, styles)
 
-### 4. Arquitectura de Carpetas
+### 4. Folder Architecture
 ```
 src/
-├── api/           # Servicios y llamadas API (mock o real)
-├── assets/        # Imágenes, fuentes, iconos
-├── components/    # Componentes reutilizables
-├── features/      # Features por dominio (auth, wallet, transactions)
+├── api/           # Services and API calls (mock or real)
+├── assets/        # Images, fonts, icons
+├── components/    # Reusable components
+├── features/      # Features by domain (auth, wallet, transactions)
 │   └── [feature]/
-│       ├── components/  # Componentes específicos del feature
-│       ├── screens/     # Pantallas del feature
-│       ├── hooks/       # Hooks personalizados
-│       └── types.ts     # Tipos del feature
-├── navigation/    # Configuración de navegación
-├── store/         # Estado global (Zustand stores)
-├── theme/         # Tokens de diseño, colores, tipografía
-├── types/         # Tipos globales y modelos de dominio
-├── utils/         # Utilidades y helpers
+│       ├── components/  # Feature-specific components
+│       ├── screens/     # Feature screens
+│       ├── hooks/       # Custom hooks
+│       └── types.ts     # Feature types
+├── navigation/    # Navigation configuration
+├── store/         # Global state (Zustand stores)
+├── theme/         # Design tokens, colors, typography
+├── types/         # Global types and domain models
+├── utils/         # Utilities and helpers
 └── App.tsx
 ```
 
-### 5. Componentes
-- ✅ Separar lógica de presentación (hooks personalizados)
-- ✅ Props tipadas con interfaces
-- ✅ Componentes pequeños y con responsabilidad única
-- ✅ Usar composición sobre herencia
-- ✅ Memoización cuando sea necesario (React.memo, useMemo, useCallback)
+#### 4.1 Component, Hook, and Screen Structure
+**MANDATORY**: Each component, hook, and screen must be organized in its own folder:
 
-### 6. Estado Global (Zustand)
-- ✅ Un store por dominio (authStore, walletStore, transactionsStore)
-- ✅ Acciones tipadas y descriptivas
-- ✅ Usar middleware de persist para datos que deben sobrevivir reinicios
-- ✅ Selectores para evitar re-renders innecesarios
+```
+components/
+└── Button/
+    ├── Button.tsx           # Component implementation
+    ├── Button.styles.ts     # Component styles
+    ├── Button.test.tsx      # Unit tests
+    └── index.ts             # Barrel export
 
-### 7. Validaciones y Reglas de Negocio
-- ✅ Validaciones en servicios/hooks, NO solo en UI
-- ✅ Mensajes de error descriptivos y centralizados
-- ✅ Manejo de estados: loading, error, success, empty
-- ✅ Implementar reglas de negocio en capa de dominio
+hooks/
+└── useContacts/
+    ├── useContacts.ts       # Hook implementation
+    ├── useContacts.test.ts  # Unit tests
+    └── index.ts             # Barrel export
+
+features/auth/screens/
+└── LoginScreen/
+    ├── LoginScreen.tsx      # Screen implementation
+    ├── LoginScreen.styles.ts # Screen styles
+    ├── LoginScreen.test.tsx # Unit tests
+    └── index.ts             # Barrel export
+```
+
+**Rules**:
+- ✅ Each component/hook/screen must have its own folder with the same name
+- ✅ Unit tests must be inside the same folder (not in separate `__tests__` folders)
+- ✅ Each folder must contain a barrel export (`index.ts`)
+- ✅ Barrel exports should re-export the main module: `export { Button } from './Button';`
+- ✅ Import from the folder, not the file: `import { Button } from '@/components/Button';`
+
+### 5. Components
+- ✅ Separate logic from presentation (custom hooks)
+- ✅ Typed props with interfaces
+- ✅ Small components with single responsibility
+- ✅ Use composition over inheritance
+- ✅ Memoization when necessary (React.memo, useMemo, useCallback)
+
+### 6. Global State (Zustand)
+- ✅ One store per domain (authStore, walletStore, transactionsStore)
+- ✅ Typed and descriptive actions
+- ✅ Use persist middleware for data that must survive restarts
+- ✅ Selectors to avoid unnecessary re-renders
+
+### 7. Validations and Business Rules
+- ✅ Validations in services/hooks, NOT only in UI
+- ✅ Descriptive and centralized error messages
+- ✅ State handling: loading, error, success, empty
+- ✅ Implement business rules in domain layer
 
 ### 8. Testing
-- ✅ Tests unitarios para validaciones y lógica de negocio
-- ✅ Tests de componentes críticos
-- ✅ Mocks para servicios y stores
-- ✅ Cobertura mínima: validaciones, hooks, stores
-- ✅ Archivos de prueba deben vivir junto al componente/módulo que prueban
-- ❌ **PROHIBIDO** crear carpetas `__tests__` separadas
-- ✅ Convención: `ComponentName.test.tsx` junto a `ComponentName.tsx`
+- ✅ Unit tests for validations and business logic
+- ✅ Tests for critical components
+- ✅ Mocks for services and stores
+- ✅ Minimum coverage: validations, hooks, stores
+- ✅ Test files must live next to the component/module they test
+- ❌ **FORBIDDEN** to create separate `__tests__` folders
+- ✅ Convention: `ComponentName.test.tsx` next to `ComponentName.tsx`
 
-### 9. Manejo de Errores
-- ✅ Try-catch en operaciones asíncronas
-- ✅ Feedback visual al usuario (toast, mensajes inline)
-- ✅ Logging de errores para debugging
-- ✅ Fallbacks y estados de error definidos
+### 9. Error Handling
+- ✅ Try-catch in asynchronous operations
+- ✅ Visual feedback to user (toast, inline messages)
+- ✅ Error logging for debugging
+- ✅ Defined fallbacks and error states
 
-### 10. Accesibilidad
-- ✅ Labels descriptivos en inputs
-- ✅ Feedback táctil y visual
-- ✅ Tamaños de touch targets adecuados (mínimo 44x44)
-- ✅ Contraste de colores apropiado
+### 10. Accessibility
+- ✅ Descriptive labels on inputs
+- ✅ Tactile and visual feedback
+- ✅ Adequate touch target sizes (minimum 44x44)
+- ✅ Appropriate color contrast
 
 ### 11. Performance
-- ✅ Listas con FlatList/SectionList (no ScrollView con map)
-- ✅ KeyExtractor único y estable
-- ✅ Optimizar re-renders con React.memo
-- ✅ Lazy loading cuando sea apropiado
+- ✅ Lists with FlatList/SectionList (not ScrollView with map)
+- ✅ Unique and stable KeyExtractor
+- ✅ Optimize re-renders with React.memo
+- ✅ Lazy loading when appropriate
 
-### 12. Documentación
-- ✅ JSDoc para funciones complejas
-- ✅ README actualizado con instrucciones
-- ✅ Comentarios solo cuando el código no sea auto-explicativo
-- ✅ DECISIONS.md con decisiones arquitectónicas
 
----
+## 🤖 Instructions for AI
 
-## 📋 Checklist Pre-Commit
+**IMPORTANT**: At the beginning of each development session:
+1. Read this entire file
+2. Apply ALL rules in the generated code
+3. If a rule conflicts with a request, ask the user
+4. Suggest improvements when existing code doesn't follow the rules
+5. Document decisions that affect these rules in DECISIONS.md
 
-Antes de considerar una tarea completada, verificar:
-
-- [ ] No hay tipos `any`
-- [ ] No hay inline styles
-- [ ] Todos los imports usan alias `@/`
-- [ ] Componentes tienen props tipadas
-- [ ] Manejo de estados loading/error/success
-- [ ] Validaciones implementadas
-- [ ] Código formateado (Prettier)
-- [ ] Sin warnings de ESLint
-- [ ] Tests relevantes agregados/actualizados
-
----
-
-## 🔄 Evolución de Reglas
-
-Este archivo puede crecer con nuevas reglas. Cuando se agreguen:
-1. Actualizar este archivo
-2. Notificar al equipo
-3. Refactorizar código existente si es necesario
-4. Actualizar documentación relacionada
-
----
-
-## 🤖 Instrucciones para IA
-
-**IMPORTANTE**: Al inicio de cada sesión de desarrollo:
-1. Leer este archivo completo
-2. Aplicar TODAS las reglas en el código generado
-3. Si una regla entra en conflicto con una solicitud, preguntar al usuario
-4. Sugerir mejoras cuando el código existente no siga las reglas
-5. Documentar decisiones que afecten estas reglas en DECISIONS.md
-
-**Estas reglas son OBLIGATORIAS y tienen prioridad sobre sugerencias generales.**
+**These rules are MANDATORY and take priority over general suggestions.**
