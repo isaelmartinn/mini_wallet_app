@@ -7,11 +7,12 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  Alert,
+  SafeAreaView,
 } from 'react-native';
 import {Contact} from '@/types/contacts';
 import {useContacts} from '@/hooks/useContacts';
 import {Button} from '@/components';
+import {openDeviceSettings} from '@/utils/deviceSettings';
 import {styles} from './ContactPicker.styles';
 
 interface ContactPickerProps {
@@ -30,18 +31,31 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
     isLoading,
     error,
     isAvailable,
+    canAskAgain,
     fetchContacts,
     reset,
   } = useContacts();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
+  const [permissionDenied, setPermissionDenied] = useState(false);
 
   useEffect(() => {
     if (visible && isAvailable) {
-      fetchContacts();
+      const loadContacts = async (): Promise<void> => {
+        await fetchContacts();
+      };
+      loadContacts();
     }
   }, [visible, isAvailable, fetchContacts]);
+
+  useEffect(() => {
+    if (error && error.includes('denegado')) {
+      setPermissionDenied(true);
+    } else {
+      setPermissionDenied(false);
+    }
+  }, [error]);
 
   useEffect(() => {
     if (searchQuery.trim() === '') {
@@ -59,6 +73,7 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
 
   const handleClose = (): void => {
     setSearchQuery('');
+    setPermissionDenied(false);
     reset();
     onClose();
   };
@@ -68,9 +83,42 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
     handleClose();
   };
 
-  const handleRetry = (): void => {
-    fetchContacts();
+  const handleOpenSettings = async (): Promise<void> => {
+    await openDeviceSettings();
   };
+
+  const handleManualEntry = (): void => {
+    handleClose();
+  };
+
+  const renderPermissionDeniedState = (): React.ReactElement => (
+    <View style={styles.permissionDeniedContainer}>
+      <Text style={styles.permissionIcon}>📱</Text>
+      <Text style={styles.permissionTitle}>Permiso de contactos denegado</Text>
+      <Text style={styles.permissionMessage}>
+        Para seleccionar contactos, necesitamos acceso a tu lista de contactos.
+        {canAskAgain
+          ? ' Puedes continuar ingresando los datos manualmente.'
+          : ' Puedes habilitar el permiso en la configuración de tu dispositivo o continuar manualmente.'}
+      </Text>
+      
+      {!canAskAgain && (
+        <TouchableOpacity
+          style={styles.permissionButtonPrimary}
+          onPress={handleOpenSettings}
+          activeOpacity={0.8}>
+          <Text style={styles.permissionButtonTextPrimary}>Abrir Configuración</Text>
+        </TouchableOpacity>
+      )}
+      
+      <TouchableOpacity
+        style={styles.permissionButtonSecondary}
+        onPress={handleManualEntry}
+        activeOpacity={0.8}>
+        <Text style={styles.permissionButtonText}>Ingresar manualmente</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   const renderEmptyState = (): React.ReactElement => {
     if (isLoading) {
@@ -82,13 +130,8 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
       );
     }
 
-    if (error) {
-      return (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.errorText}>{error}</Text>
-          <Button title="Reintentar" onPress={handleRetry} />
-        </View>
-      );
+    if (permissionDenied) {
+      return renderPermissionDeniedState();
     }
 
     if (searchQuery && filteredContacts.length === 0) {
@@ -137,7 +180,7 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
       animationType="slide"
       transparent={false}
       onRequestClose={handleClose}>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Seleccionar contacto</Text>
           <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
@@ -164,7 +207,7 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
           ListEmptyComponent={renderEmptyState}
           showsVerticalScrollIndicator={true}
         />
-      </View>
+      </SafeAreaView>
     </Modal>
   );
 };
