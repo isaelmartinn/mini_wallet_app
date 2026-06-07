@@ -1,5 +1,5 @@
 import {NativeModules} from 'react-native';
-import {contactsService} from '../ContactsService';
+import {contactsService} from './ContactsService';
 import {Contact, ContactsPermissionStatus} from '@/types/contacts';
 
 jest.mock('react-native', () => ({
