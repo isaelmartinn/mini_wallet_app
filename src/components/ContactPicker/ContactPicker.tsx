@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,11 +9,10 @@ import {
   ActivityIndicator,
   SafeAreaView,
 } from 'react-native';
-import {Contact} from '@/types/contacts';
-import {useContacts} from '@/hooks/useContacts';
-import {Button} from '@/components';
-import {openDeviceSettings} from '@/utils/deviceSettings';
-import {styles} from './ContactPicker.styles';
+import { Contact } from '@/types/contacts';
+import { useContacts } from '@/hooks/useContacts';
+import { openDeviceSettings } from '@/utils/deviceSettings';
+import { styles } from './ContactPicker.styles';
 
 interface ContactPickerProps {
   visible: boolean;
@@ -101,16 +100,18 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
           ? ' Puedes continuar ingresando los datos manualmente.'
           : ' Puedes habilitar el permiso en la configuración de tu dispositivo o continuar manualmente.'}
       </Text>
-      
+
       {!canAskAgain && (
         <TouchableOpacity
           style={styles.permissionButtonPrimary}
           onPress={handleOpenSettings}
           activeOpacity={0.8}>
-          <Text style={styles.permissionButtonTextPrimary}>Abrir Configuración</Text>
+          <Text style={styles.permissionButtonTextPrimary}>
+            Abrir Configuración
+          </Text>
         </TouchableOpacity>
       )}
-      
+
       <TouchableOpacity
         style={styles.permissionButtonSecondary}
         onPress={handleManualEntry}
@@ -153,7 +154,11 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
     return <></>;
   };
 
-  const renderContactItem = ({item}: {item: Contact}): React.ReactElement => (
+  const renderContactItem = ({
+    item,
+  }: {
+    item: Contact;
+  }): React.ReactElement => (
     <TouchableOpacity
       style={styles.contactItem}
       onPress={() => handleSelectContact(item)}

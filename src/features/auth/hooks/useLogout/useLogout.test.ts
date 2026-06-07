@@ -1,8 +1,8 @@
-import {renderHook, act} from '@testing-library/react-native';
-import {useLogout} from './useLogout';
-import {useAuthStore} from '@/store/authStore';
-import {useWalletStore} from '@/store/walletStore';
-import {useTransactionFlowStore} from '@/store/transactionFlowStore';
+import { renderHook, act } from '@testing-library/react-native';
+import { useLogout } from './useLogout';
+import { useAuthStore } from '@/store/authStore';
+import { useWalletStore } from '@/store/walletStore';
+import { useTransactionFlowStore } from '@/store/transactionFlowStore';
 
 jest.mock('@/store/authStore');
 jest.mock('@/store/walletStore');
@@ -16,25 +16,25 @@ describe('useLogout', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useAuthStore as unknown as jest.Mock).mockImplementation(selector =>
-      selector({logout: mockAuthLogout}),
+      selector({ logout: mockAuthLogout }),
     );
     (useWalletStore as unknown as jest.Mock).mockImplementation(selector =>
-      selector({reset: mockWalletReset}),
+      selector({ reset: mockWalletReset }),
     );
     (useTransactionFlowStore as unknown as jest.Mock).mockImplementation(
-      selector => selector({reset: mockTransactionReset}),
+      selector => selector({ reset: mockTransactionReset }),
     );
   });
 
   it('debe retornar la función logout', () => {
-    const {result} = renderHook(() => useLogout());
+    const { result } = renderHook(() => useLogout());
 
     expect(result.current.logout).toBeDefined();
     expect(typeof result.current.logout).toBe('function');
   });
 
   it('debe llamar a todos los resets en el orden correcto al hacer logout', () => {
-    const {result} = renderHook(() => useLogout());
+    const { result } = renderHook(() => useLogout());
 
     act(() => {
       result.current.logout();
@@ -45,7 +45,8 @@ describe('useLogout', () => {
     expect(mockAuthLogout).toHaveBeenCalledTimes(1);
 
     const walletResetOrder = mockWalletReset.mock.invocationCallOrder[0];
-    const transactionResetOrder = mockTransactionReset.mock.invocationCallOrder[0];
+    const transactionResetOrder =
+      mockTransactionReset.mock.invocationCallOrder[0];
     const authLogoutOrder = mockAuthLogout.mock.invocationCallOrder[0];
 
     expect(walletResetOrder).toBeLessThan(authLogoutOrder);
@@ -53,7 +54,7 @@ describe('useLogout', () => {
   });
 
   it('debe mantener la misma referencia de logout entre renders', () => {
-    const {result, rerender} = renderHook(() => useLogout());
+    const { result, rerender } = renderHook(() => useLogout());
 
     const firstLogout = result.current.logout;
 
@@ -65,7 +66,7 @@ describe('useLogout', () => {
   });
 
   it('debe llamar a logout múltiples veces sin errores', () => {
-    const {result} = renderHook(() => useLogout());
+    const { result } = renderHook(() => useLogout());
 
     act(() => {
       result.current.logout();

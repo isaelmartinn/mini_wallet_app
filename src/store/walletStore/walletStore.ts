@@ -1,6 +1,6 @@
-import {create} from 'zustand';
-import {WalletState} from '@/types';
-import {walletApi} from '@/api/wallet';
+import { create } from 'zustand';
+import { WalletState } from '@/types';
+import { walletApi } from '@/api/wallet';
 
 export const useWalletStore = create<WalletState>((set, get) => ({
   balance: 0,
@@ -14,7 +14,7 @@ export const useWalletStore = create<WalletState>((set, get) => ({
       return;
     }
 
-    set({isLoading: true, error: null});
+    set({ isLoading: true, error: null });
 
     try {
       const response = await walletApi.getWalletData();
@@ -45,7 +45,7 @@ export const useWalletStore = create<WalletState>((set, get) => ({
       return;
     }
 
-    set({isRefreshing: true, error: null});
+    set({ isRefreshing: true, error: null });
 
     try {
       const response = await walletApi.getWalletData();
@@ -90,7 +90,7 @@ export const useWalletStore = create<WalletState>((set, get) => ({
   },
 
   clearError: () => {
-    set({error: null});
+    set({ error: null });
   },
 
   reset: () => {

@@ -1,10 +1,11 @@
 import React from 'react';
-import {render, fireEvent, waitFor} from '@testing-library/react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {ResultScreen} from '../ResultScreen';
-import {useTransactionFlowStore} from '@/store/transactionFlowStore';
-import {useWalletStore} from '@/store/walletStore';
-import {TransactionErrorType} from '@/types';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ResultScreen } from '../ResultScreen';
+import { useTransactionFlowStore } from '@/store/transactionFlowStore';
+import { useWalletStore } from '@/store/walletStore';
+import { TransactionErrorType } from '@/types';
+import { AppStackParamList } from '@/navigation/types';
 
 jest.mock('@/store/transactionFlowStore');
 jest.mock('@/store/walletStore');
@@ -12,7 +13,7 @@ jest.mock('@/store/walletStore');
 const mockNavigation = {
   navigate: jest.fn(),
   reset: jest.fn(),
-} as unknown as StackNavigationProp<Record<string, object | undefined>>;
+} as unknown as StackNavigationProp<AppStackParamList, 'Result'>;
 
 describe('ResultScreen', () => {
   const mockReset = jest.fn();
@@ -50,14 +51,18 @@ describe('ResultScreen', () => {
     });
 
     it('should render success screen', () => {
-      const {getByText} = render(<ResultScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <ResultScreen navigation={mockNavigation} />,
+      );
 
       expect(getByText('¡Transacción exitosa!')).toBeTruthy();
       expect(getByText('Tu dinero ha sido enviado correctamente')).toBeTruthy();
     });
 
     it('should display transaction details with formatted amount', () => {
-      const {getByText} = render(<ResultScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <ResultScreen navigation={mockNavigation} />,
+      );
 
       expect(getByText('TXN-123-abc')).toBeTruthy();
       expect(getByText('Juan Pérez')).toBeTruthy();
@@ -87,9 +92,7 @@ describe('ResultScreen', () => {
     });
 
     it('should not add duplicate transaction on re-render', () => {
-      const {rerender} = render(
-        <ResultScreen navigation={mockNavigation} />,
-      );
+      const { rerender } = render(<ResultScreen navigation={mockNavigation} />);
 
       expect(mockAddTransaction).toHaveBeenCalledTimes(1);
 
@@ -99,7 +102,9 @@ describe('ResultScreen', () => {
     });
 
     it('should navigate to Home when "Volver al inicio" is pressed', () => {
-      const {getByText} = render(<ResultScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <ResultScreen navigation={mockNavigation} />,
+      );
 
       const button = getByText('Volver al inicio');
       fireEvent.press(button);
@@ -107,12 +112,14 @@ describe('ResultScreen', () => {
       expect(mockReset).toHaveBeenCalled();
       expect(mockNavigation.reset).toHaveBeenCalledWith({
         index: 0,
-        routes: [{name: 'Home'}],
+        routes: [{ name: 'Home' }],
       });
     });
 
     it('should navigate to Amount screen when "Nueva transacción" is pressed', () => {
-      const {getByText} = render(<ResultScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <ResultScreen navigation={mockNavigation} />,
+      );
 
       const button = getByText('Nueva transacción');
       fireEvent.press(button);
@@ -120,10 +127,7 @@ describe('ResultScreen', () => {
       expect(mockReset).toHaveBeenCalled();
       expect(mockNavigation.reset).toHaveBeenCalledWith({
         index: 1,
-        routes: [
-          {name: 'Home'},
-          {name: 'Amount'},
-        ],
+        routes: [{ name: 'Home' }, { name: 'Amount' }],
       });
     });
   });
@@ -151,7 +155,9 @@ describe('ResultScreen', () => {
     });
 
     it('should render error screen', () => {
-      const {getByText} = render(<ResultScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <ResultScreen navigation={mockNavigation} />,
+      );
 
       expect(getByText('Transacción fallida')).toBeTruthy();
       expect(
@@ -160,7 +166,9 @@ describe('ResultScreen', () => {
     });
 
     it('should show retry button for network error', () => {
-      const {getByText} = render(<ResultScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <ResultScreen navigation={mockNavigation} />,
+      );
 
       expect(getByText('Reintentar')).toBeTruthy();
     });
@@ -173,7 +181,9 @@ describe('ResultScreen', () => {
     });
 
     it('should call processTransaction when retry is pressed', async () => {
-      const {getByText} = render(<ResultScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <ResultScreen navigation={mockNavigation} />,
+      );
 
       const retryButton = getByText('Reintentar');
       fireEvent.press(retryButton);
@@ -184,7 +194,7 @@ describe('ResultScreen', () => {
     });
 
     it('should reset transaction ref when retry is pressed to allow new transaction', async () => {
-      const {getByText, rerender} = render(
+      const { getByText, rerender } = render(
         <ResultScreen navigation={mockNavigation} />,
       );
 
@@ -244,7 +254,9 @@ describe('ResultScreen', () => {
     });
 
     it('should show retry button for timeout error', () => {
-      const {getByText} = render(<ResultScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <ResultScreen navigation={mockNavigation} />,
+      );
 
       expect(getByText('Reintentar')).toBeTruthy();
     });
@@ -274,7 +286,7 @@ describe('ResultScreen', () => {
     });
 
     it('should not show retry button for insufficient funds', () => {
-      const {queryByText} = render(
+      const { queryByText } = render(
         <ResultScreen navigation={mockNavigation} />,
       );
 
@@ -282,7 +294,9 @@ describe('ResultScreen', () => {
     });
 
     it('should show only "Volver al inicio" button', () => {
-      const {getByText} = render(<ResultScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <ResultScreen navigation={mockNavigation} />,
+      );
 
       expect(getByText('Volver al inicio')).toBeTruthy();
     });
@@ -311,13 +325,17 @@ describe('ResultScreen', () => {
     });
 
     it('should show processing text on retry button', () => {
-      const {getByText} = render(<ResultScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <ResultScreen navigation={mockNavigation} />,
+      );
 
       expect(getByText('Reintentando...')).toBeTruthy();
     });
 
     it('should not call processTransaction again while processing', () => {
-      const {getByText} = render(<ResultScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <ResultScreen navigation={mockNavigation} />,
+      );
 
       const button = getByText('Reintentando...');
       fireEvent.press(button);

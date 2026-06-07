@@ -1,4 +1,4 @@
-import {normalizePhoneNumber} from './phoneNormalization';
+import { normalizePhoneNumber } from './phoneNormalization';
 
 describe('normalizePhoneNumber', () => {
   it('should normalize Mexican international format (+52) with 12 digits', () => {

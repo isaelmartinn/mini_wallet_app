@@ -1,7 +1,7 @@
-import {renderHook, act, waitFor} from '@testing-library/react-native';
-import {useContacts} from './useContacts';
-import {contactsService} from '@/services/ContactsService';
-import {Contact} from '@/types/contacts';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
+import { useContacts } from './useContacts';
+import { contactsService } from '@/services/ContactsService';
+import { Contact } from '@/types/contacts';
 
 jest.mock('@/services/ContactsService', () => ({
   contactsService: {
@@ -12,7 +12,9 @@ jest.mock('@/services/ContactsService', () => ({
 }));
 
 describe('useContacts', () => {
-  const mockContactsService = contactsService as jest.Mocked<typeof contactsService>;
+  const mockContactsService = contactsService as jest.Mocked<
+    typeof contactsService
+  >;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -20,7 +22,7 @@ describe('useContacts', () => {
   });
 
   it('should initialize with default values', () => {
-    const {result} = renderHook(() => useContacts());
+    const { result } = renderHook(() => useContacts());
 
     expect(result.current.contacts).toEqual([]);
     expect(result.current.isLoading).toBe(false);
@@ -31,7 +33,7 @@ describe('useContacts', () => {
 
   it('should return isAvailable status from service', () => {
     mockContactsService.isAvailable.mockReturnValue(true);
-    const {result} = renderHook(() => useContacts());
+    const { result } = renderHook(() => useContacts());
 
     expect(result.current.isAvailable).toBe(true);
   });
@@ -43,7 +45,7 @@ describe('useContacts', () => {
         canAskAgain: true,
       });
 
-      const {result} = renderHook(() => useContacts());
+      const { result } = renderHook(() => useContacts());
 
       let permissionResult: boolean = false;
 
@@ -63,7 +65,7 @@ describe('useContacts', () => {
         canAskAgain: true,
       });
 
-      const {result} = renderHook(() => useContacts());
+      const { result } = renderHook(() => useContacts());
 
       let permissionResult: boolean = false;
 
@@ -80,7 +82,7 @@ describe('useContacts', () => {
     it('should handle errors when module is not available', async () => {
       mockContactsService.isAvailable.mockReturnValue(false);
 
-      const {result} = renderHook(() => useContacts());
+      const { result } = renderHook(() => useContacts());
 
       let permissionResult: boolean = false;
 
@@ -89,15 +91,17 @@ describe('useContacts', () => {
       });
 
       expect(permissionResult).toBe(false);
-      expect(result.current.error).toBe('El módulo de contactos no está disponible');
+      expect(result.current.error).toBe(
+        'El módulo de contactos no está disponible',
+      );
     });
   });
 
   describe('fetchContacts', () => {
     it('should fetch contacts successfully when permission is granted', async () => {
       const mockContacts: Contact[] = [
-        {id: '1', name: 'John Doe', phoneNumber: '1234567890'},
-        {id: '2', name: 'Jane Smith', phoneNumber: '0987654321'},
+        { id: '1', name: 'John Doe', phoneNumber: '1234567890' },
+        { id: '2', name: 'Jane Smith', phoneNumber: '0987654321' },
       ];
 
       mockContactsService.requestPermission.mockResolvedValue({
@@ -106,7 +110,7 @@ describe('useContacts', () => {
       });
       mockContactsService.getContacts.mockResolvedValue(mockContacts);
 
-      const {result} = renderHook(() => useContacts());
+      const { result } = renderHook(() => useContacts());
 
       await act(async () => {
         await result.current.fetchContacts();
@@ -121,7 +125,7 @@ describe('useContacts', () => {
 
     it('should request permission before fetching if not granted', async () => {
       const mockContacts: Contact[] = [
-        {id: '1', name: 'John Doe', phoneNumber: '1234567890'},
+        { id: '1', name: 'John Doe', phoneNumber: '1234567890' },
       ];
 
       mockContactsService.requestPermission.mockResolvedValue({
@@ -130,7 +134,7 @@ describe('useContacts', () => {
       });
       mockContactsService.getContacts.mockResolvedValue(mockContacts);
 
-      const {result} = renderHook(() => useContacts());
+      const { result } = renderHook(() => useContacts());
 
       await act(async () => {
         await result.current.fetchContacts();
@@ -145,9 +149,11 @@ describe('useContacts', () => {
         granted: true,
         canAskAgain: true,
       });
-      mockContactsService.getContacts.mockRejectedValue(new Error('Fetch error'));
+      mockContactsService.getContacts.mockRejectedValue(
+        new Error('Fetch error'),
+      );
 
-      const {result} = renderHook(() => useContacts());
+      const { result } = renderHook(() => useContacts());
 
       await act(async () => {
         await result.current.fetchContacts();
@@ -162,13 +168,15 @@ describe('useContacts', () => {
     it('should not fetch if module is not available', async () => {
       mockContactsService.isAvailable.mockReturnValue(false);
 
-      const {result} = renderHook(() => useContacts());
+      const { result } = renderHook(() => useContacts());
 
       await act(async () => {
         await result.current.fetchContacts();
       });
 
-      expect(result.current.error).toBe('El módulo de contactos no está disponible');
+      expect(result.current.error).toBe(
+        'El módulo de contactos no está disponible',
+      );
       expect(mockContactsService.getContacts).not.toHaveBeenCalled();
     });
   });
@@ -176,7 +184,7 @@ describe('useContacts', () => {
   describe('reset', () => {
     it('should reset all state to initial values', async () => {
       const mockContacts: Contact[] = [
-        {id: '1', name: 'John Doe', phoneNumber: '1234567890'},
+        { id: '1', name: 'John Doe', phoneNumber: '1234567890' },
       ];
 
       mockContactsService.requestPermission.mockResolvedValue({
@@ -185,7 +193,7 @@ describe('useContacts', () => {
       });
       mockContactsService.getContacts.mockResolvedValue(mockContacts);
 
-      const {result} = renderHook(() => useContacts());
+      const { result } = renderHook(() => useContacts());
 
       await act(async () => {
         await result.current.fetchContacts();
@@ -211,7 +219,7 @@ describe('useContacts', () => {
         canAskAgain: false,
       });
 
-      const {result} = renderHook(() => useContacts());
+      const { result } = renderHook(() => useContacts());
 
       await act(async () => {
         await result.current.requestPermission();
@@ -234,7 +242,7 @@ describe('useContacts', () => {
         canAskAgain: false,
       });
 
-      const {result} = renderHook(() => useContacts());
+      const { result } = renderHook(() => useContacts());
 
       await act(async () => {
         await result.current.requestPermission();
@@ -250,7 +258,7 @@ describe('useContacts', () => {
         canAskAgain: true,
       });
 
-      const {result} = renderHook(() => useContacts());
+      const { result } = renderHook(() => useContacts());
 
       await act(async () => {
         await result.current.requestPermission();

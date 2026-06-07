@@ -1,7 +1,10 @@
-import React, {useEffect} from 'react';
-import {createDrawerNavigator, DrawerContentComponentProps} from '@react-navigation/drawer';
-import {createStackNavigator} from '@react-navigation/stack';
-import {HomeScreen} from '@/features/wallet/screens/HomeScreen';
+import React, { useEffect } from 'react';
+import {
+  createDrawerNavigator,
+  DrawerContentComponentProps,
+} from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
+import { HomeScreen } from '@/features/wallet/screens/HomeScreen';
 import {
   AmountScreen,
   RecipientScreen,
@@ -9,9 +12,9 @@ import {
   ResultScreen,
   TimeoutScreen,
 } from '@/features/transactions/screens';
-import {AppStackParamList} from '@/navigation/types';
-import {CustomDrawerContent} from '@/navigation/CustomDrawerContent';
-import {useWalletStore} from '@/store/walletStore';
+import { AppStackParamList } from '@/navigation/types';
+import { CustomDrawerContent } from '@/navigation/CustomDrawerContent';
+import { useWalletStore } from '@/store/walletStore';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator<AppStackParamList>();
@@ -22,10 +25,7 @@ const MainStack: React.FC = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-      />
+      <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen
         name="Amount"
         component={AmountScreen}
@@ -75,6 +75,10 @@ const MainStack: React.FC = () => {
   );
 };
 
+const CustomDrawerContentWrapper: React.FC<
+  DrawerContentComponentProps
+> = props => <CustomDrawerContent {...props} />;
+
 export const AppStack: React.FC = () => {
   const fetchWalletData = useWalletStore(state => state.fetchWalletData);
 
@@ -84,7 +88,7 @@ export const AppStack: React.FC = () => {
 
   return (
     <Drawer.Navigator
-      drawerContent={(props: DrawerContentComponentProps) => <CustomDrawerContent {...props} />}
+      drawerContent={CustomDrawerContentWrapper}
       screenOptions={{
         headerShown: false,
         drawerPosition: 'right',
@@ -93,7 +97,7 @@ export const AppStack: React.FC = () => {
         name="MainStack"
         component={MainStack}
         options={{
-          drawerItemStyle: {display: 'none'},
+          drawerItemStyle: { display: 'none' },
         }}
       />
     </Drawer.Navigator>

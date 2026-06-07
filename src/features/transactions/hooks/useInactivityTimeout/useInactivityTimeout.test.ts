@@ -1,5 +1,5 @@
-import {renderHook, act} from '@testing-library/react-native';
-import {useInactivityTimeout} from './useInactivityTimeout';
+import { renderHook, act } from '@testing-library/react-native';
+import { useInactivityTimeout } from './useInactivityTimeout';
 
 jest.useFakeTimers();
 
@@ -17,12 +17,12 @@ describe('useInactivityTimeout', () => {
 
   describe('Inicialización', () => {
     it('should initialize with correct default values', () => {
-      const {result} = renderHook(() =>
+      const { result } = renderHook(() =>
         useInactivityTimeout({
           timeoutMs: 5000,
           onTimeout: mockOnTimeout,
           enabled: true,
-        })
+        }),
       );
 
       expect(result.current.isActive).toBe(true);
@@ -35,7 +35,7 @@ describe('useInactivityTimeout', () => {
           timeoutMs: 5000,
           onTimeout: mockOnTimeout,
           enabled: false,
-        })
+        }),
       );
 
       act(() => {
@@ -53,7 +53,7 @@ describe('useInactivityTimeout', () => {
           timeoutMs: 5000,
           onTimeout: mockOnTimeout,
           enabled: true,
-        })
+        }),
       );
 
       act(() => {
@@ -69,7 +69,7 @@ describe('useInactivityTimeout', () => {
           timeoutMs: 5000,
           onTimeout: mockOnTimeout,
           enabled: true,
-        })
+        }),
       );
 
       act(() => {
@@ -82,12 +82,12 @@ describe('useInactivityTimeout', () => {
 
   describe('Reset Timer', () => {
     it('should reset timer when resetTimer is called', () => {
-      const {result} = renderHook(() =>
+      const { result } = renderHook(() =>
         useInactivityTimeout({
           timeoutMs: 5000,
           onTimeout: mockOnTimeout,
           enabled: true,
-        })
+        }),
       );
 
       act(() => {
@@ -112,12 +112,12 @@ describe('useInactivityTimeout', () => {
     });
 
     it('should handle multiple resetTimer calls', () => {
-      const {result} = renderHook(() =>
+      const { result } = renderHook(() =>
         useInactivityTimeout({
           timeoutMs: 5000,
           onTimeout: mockOnTimeout,
           enabled: true,
-        })
+        }),
       );
 
       act(() => {
@@ -136,12 +136,12 @@ describe('useInactivityTimeout', () => {
 
   describe('Cleanup', () => {
     it('should cleanup timer on unmount', () => {
-      const {unmount} = renderHook(() =>
+      const { unmount } = renderHook(() =>
         useInactivityTimeout({
           timeoutMs: 5000,
           onTimeout: mockOnTimeout,
           enabled: true,
-        })
+        }),
       );
 
       unmount();
@@ -154,12 +154,12 @@ describe('useInactivityTimeout', () => {
     });
 
     it('should cleanup previous timer when resetTimer is called', () => {
-      const {result} = renderHook(() =>
+      const { result } = renderHook(() =>
         useInactivityTimeout({
           timeoutMs: 5000,
           onTimeout: mockOnTimeout,
           enabled: true,
-        })
+        }),
       );
 
       act(() => {
@@ -173,19 +173,19 @@ describe('useInactivityTimeout', () => {
 
   describe('Edge Cases', () => {
     it('should handle enabled changing from true to false', () => {
-      const {rerender} = renderHook(
-        ({enabled}: {enabled: boolean}) =>
+      const { rerender } = renderHook(
+        ({ enabled }: { enabled: boolean }) =>
           useInactivityTimeout({
             timeoutMs: 5000,
             onTimeout: mockOnTimeout,
             enabled,
           }),
         {
-          initialProps: {enabled: true},
-        }
+          initialProps: { enabled: true },
+        },
       );
 
-      rerender({enabled: false});
+      rerender({ enabled: false });
 
       act(() => {
         jest.advanceTimersByTime(5000);

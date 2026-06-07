@@ -1,29 +1,37 @@
-import React, {useEffect, useRef} from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {CheckCircle, XCircle, WifiOff, Clock, AlertCircle} from 'lucide-react-native';
-import {useTransactionFlowStore} from '@/store/transactionFlowStore';
-import {useWalletStore} from '@/store/walletStore';
-import {TransactionErrorType} from '@/types';
-import {Button} from '@/components';
-import {formatAmount} from '@/utils/currency';
-import {Theme} from '@/theme';
-import {styles} from './ResultScreen.styles';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, SafeAreaView } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  CheckCircle,
+  XCircle,
+  WifiOff,
+  Clock,
+  AlertCircle,
+} from 'lucide-react-native';
+import { useTransactionFlowStore } from '@/store/transactionFlowStore';
+import { useWalletStore } from '@/store/walletStore';
+import { TransactionErrorType } from '@/types';
+import { Button } from '@/components';
+import { formatAmount } from '@/utils/currency';
+import { AppStackParamList } from '@/navigation/types';
+import { Theme } from '@/theme';
+import { styles } from './ResultScreen.styles';
 
 type ResultScreenProps = {
-  navigation: StackNavigationProp<any>;
+  navigation: StackNavigationProp<AppStackParamList, 'Result'>;
 };
 
-export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
-  const {result, draft, reset, processTransaction, isProcessing} = useTransactionFlowStore();
-  const {addTransaction, updateBalance} = useWalletStore();
+export const ResultScreen: React.FC<ResultScreenProps> = ({ navigation }) => {
+  const { result, draft, reset, processTransaction, isProcessing } =
+    useTransactionFlowStore();
+  const { addTransaction, updateBalance } = useWalletStore();
   const processedTransactionIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (
-      result?.success && 
-      result.transactionId && 
-      draft.recipient && 
+      result?.success &&
+      result.transactionId &&
+      draft.recipient &&
       processedTransactionIdRef.current !== result.transactionId
     ) {
       const newTransaction = {
@@ -35,7 +43,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
         status: 'completed' as const,
         recipient: draft.recipient.name,
       };
-      
+
       addTransaction(newTransaction);
       updateBalance(draft.amount);
       processedTransactionIdRef.current = result.transactionId;
@@ -51,7 +59,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
     reset();
     navigation.reset({
       index: 0,
-      routes: [{name: 'Home'}],
+      routes: [{ name: 'Home' }],
     });
   };
 
@@ -59,10 +67,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
     reset();
     navigation.reset({
       index: 1,
-      routes: [
-        {name: 'Home'},
-        {name: 'Amount'},
-      ],
+      routes: [{ name: 'Home' }, { name: 'Amount' }],
     });
   };
 
@@ -133,7 +138,9 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
     }
   };
 
-  const canRetry = result.errorType === TransactionErrorType.NETWORK_ERROR || result.errorType === TransactionErrorType.TIMEOUT;
+  const canRetry =
+    result.errorType === TransactionErrorType.NETWORK_ERROR ||
+    result.errorType === TransactionErrorType.TIMEOUT;
 
   return (
     <SafeAreaView style={styles.container}>

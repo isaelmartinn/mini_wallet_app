@@ -1,7 +1,7 @@
-import {renderHook, act, waitFor} from '@testing-library/react-native';
-import {useLogin} from './useLogin';
-import {useAuthStore} from '@/store/authStore';
-import {validateIdentifier} from '@/utils/validation';
+import { renderHook, act } from '@testing-library/react-native';
+import { useLogin } from './useLogin';
+import { useAuthStore } from '@/store/authStore';
+import { validateIdentifier } from '@/utils/validation';
 
 jest.mock('@/store/authStore');
 jest.mock('@/utils/validation');
@@ -21,7 +21,7 @@ describe('useLogin', () => {
   });
 
   it('debe inicializar con valores por defecto', () => {
-    const {result} = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin());
 
     expect(result.current.identifier).toBe('');
     expect(result.current.error).toBeNull();
@@ -29,7 +29,7 @@ describe('useLogin', () => {
   });
 
   it('debe actualizar el identifier cuando cambia el texto', () => {
-    const {result} = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin());
 
     act(() => {
       result.current.handleIdentifierChange('test@example.com');
@@ -45,7 +45,7 @@ describe('useLogin', () => {
       error: 'Error de validación',
     });
 
-    const {result} = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin());
 
     act(() => {
       result.current.handleLogin();
@@ -66,7 +66,7 @@ describe('useLogin', () => {
       error: 'Identificador inválido',
     });
 
-    const {result} = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin());
 
     act(() => {
       result.current.handleIdentifierChange('invalid');
@@ -86,7 +86,7 @@ describe('useLogin', () => {
       error: null,
     });
 
-    const {result} = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin());
 
     act(() => {
       result.current.handleIdentifierChange('valid@example.com');
@@ -96,7 +96,7 @@ describe('useLogin', () => {
       await result.current.handleLogin();
     });
 
-    expect(mockLogin).toHaveBeenCalledWith({identifier: 'valid@example.com'});
+    expect(mockLogin).toHaveBeenCalledWith({ identifier: 'valid@example.com' });
   });
 
   it('debe mostrar error de autenticación del store', () => {
@@ -107,7 +107,7 @@ describe('useLogin', () => {
       clearError: mockClearError,
     });
 
-    const {result} = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin());
 
     expect(result.current.error).toBe('Error de autenticación');
   });
@@ -125,7 +125,7 @@ describe('useLogin', () => {
       error: 'Error de validación',
     });
 
-    const {result} = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin());
 
     await act(async () => {
       await result.current.handleLogin();
@@ -142,7 +142,7 @@ describe('useLogin', () => {
       clearError: mockClearError,
     });
 
-    const {result} = renderHook(() => useLogin());
+    const { result } = renderHook(() => useLogin());
 
     expect(result.current.isLoading).toBe(true);
   });

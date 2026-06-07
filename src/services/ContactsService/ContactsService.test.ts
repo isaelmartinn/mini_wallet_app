@@ -1,6 +1,6 @@
-import {NativeModules} from 'react-native';
-import {contactsService} from './ContactsService';
-import {Contact, ContactsPermissionStatus} from '@/types/contacts';
+import { NativeModules } from 'react-native';
+import { contactsService } from './ContactsService';
+import { Contact, ContactsPermissionStatus } from '@/types/contacts';
 
 jest.mock('react-native', () => ({
   NativeModules: {
@@ -34,7 +34,9 @@ describe('ContactsService', () => {
         canAskAgain: true,
       };
 
-      (mockContactsModule.requestPermission as jest.Mock).mockResolvedValue(mockResponse);
+      (mockContactsModule.requestPermission as jest.Mock).mockResolvedValue(
+        mockResponse,
+      );
 
       const result = await contactsService.requestPermission();
 
@@ -48,7 +50,9 @@ describe('ContactsService', () => {
         canAskAgain: true,
       };
 
-      (mockContactsModule.requestPermission as jest.Mock).mockResolvedValue(mockResponse);
+      (mockContactsModule.requestPermission as jest.Mock).mockResolvedValue(
+        mockResponse,
+      );
 
       const result = await contactsService.requestPermission();
 
@@ -58,7 +62,7 @@ describe('ContactsService', () => {
 
     it('should handle errors gracefully and return denied status', async () => {
       (mockContactsModule.requestPermission as jest.Mock).mockRejectedValue(
-        new Error('Permission error')
+        new Error('Permission error'),
       );
 
       const result = await contactsService.requestPermission();
@@ -73,11 +77,13 @@ describe('ContactsService', () => {
   describe('getContacts', () => {
     it('should return list of contacts when permission is granted', async () => {
       const mockContacts: Contact[] = [
-        {id: '1', name: 'John Doe', phoneNumber: '1234567890'},
-        {id: '2', name: 'Jane Smith', phoneNumber: '0987654321'},
+        { id: '1', name: 'John Doe', phoneNumber: '1234567890' },
+        { id: '2', name: 'Jane Smith', phoneNumber: '0987654321' },
       ];
 
-      (mockContactsModule.getContacts as jest.Mock).mockResolvedValue(mockContacts);
+      (mockContactsModule.getContacts as jest.Mock).mockResolvedValue(
+        mockContacts,
+      );
 
       const result = await contactsService.getContacts();
 
@@ -97,7 +103,9 @@ describe('ContactsService', () => {
       const error = new Error('Permission denied');
       (mockContactsModule.getContacts as jest.Mock).mockRejectedValue(error);
 
-      await expect(contactsService.getContacts()).rejects.toThrow('Permission denied');
+      await expect(contactsService.getContacts()).rejects.toThrow(
+        'Permission denied',
+      );
     });
 
     it('should handle native module errors', async () => {

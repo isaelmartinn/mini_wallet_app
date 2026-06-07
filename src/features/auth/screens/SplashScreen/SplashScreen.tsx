@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, ActivityIndicator} from 'react-native';
-import {Theme} from '@/theme';
-import {styles} from './SplashScreen.styles';
+import { View, Text, ActivityIndicator } from 'react-native';
+import { Theme } from '@/theme';
+import { styles } from './SplashScreen.styles';
 
 export const SplashScreen: React.FC = () => {
   return (

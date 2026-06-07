@@ -1,42 +1,44 @@
 import React from 'react';
-import {render, fireEvent, waitFor} from '@testing-library/react-native';
-import {HomeScreen} from './HomeScreen';
-import {useAuthStore} from '@/store/authStore';
-import {useWallet} from '../../hooks';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {AppStackParamList} from '@/navigation/types';
+import { render, fireEvent } from '@testing-library/react-native';
+import { HomeScreen } from './HomeScreen';
+import { useAuthStore } from '@/store/authStore';
+import { useWallet } from '../../hooks';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { AppStackParamList } from '@/navigation/types';
 
 jest.mock('@/store/authStore');
 jest.mock('../../hooks');
-jest.mock('./components', () => ({
-  BalanceCard: jest.fn(({onSendMoney}) => {
-    const {View, Text, TouchableOpacity} = require('react-native');
-    return (
-      <View testID="balance-card">
-        <Text>Balance Card</Text>
-        <TouchableOpacity testID="send-money-button" onPress={onSendMoney}>
-          <Text>Enviar</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }),
-  TransactionList: jest.fn(({onRefresh, onRetry, hasError}) => {
-    const {View, Text, TouchableOpacity} = require('react-native');
-    return (
-      <View testID="transaction-list">
-        <Text>Transaction List</Text>
-        {hasError && (
-          <TouchableOpacity testID="retry-button" onPress={onRetry}>
-            <Text>Reintentar</Text>
+jest.mock('./components', () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { View, Text, TouchableOpacity } = require('react-native');
+  return {
+    BalanceCard: jest.fn(({ onSendMoney }) => {
+      return (
+        <View testID="balance-card">
+          <Text>Balance Card</Text>
+          <TouchableOpacity testID="send-money-button" onPress={onSendMoney}>
+            <Text>Enviar</Text>
           </TouchableOpacity>
-        )}
-        <TouchableOpacity testID="refresh-button" onPress={onRefresh}>
-          <Text>Refrescar</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }),
-}));
+        </View>
+      );
+    }),
+    TransactionList: jest.fn(({ onRefresh, onRetry, hasError }) => {
+      return (
+        <View testID="transaction-list">
+          <Text>Transaction List</Text>
+          {hasError && (
+            <TouchableOpacity testID="retry-button" onPress={onRetry}>
+              <Text>Reintentar</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity testID="refresh-button" onPress={onRefresh}>
+            <Text>Refrescar</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }),
+  };
+});
 
 type MockNavigation = Partial<DrawerNavigationProp<AppStackParamList, 'Home'>>;
 
@@ -105,8 +107,12 @@ describe('HomeScreen', () => {
       handleRetry: mockHandleRetry,
     });
 
-    const {getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     expect(getByTestId('activity-indicator')).toBeTruthy();
@@ -123,8 +129,12 @@ describe('HomeScreen', () => {
       handleRetry: mockHandleRetry,
     });
 
-    const {queryByTestId, getByText} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { queryByTestId, getByText } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     expect(queryByTestId('activity-indicator')).toBeNull();
@@ -132,8 +142,12 @@ describe('HomeScreen', () => {
   });
 
   it('should render header with title and menu button', () => {
-    const {getByText, getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByText, getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     expect(getByText('Mi Billetera')).toBeTruthy();
@@ -141,8 +155,12 @@ describe('HomeScreen', () => {
   });
 
   it('should open drawer when menu button is pressed', () => {
-    const {getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     const menuButton = getByTestId('menu-button');
@@ -152,16 +170,24 @@ describe('HomeScreen', () => {
   });
 
   it('should render BalanceCard with correct props', () => {
-    const {getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     expect(getByTestId('balance-card')).toBeTruthy();
   });
 
   it('should navigate to Amount screen when send money is triggered', () => {
-    const {getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     const sendMoneyButton = getByTestId('send-money-button');
@@ -171,16 +197,24 @@ describe('HomeScreen', () => {
   });
 
   it('should render TransactionList with correct props', () => {
-    const {getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     expect(getByTestId('transaction-list')).toBeTruthy();
   });
 
   it('should call handleRefresh when refresh is triggered', () => {
-    const {getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     const refreshButton = getByTestId('refresh-button');
@@ -200,8 +234,12 @@ describe('HomeScreen', () => {
       handleRetry: mockHandleRetry,
     });
 
-    const {getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     const retryButton = getByTestId('retry-button');
@@ -221,8 +259,12 @@ describe('HomeScreen', () => {
       handleRetry: mockHandleRetry,
     });
 
-    const {getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     expect(getByTestId('retry-button')).toBeTruthy();
@@ -233,8 +275,12 @@ describe('HomeScreen', () => {
       user: null,
     });
 
-    const {getByText, getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByText, getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     expect(getByText('Mi Billetera')).toBeTruthy();
@@ -252,8 +298,12 @@ describe('HomeScreen', () => {
       handleRetry: mockHandleRetry,
     });
 
-    const {getByText, getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByText, getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     expect(getByText('Mi Billetera')).toBeTruthy();
@@ -271,8 +321,12 @@ describe('HomeScreen', () => {
       handleRetry: mockHandleRetry,
     });
 
-    const {getByText, getByTestId} = render(
-      <HomeScreen navigation={mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>} />,
+    const { getByText, getByTestId } = render(
+      <HomeScreen
+        navigation={
+          mockNavigation as DrawerNavigationProp<AppStackParamList, 'Home'>
+        }
+      />,
     );
 
     expect(getByText('Mi Billetera')).toBeTruthy();

@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {styles} from './WalletScreen.styles';
-import {useAppStore} from '@/store/useAppStore';
+import { View, Text } from 'react-native';
+import { styles } from './WalletScreen.styles';
+import { useAppStore } from '@/store/useAppStore';
 
 export const WalletScreen: React.FC = () => {
-  const {isLoading} = useAppStore();
+  const { isLoading } = useAppStore();
 
   return (
     <View style={styles.container}>

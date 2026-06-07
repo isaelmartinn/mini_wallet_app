@@ -1,6 +1,6 @@
-import {renderHook} from '@testing-library/react-native';
-import {useWallet} from './useWallet';
-import {useWalletStore} from '@/store/walletStore';
+import { renderHook } from '@testing-library/react-native';
+import { useWallet } from './useWallet';
+import { useWalletStore } from '@/store/walletStore';
 
 jest.mock('@/store/walletStore', () => ({
   useWalletStore: jest.fn(),
@@ -13,7 +13,7 @@ describe('useWallet', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (useWalletStore as jest.Mock).mockReturnValue({
+    (useWalletStore as unknown as jest.Mock).mockReturnValue({
       balance: 1000,
       transactions: [],
       isLoading: false,
@@ -26,7 +26,7 @@ describe('useWallet', () => {
   });
 
   it('should return wallet data from store', () => {
-    const {result} = renderHook(() => useWallet());
+    const { result } = renderHook(() => useWallet());
 
     expect(result.current.balance).toBe(1000);
     expect(result.current.transactions).toEqual([]);
@@ -36,7 +36,7 @@ describe('useWallet', () => {
   });
 
   it('should call refreshWalletData when handleRefresh is called', () => {
-    const {result} = renderHook(() => useWallet());
+    const { result } = renderHook(() => useWallet());
 
     result.current.handleRefresh();
 
@@ -44,7 +44,7 @@ describe('useWallet', () => {
   });
 
   it('should call clearError and fetchWalletData when handleRetry is called', () => {
-    const {result} = renderHook(() => useWallet());
+    const { result } = renderHook(() => useWallet());
 
     result.current.handleRetry();
 

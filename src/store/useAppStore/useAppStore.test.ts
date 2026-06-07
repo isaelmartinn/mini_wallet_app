@@ -1,5 +1,5 @@
-import {renderHook, act} from '@testing-library/react-native';
-import {useAppStore} from './useAppStore';
+import { renderHook, act } from '@testing-library/react-native';
+import { useAppStore } from './useAppStore';
 
 describe('useAppStore', () => {
   beforeEach(() => {
@@ -11,7 +11,7 @@ describe('useAppStore', () => {
 
   describe('initial state', () => {
     it('should initialize with default values', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       expect(result.current.isLoading).toBe(false);
       expect(result.current.error).toBeNull();
@@ -20,7 +20,7 @@ describe('useAppStore', () => {
 
   describe('setLoading', () => {
     it('should set loading to true', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       act(() => {
         result.current.setLoading(true);
@@ -30,7 +30,7 @@ describe('useAppStore', () => {
     });
 
     it('should set loading to false', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       act(() => {
         result.current.setLoading(true);
@@ -46,7 +46,7 @@ describe('useAppStore', () => {
     });
 
     it('should not affect error state when setting loading', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       act(() => {
         result.current.setError('Test error');
@@ -65,7 +65,7 @@ describe('useAppStore', () => {
 
   describe('setError', () => {
     it('should set error message', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       act(() => {
         result.current.setError('Something went wrong');
@@ -75,7 +75,7 @@ describe('useAppStore', () => {
     });
 
     it('should update error message', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       act(() => {
         result.current.setError('First error');
@@ -91,7 +91,7 @@ describe('useAppStore', () => {
     });
 
     it('should set error to null', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       act(() => {
         result.current.setError('Error message');
@@ -107,7 +107,7 @@ describe('useAppStore', () => {
     });
 
     it('should not affect loading state when setting error', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       act(() => {
         result.current.setLoading(true);
@@ -126,7 +126,7 @@ describe('useAppStore', () => {
 
   describe('clearError', () => {
     it('should clear error message', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       act(() => {
         result.current.setError('Error to clear');
@@ -142,7 +142,7 @@ describe('useAppStore', () => {
     });
 
     it('should not affect loading state when clearing error', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       act(() => {
         result.current.setLoading(true);
@@ -161,7 +161,7 @@ describe('useAppStore', () => {
     });
 
     it('should handle clearing error when no error exists', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       expect(result.current.error).toBeNull();
 
@@ -175,7 +175,7 @@ describe('useAppStore', () => {
 
   describe('combined operations', () => {
     it('should handle multiple state changes', () => {
-      const {result} = renderHook(() => useAppStore());
+      const { result } = renderHook(() => useAppStore());
 
       act(() => {
         result.current.setLoading(true);

@@ -1,30 +1,46 @@
-import React, {useState} from 'react';
-import {View, Text, SafeAreaView, KeyboardAvoidingView, Platform, TouchableOpacity} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useTransactionFlowStore} from '@/store/transactionFlowStore';
-import {validateRecipient, normalizePhoneNumber} from '@/features/transactions/utils';
-import {Recipient} from '@/features/transactions/types';
-import {Button, Input, ContactPicker} from '@/components';
-import {Contact} from '@/types/contacts';
-import {contactsService} from '@/services/ContactsService';
-import {styles} from './RecipientScreen.styles';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableOpacity,
+} from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useTransactionFlowStore } from '@/store/transactionFlowStore';
+import {
+  validateRecipient,
+  normalizePhoneNumber,
+} from '@/features/transactions/utils';
+import { Recipient } from '@/features/transactions/types';
+import { Button, Input, ContactPicker } from '@/components';
+import { Contact } from '@/types/contacts';
+import { contactsService } from '@/services/ContactsService';
+import { AppStackParamList } from '@/navigation/types';
+import { styles } from './RecipientScreen.styles';
 
 type RecipientScreenProps = {
-  navigation: StackNavigationProp<any>;
+  navigation: StackNavigationProp<AppStackParamList, 'Recipient'>;
 };
 
-export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) => {
-  const {setRecipient} = useTransactionFlowStore();
+export const RecipientScreen: React.FC<RecipientScreenProps> = ({
+  navigation,
+}) => {
+  const { setRecipient } = useTransactionFlowStore();
   const [name, setName] = useState('');
   const [accountOrPhone, setAccountOrPhone] = useState('');
-  const [errors, setErrors] = useState<{name?: string; accountOrPhone?: string}>({});
+  const [errors, setErrors] = useState<{
+    name?: string;
+    accountOrPhone?: string;
+  }>({});
   const [showContactPicker, setShowContactPicker] = useState(false);
   const [isFromContact, setIsFromContact] = useState(false);
   const isContactsAvailable = contactsService.isAvailable();
 
   const handleContinue = (): void => {
     const normalizedPhone = normalizePhoneNumber(accountOrPhone.trim());
-    
+
     const recipient: Recipient = {
       name: name.trim(),
       accountOrPhone: normalizedPhone,
@@ -44,27 +60,27 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) =>
   const handleNameChange = (text: string): void => {
     setName(text);
     if (errors.name) {
-      setErrors(prev => ({...prev, name: undefined}));
+      setErrors(prev => ({ ...prev, name: undefined }));
     }
   };
 
   const handleAccountChange = (text: string): void => {
     let processedValue = text;
-    
+
     if (isFromContact && text.startsWith('+')) {
       processedValue = text;
     } else {
       processedValue = text.replace(/\D/g, '');
     }
-    
+
     setAccountOrPhone(processedValue);
-    
+
     if (!text.startsWith('+')) {
       setIsFromContact(false);
     }
-    
+
     if (errors.accountOrPhone) {
-      setErrors(prev => ({...prev, accountOrPhone: undefined}));
+      setErrors(prev => ({ ...prev, accountOrPhone: undefined }));
     }
   };
 
@@ -93,7 +109,9 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) =>
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.title}>¿A quién le envías?</Text>
-            <Text style={styles.subtitle}>Ingresa los datos del destinatario</Text>
+            <Text style={styles.subtitle}>
+              Ingresa los datos del destinatario
+            </Text>
           </View>
 
           <View style={styles.form}>
@@ -102,7 +120,9 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) =>
                 style={styles.contactButton}
                 onPress={handleOpenContactPicker}
                 activeOpacity={0.7}>
-                <Text style={styles.contactButtonText}>📱 Seleccionar de contactos</Text>
+                <Text style={styles.contactButtonText}>
+                  📱 Seleccionar de contactos
+                </Text>
               </TouchableOpacity>
             )}
 
@@ -123,9 +143,9 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({navigation}) =>
               <Input
                 value={accountOrPhone}
                 onChangeText={handleAccountChange}
-                placeholder={isFromContact ? "Ej: +521234567890" : "10 dígitos"}
+                placeholder={isFromContact ? 'Ej: +521234567890' : '10 dígitos'}
                 error={errors.accountOrPhone}
-                keyboardType={isFromContact ? "phone-pad" : "number-pad"}
+                keyboardType={isFromContact ? 'phone-pad' : 'number-pad'}
                 maxLength={isFromContact ? 13 : 10}
               />
             </View>

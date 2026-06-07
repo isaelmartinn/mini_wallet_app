@@ -1,8 +1,8 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {SplashScreen} from '@/features/auth/screens/SplashScreen';
-import {WalletScreen} from '@/features/wallet/screens/WalletScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { SplashScreen } from '@/features/auth/screens/SplashScreen';
+import { WalletScreen } from '@/features/wallet/screens/WalletScreen';
 
 type MainStackParamList = {
   Splash: undefined;

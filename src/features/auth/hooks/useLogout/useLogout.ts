@@ -1,7 +1,7 @@
-import {useCallback} from 'react';
-import {useAuthStore} from '@/store/authStore';
-import {useWalletStore} from '@/store/walletStore';
-import {useTransactionFlowStore} from '@/store/transactionFlowStore';
+import { useCallback } from 'react';
+import { useAuthStore } from '@/store/authStore';
+import { useWalletStore } from '@/store/walletStore';
+import { useTransactionFlowStore } from '@/store/transactionFlowStore';
 
 export const useLogout = () => {
   const authLogout = useAuthStore(state => state.logout);
@@ -14,5 +14,5 @@ export const useLogout = () => {
     authLogout();
   }, [authLogout, walletReset, transactionReset]);
 
-  return {logout};
+  return { logout };
 };

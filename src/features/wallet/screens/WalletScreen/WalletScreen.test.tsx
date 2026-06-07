@@ -1,14 +1,16 @@
 import React from 'react';
-import {render} from '@testing-library/react-native';
-import {WalletScreen} from './WalletScreen';
-import {useAppStore} from '@/store/useAppStore';
+import { render } from '@testing-library/react-native';
+import { WalletScreen } from './WalletScreen';
+import { useAppStore } from '@/store/useAppStore';
 
 jest.mock('@/store/useAppStore', () => ({
   useAppStore: jest.fn(),
 }));
 
 describe('WalletScreen', () => {
-  const mockUseAppStore = useAppStore as jest.MockedFunction<typeof useAppStore>;
+  const mockUseAppStore = useAppStore as jest.MockedFunction<
+    typeof useAppStore
+  >;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -23,7 +25,7 @@ describe('WalletScreen', () => {
       clearError: jest.fn(),
     });
 
-    const {getByText} = render(<WalletScreen />);
+    const { getByText } = render(<WalletScreen />);
 
     expect(getByText('Wallet')).toBeTruthy();
   });
@@ -37,7 +39,7 @@ describe('WalletScreen', () => {
       clearError: jest.fn(),
     });
 
-    const {getByText} = render(<WalletScreen />);
+    const { getByText } = render(<WalletScreen />);
 
     expect(getByText('Loading...')).toBeTruthy();
   });
@@ -51,7 +53,7 @@ describe('WalletScreen', () => {
       clearError: jest.fn(),
     });
 
-    const {getByText} = render(<WalletScreen />);
+    const { getByText } = render(<WalletScreen />);
 
     expect(getByText('Your wallet is ready')).toBeTruthy();
   });
@@ -65,7 +67,7 @@ describe('WalletScreen', () => {
       clearError: jest.fn(),
     });
 
-    const {queryByText} = render(<WalletScreen />);
+    const { queryByText } = render(<WalletScreen />);
 
     expect(queryByText('Loading...')).toBeNull();
   });
@@ -79,7 +81,7 @@ describe('WalletScreen', () => {
       clearError: jest.fn(),
     });
 
-    const {queryByText} = render(<WalletScreen />);
+    const { queryByText } = render(<WalletScreen />);
 
     expect(queryByText('Your wallet is ready')).toBeNull();
   });
@@ -93,7 +95,7 @@ describe('WalletScreen', () => {
       clearError: jest.fn(),
     });
 
-    const {getByText} = render(<WalletScreen />);
+    const { getByText } = render(<WalletScreen />);
 
     const title = getByText('Wallet');
     const subtitle = getByText('Your wallet is ready');

@@ -1,7 +1,7 @@
 import React from 'react';
-import {render} from '@testing-library/react-native';
-import {TransactionItem} from './TransactionItem';
-import {Transaction} from '@/types';
+import { render } from '@testing-library/react-native';
+import { TransactionItem } from './TransactionItem';
+import { Transaction } from '@/types';
 
 jest.mock('@/utils/currency', () => ({
   formatCurrency: jest.fn((amount: number) => `$${amount.toFixed(2)}`),
@@ -36,7 +36,9 @@ describe('TransactionItem', () => {
   };
 
   it('should render incoming transaction correctly', () => {
-    const {getByText} = render(<TransactionItem transaction={mockIncomingTransaction} />);
+    const { getByText } = render(
+      <TransactionItem transaction={mockIncomingTransaction} />,
+    );
 
     expect(getByText('Pago recibido')).toBeTruthy();
     expect(getByText('+$500.00')).toBeTruthy();
@@ -44,7 +46,9 @@ describe('TransactionItem', () => {
   });
 
   it('should render outgoing transaction correctly', () => {
-    const {getByText} = render(<TransactionItem transaction={mockOutgoingTransaction} />);
+    const { getByText } = render(
+      <TransactionItem transaction={mockOutgoingTransaction} />,
+    );
 
     expect(getByText('Pago enviado')).toBeTruthy();
     expect(getByText('-$250.00')).toBeTruthy();
@@ -52,13 +56,17 @@ describe('TransactionItem', () => {
   });
 
   it('should render pending badge for pending transactions', () => {
-    const {getByText} = render(<TransactionItem transaction={mockPendingTransaction} />);
+    const { getByText } = render(
+      <TransactionItem transaction={mockPendingTransaction} />,
+    );
 
     expect(getByText('Pendiente')).toBeTruthy();
   });
 
   it('should not render pending badge for completed transactions', () => {
-    const {queryByText} = render(<TransactionItem transaction={mockIncomingTransaction} />);
+    const { queryByText } = render(
+      <TransactionItem transaction={mockIncomingTransaction} />,
+    );
 
     expect(queryByText('Pendiente')).toBeNull();
   });
@@ -69,7 +77,9 @@ describe('TransactionItem', () => {
       date: new Date().toISOString(),
     };
 
-    const {getByText} = render(<TransactionItem transaction={recentTransaction} />);
+    const { getByText } = render(
+      <TransactionItem transaction={recentTransaction} />,
+    );
 
     expect(getByText('Hace unos minutos')).toBeTruthy();
   });
@@ -83,7 +93,7 @@ describe('TransactionItem', () => {
       date: date.toISOString(),
     };
 
-    const {getByText} = render(<TransactionItem transaction={transaction} />);
+    const { getByText } = render(<TransactionItem transaction={transaction} />);
 
     expect(getByText('Hace 5h')).toBeTruthy();
   });
@@ -97,7 +107,7 @@ describe('TransactionItem', () => {
       date: date.toISOString(),
     };
 
-    const {getByText} = render(<TransactionItem transaction={transaction} />);
+    const { getByText } = render(<TransactionItem transaction={transaction} />);
 
     expect(getByText('Ayer')).toBeTruthy();
   });
@@ -111,7 +121,7 @@ describe('TransactionItem', () => {
       date: date.toISOString(),
     };
 
-    const {getByText} = render(<TransactionItem transaction={transaction} />);
+    const { getByText } = render(<TransactionItem transaction={transaction} />);
 
     const expectedDate = date.toLocaleDateString('es-MX', {
       day: 'numeric',
@@ -122,7 +132,9 @@ describe('TransactionItem', () => {
   });
 
   it('should render transaction description', () => {
-    const {getByText} = render(<TransactionItem transaction={mockIncomingTransaction} />);
+    const { getByText } = render(
+      <TransactionItem transaction={mockIncomingTransaction} />,
+    );
 
     expect(getByText('Pago recibido')).toBeTruthy();
   });
@@ -133,7 +145,9 @@ describe('TransactionItem', () => {
       amount: 0,
     };
 
-    const {getByText} = render(<TransactionItem transaction={zeroTransaction} />);
+    const { getByText } = render(
+      <TransactionItem transaction={zeroTransaction} />,
+    );
 
     expect(getByText('+$0.00')).toBeTruthy();
   });
@@ -144,7 +158,9 @@ describe('TransactionItem', () => {
       amount: 1234567.89,
     };
 
-    const {getByText} = render(<TransactionItem transaction={largeTransaction} />);
+    const { getByText } = render(
+      <TransactionItem transaction={largeTransaction} />,
+    );
 
     expect(getByText('+$1234567.89')).toBeTruthy();
   });

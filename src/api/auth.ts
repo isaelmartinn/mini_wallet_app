@@ -1,6 +1,6 @@
-import {LoginCredentials, User} from '@/types';
-import {validateIdentifier} from '@/utils/validation';
-import {MOCK_USERS, MOCK_LOGIN_DELAY} from '@/utils/constants';
+import { LoginCredentials, User } from '@/types';
+import { validateIdentifier } from '@/utils/validation';
+import { MOCK_USERS, MOCK_LOGIN_DELAY } from '@/utils/constants';
 
 export interface LoginResponse {
   success: boolean;
@@ -29,8 +29,7 @@ export const authApi = {
     const user = MOCK_USERS.find(
       u =>
         u.email?.toLowerCase() === normalizedIdentifier ||
-        u.phone?.replace(/\s/g, '') ===
-          normalizedIdentifier.replace(/\s/g, ''),
+        u.phone?.replace(/\s/g, '') === normalizedIdentifier.replace(/\s/g, ''),
     );
 
     if (user) {

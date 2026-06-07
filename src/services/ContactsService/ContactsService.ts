@@ -1,12 +1,18 @@
-import {NativeModules, Platform} from 'react-native';
-import {Contact, ContactsPermissionStatus, ContactsModuleInterface} from '@/types/contacts';
+import { NativeModules } from 'react-native';
+import {
+  Contact,
+  ContactsPermissionStatus,
+  ContactsModuleInterface,
+} from '@/types/contacts';
 
-const {ContactsModule} = NativeModules;
+const { ContactsModule } = NativeModules;
 
 class ContactsService implements ContactsModuleInterface {
   private validateModule(): void {
     if (!ContactsModule) {
-      throw new Error('ContactsModule is not available. Make sure native module is properly linked.');
+      throw new Error(
+        'ContactsModule is not available. Make sure native module is properly linked.',
+      );
     }
   }
 

@@ -1,1 +1,1 @@
-export {useInactivityTimeout} from './useInactivityTimeout';
+export { useInactivityTimeout } from './useInactivityTimeout';

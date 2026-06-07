@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState, useCallback} from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 interface UseInactivityTimeoutParams {
   timeoutMs: number;
@@ -30,7 +30,7 @@ export const useInactivityTimeout = ({
 
   const startTimer = useCallback((): void => {
     clearTimer();
-    
+
     if (!enabled) {
       return;
     }

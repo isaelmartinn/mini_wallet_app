@@ -11,8 +11,10 @@ export const TRANSACTION_ERRORS = {
   RECIPIENT_NAME_REQUIRED: 'El nombre es requerido',
   RECIPIENT_NAME_TOO_SHORT: 'El nombre debe tener al menos 3 caracteres',
   RECIPIENT_ACCOUNT_REQUIRED: 'La cuenta o teléfono es requerido',
-  RECIPIENT_ACCOUNT_INVALID: 'Ingresa un número de teléfono válido (10 dígitos)',
-  INSUFFICIENT_FUNDS: 'No tienes saldo suficiente para completar esta transacción',
+  RECIPIENT_ACCOUNT_INVALID:
+    'Ingresa un número de teléfono válido (10 dígitos)',
+  INSUFFICIENT_FUNDS:
+    'No tienes saldo suficiente para completar esta transacción',
   NETWORK_ERROR: 'Error de conexión. Por favor, intenta nuevamente',
   TIMEOUT: 'La transacción tardó demasiado. Intenta de nuevo',
   UNKNOWN: 'Ocurrió un error inesperado. Por favor, intenta más tarde',
@@ -20,4 +22,3 @@ export const TRANSACTION_ERRORS = {
 
 export const TRANSACTION_TIMEOUT_MS = 60_000;
 export const TIMEOUT_WARNING_MS = 50_000;
-

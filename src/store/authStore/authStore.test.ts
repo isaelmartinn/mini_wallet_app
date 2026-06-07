@@ -1,6 +1,6 @@
-import {renderHook, act, waitFor} from '@testing-library/react-native';
-import {useAuthStore} from './authStore';
-import {authApi} from '@/api/auth';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
+import { useAuthStore } from './authStore';
+import { authApi } from '@/api/auth';
 
 jest.mock('@/api/auth');
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -35,10 +35,10 @@ describe('authStore', () => {
 
       (authApi.login as jest.Mock).mockResolvedValue(mockResponse);
 
-      const {result} = renderHook(() => useAuthStore());
+      const { result } = renderHook(() => useAuthStore());
 
       await act(async () => {
-        await result.current.login({identifier: 'john@example.com'});
+        await result.current.login({ identifier: 'john@example.com' });
       });
 
       await waitFor(() => {
@@ -57,10 +57,10 @@ describe('authStore', () => {
 
       (authApi.login as jest.Mock).mockResolvedValue(mockResponse);
 
-      const {result} = renderHook(() => useAuthStore());
+      const { result } = renderHook(() => useAuthStore());
 
       await act(async () => {
-        await result.current.login({identifier: 'wrong@example.com'});
+        await result.current.login({ identifier: 'wrong@example.com' });
       });
 
       await waitFor(() => {
@@ -78,10 +78,10 @@ describe('authStore', () => {
 
       (authApi.login as jest.Mock).mockResolvedValue(mockResponse);
 
-      const {result} = renderHook(() => useAuthStore());
+      const { result } = renderHook(() => useAuthStore());
 
       await act(async () => {
-        await result.current.login({identifier: 'test@example.com'});
+        await result.current.login({ identifier: 'test@example.com' });
       });
 
       await waitFor(() => {
@@ -91,16 +91,20 @@ describe('authStore', () => {
     });
 
     it('should handle network error during login', async () => {
-      (authApi.login as jest.Mock).mockRejectedValue(new Error('Network error'));
+      (authApi.login as jest.Mock).mockRejectedValue(
+        new Error('Network error'),
+      );
 
-      const {result} = renderHook(() => useAuthStore());
+      const { result } = renderHook(() => useAuthStore());
 
       await act(async () => {
-        await result.current.login({identifier: 'test@example.com'});
+        await result.current.login({ identifier: 'test@example.com' });
       });
 
       await waitFor(() => {
-        expect(result.current.error).toBe('Error de conexión. Intenta de nuevo.');
+        expect(result.current.error).toBe(
+          'Error de conexión. Intenta de nuevo.',
+        );
         expect(result.current.isLoading).toBe(false);
         expect(result.current.isAuthenticated).toBe(false);
       });
@@ -109,7 +113,7 @@ describe('authStore', () => {
     it('should set loading state during login', async () => {
       const mockResponse = {
         success: true,
-        user: {id: '1', name: 'Test User', email: 'test@example.com'},
+        user: { id: '1', name: 'Test User', email: 'test@example.com' },
       };
 
       (authApi.login as jest.Mock).mockImplementation(() => {
@@ -118,10 +122,10 @@ describe('authStore', () => {
         });
       });
 
-      const {result} = renderHook(() => useAuthStore());
+      const { result } = renderHook(() => useAuthStore());
 
       act(() => {
-        result.current.login({identifier: 'test@example.com'});
+        result.current.login({ identifier: 'test@example.com' });
       });
 
       expect(result.current.isLoading).toBe(true);
@@ -134,11 +138,11 @@ describe('authStore', () => {
 
   describe('logout', () => {
     it('should clear user data on logout', () => {
-      const {result} = renderHook(() => useAuthStore());
+      const { result } = renderHook(() => useAuthStore());
 
       act(() => {
         useAuthStore.setState({
-          user: {id: '1', name: 'Test User', email: 'test@example.com'},
+          user: { id: '1', name: 'Test User', email: 'test@example.com' },
           isAuthenticated: true,
           error: 'Some error',
         });
@@ -157,7 +161,7 @@ describe('authStore', () => {
     });
 
     it('should handle logout when already logged out', () => {
-      const {result} = renderHook(() => useAuthStore());
+      const { result } = renderHook(() => useAuthStore());
 
       expect(result.current.isAuthenticated).toBe(false);
 
@@ -172,10 +176,10 @@ describe('authStore', () => {
 
   describe('clearError', () => {
     it('should clear error message', () => {
-      const {result} = renderHook(() => useAuthStore());
+      const { result } = renderHook(() => useAuthStore());
 
       act(() => {
-        useAuthStore.setState({error: 'Test error message'});
+        useAuthStore.setState({ error: 'Test error message' });
       });
 
       expect(result.current.error).toBe('Test error message');
@@ -188,9 +192,13 @@ describe('authStore', () => {
     });
 
     it('should not affect other state when clearing error', () => {
-      const {result} = renderHook(() => useAuthStore());
+      const { result } = renderHook(() => useAuthStore());
 
-      const mockUser = {id: '1', name: 'Test User', email: 'test@example.com'};
+      const mockUser = {
+        id: '1',
+        name: 'Test User',
+        email: 'test@example.com',
+      };
 
       act(() => {
         useAuthStore.setState({
