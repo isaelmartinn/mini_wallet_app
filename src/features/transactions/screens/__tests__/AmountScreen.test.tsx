@@ -4,16 +4,21 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {AmountScreen} from '../AmountScreen';
 import {useWalletStore} from '@/store/walletStore';
 import {useTransactionFlowStore} from '@/store/transactionFlowStore';
+import {useInactivityTimeout} from '@/features/transactions/hooks/useInactivityTimeout';
 
 jest.mock('@/store/walletStore');
 jest.mock('@/store/transactionFlowStore');
+jest.mock('@/features/transactions/hooks/useInactivityTimeout');
 
 const mockNavigation = {
   navigate: jest.fn(),
+  replace: jest.fn(),
 } as unknown as StackNavigationProp<Record<string, object | undefined>>;
 
 describe('AmountScreen', () => {
   const mockSetAmount = jest.fn();
+  const mockResetTimer = jest.fn();
+  let mockOnTimeout: () => void;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -22,6 +27,14 @@ describe('AmountScreen', () => {
     });
     (useTransactionFlowStore as unknown as jest.Mock).mockReturnValue({
       setAmount: mockSetAmount,
+    });
+    (useInactivityTimeout as jest.Mock).mockImplementation(({onTimeout}) => {
+      mockOnTimeout = onTimeout;
+      return {
+        resetTimer: mockResetTimer,
+        remainingTime: 60000,
+        isActive: true,
+      };
     });
   });
 
@@ -223,5 +236,50 @@ describe('AmountScreen', () => {
 
     errorTexts = queryAllByText(/saldo/i);
     expect(errorTexts.length).toBe(1);
+  });
+
+  describe('Integración con Hook de Timeout', () => {
+    it('should initialize timeout hook on mount', () => {
+      render(<AmountScreen navigation={mockNavigation} />);
+
+      expect(useInactivityTimeout).toHaveBeenCalledWith({
+        timeoutMs: 60000,
+        onTimeout: expect.any(Function),
+        enabled: true,
+      });
+    });
+
+    it('should call resetTimer when user types in input', () => {
+      const {getByPlaceholderText} = render(
+        <AmountScreen navigation={mockNavigation} />,
+      );
+
+      const input = getByPlaceholderText('0.00');
+      fireEvent.changeText(input, '100');
+
+      expect(mockResetTimer).toHaveBeenCalled();
+    });
+
+    it('should call resetTimer when continue button is pressed', () => {
+      const {getByPlaceholderText, getByText} = render(
+        <AmountScreen navigation={mockNavigation} />,
+      );
+
+      const input = getByPlaceholderText('0.00');
+      fireEvent.changeText(input, '100');
+
+      const button = getByText('Continuar');
+      fireEvent.press(button);
+
+      expect(mockResetTimer).toHaveBeenCalledTimes(2);
+    });
+
+    it('should navigate to Timeout screen when timeout occurs', () => {
+      render(<AmountScreen navigation={mockNavigation} />);
+
+      mockOnTimeout();
+
+      expect(mockNavigation.replace).toHaveBeenCalledWith('Timeout');
+    });
   });
 });

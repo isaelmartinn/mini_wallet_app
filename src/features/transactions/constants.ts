@@ -17,3 +17,7 @@ export const TRANSACTION_ERRORS = {
   TIMEOUT: 'La transacción tardó demasiado. Intenta de nuevo',
   UNKNOWN: 'Ocurrió un error inesperado. Por favor, intenta más tarde',
 } as const;
+
+export const TRANSACTION_TIMEOUT_MS = 60_000;
+export const TIMEOUT_WARNING_MS = 50_000;
+

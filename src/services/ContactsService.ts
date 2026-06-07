@@ -16,7 +16,6 @@ class ContactsService implements ContactsModuleInterface {
       const result = await ContactsModule.requestPermission();
       return result;
     } catch (error) {
-      console.error('Error requesting contacts permission:', error);
       return {
         granted: false,
         canAskAgain: false,
@@ -30,14 +29,11 @@ class ContactsService implements ContactsModuleInterface {
       const contacts = await ContactsModule.getContacts();
       return contacts;
     } catch (error) {
-      console.error('Error fetching contacts:', error);
       throw error;
     }
   }
 
   isAvailable(): boolean {
-    console.log('ContactsModule:', ContactsModule);
-    console.log('NativeModules:', Object.keys(NativeModules));
     return ContactsModule !== null && ContactsModule !== undefined;
   }
 }

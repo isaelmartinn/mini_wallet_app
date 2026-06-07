@@ -45,3 +45,10 @@ export interface RecipientValidation {
     accountOrPhone?: string;
   };
 }
+
+export interface InactivityTimeoutConfig {
+  timeoutMs: number;
+  enabled: boolean;
+}
+
+export type TimeoutReason = 'inactivity' | 'session_expired';
