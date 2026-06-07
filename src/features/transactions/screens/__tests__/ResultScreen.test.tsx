@@ -11,6 +11,7 @@ jest.mock('@/store/walletStore');
 
 const mockNavigation = {
   navigate: jest.fn(),
+  reset: jest.fn(),
 } as unknown as StackNavigationProp<Record<string, object | undefined>>;
 
 describe('ResultScreen', () => {
@@ -104,7 +105,10 @@ describe('ResultScreen', () => {
       fireEvent.press(button);
 
       expect(mockReset).toHaveBeenCalled();
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('Home');
+      expect(mockNavigation.reset).toHaveBeenCalledWith({
+        index: 0,
+        routes: [{name: 'Home'}],
+      });
     });
 
     it('should navigate to Amount screen when "Nueva transacción" is pressed', () => {
@@ -114,7 +118,13 @@ describe('ResultScreen', () => {
       fireEvent.press(button);
 
       expect(mockReset).toHaveBeenCalled();
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('Amount');
+      expect(mockNavigation.reset).toHaveBeenCalledWith({
+        index: 1,
+        routes: [
+          {name: 'Home'},
+          {name: 'Amount'},
+        ],
+      });
     });
   });
 

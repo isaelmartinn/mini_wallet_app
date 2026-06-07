@@ -8,6 +8,7 @@ jest.mock('@/store/transactionFlowStore');
 
 const mockNavigation = {
   replace: jest.fn(),
+  reset: jest.fn(),
 } as unknown as StackNavigationProp<Record<string, object | undefined>>;
 
 describe('TimeoutScreen', () => {
@@ -40,7 +41,13 @@ describe('TimeoutScreen', () => {
       const tryAgainButton = getByText('Intentar de nuevo');
       fireEvent.press(tryAgainButton);
 
-      expect(mockNavigation.replace).toHaveBeenCalledWith('Amount');
+      expect(mockNavigation.reset).toHaveBeenCalledWith({
+        index: 1,
+        routes: [
+          {name: 'Home'},
+          {name: 'Amount'},
+        ],
+      });
     });
 
     it('should reset transaction store when navigating to AmountScreen', () => {
@@ -60,7 +67,10 @@ describe('TimeoutScreen', () => {
       const goHomeButton = getByText('Volver al inicio');
       fireEvent.press(goHomeButton);
 
-      expect(mockNavigation.replace).toHaveBeenCalledWith('Home');
+      expect(mockNavigation.reset).toHaveBeenCalledWith({
+        index: 0,
+        routes: [{name: 'Home'}],
+      });
     });
 
     it('should reset transaction store when navigating to Home', () => {

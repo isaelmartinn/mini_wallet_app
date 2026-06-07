@@ -9,6 +9,7 @@ export const openDeviceSettings = async (): Promise<boolean> => {
         await Linking.openURL('app-settings:');
         return true;
       } else {
+        console.warn('app-settings: not available, falling back to openSettings()');
         await Linking.openSettings();
         return true;
       }
@@ -19,13 +20,17 @@ export const openDeviceSettings = async (): Promise<boolean> => {
       return true;
     }
     
+    console.warn('openSettings is not supported on this platform');
     return false;
   } catch (error) {
+    console.error('Error opening device settings:', error);
     
     try {
+      console.log('Attempting fallback to Linking.openSettings()');
       await Linking.openSettings();
       return true;
     } catch (fallbackError) {
+      console.error('Error opening device settings:', fallbackError);
       return false;
     }
   }
