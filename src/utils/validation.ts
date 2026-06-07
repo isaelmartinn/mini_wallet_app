@@ -1,5 +1,5 @@
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-export const PHONE_REGEX = /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/;
+export const PHONE_REGEX = /^\+52\d{10}$/;
 
 export interface ValidationResult {
   isValid: boolean;
@@ -17,29 +17,57 @@ export const validateEmail = (email: string): ValidationResult => {
 };
 
 export const validatePhone = (phone: string): ValidationResult => {
-  if (!phone.trim()) {
+  const cleanPhone = phone.trim();
+  
+  if (!cleanPhone) {
     return {isValid: false, error: 'El teléfono es requerido'};
   }
-  if (!PHONE_REGEX.test(phone)) {
-    return {isValid: false, error: 'El formato del teléfono no es válido'};
+  
+  if (!cleanPhone.startsWith('+52')) {
+    return {
+      isValid: false,
+      error: 'El teléfono debe iniciar con +52',
+    };
   }
+  
+  const digits = cleanPhone.replace('+52', '');
+  
+  if (digits.length !== 10) {
+    return {
+      isValid: false,
+      error: 'El teléfono debe tener 10 dígitos después de +52',
+    };
+  }
+  
+  if (!/^\d{10}$/.test(digits)) {
+    return {
+      isValid: false,
+      error: 'El teléfono solo debe contener números',
+    };
+  }
+  
+  if (!PHONE_REGEX.test(cleanPhone)) {
+    return {
+      isValid: false,
+      error: 'El formato del teléfono no es válido',
+    };
+  }
+  
   return {isValid: true};
 };
 
 export const validateIdentifier = (identifier: string): ValidationResult => {
-  if (!identifier.trim()) {
+  const cleanIdentifier = identifier.trim();
+
+  if (!cleanIdentifier) {
     return {isValid: false, error: 'Este campo es requerido'};
   }
 
-  const emailValidation = validateEmail(identifier);
-  const phoneValidation = validatePhone(identifier);
+  const isPhone = cleanIdentifier.startsWith('+52') || /^\d/.test(cleanIdentifier);
 
-  if (emailValidation.isValid || phoneValidation.isValid) {
-    return {isValid: true};
+  if (isPhone) {
+    return validatePhone(cleanIdentifier);
   }
 
-  return {
-    isValid: false,
-    error: 'Ingresa un email o teléfono válido',
-  };
+  return validateEmail(cleanIdentifier);
 };

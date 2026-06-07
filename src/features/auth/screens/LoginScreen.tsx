@@ -25,7 +25,7 @@ export const LoginScreen: React.FC = () => {
         <View style={styles.form}>
           <Input
             label="Email o Teléfono"
-            placeholder="ejemplo@email.com o +52 55 1234 5678"
+            placeholder="ejemplo@email.com o +523314530322"
             value={identifier}
             onChangeText={handleIdentifierChange}
             error={error || undefined}
@@ -42,15 +42,6 @@ export const LoginScreen: React.FC = () => {
             loading={isLoading}
             fullWidth
           />
-        </View>
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Esta es una aplicación de demostración
-          </Text>
-          <Text style={styles.footerHint}>
-            Puedes usar cualquier email o teléfono válido
-          </Text>
         </View>
       </View>
     </KeyboardAvoidingView>
