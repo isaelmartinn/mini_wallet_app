@@ -68,6 +68,9 @@ src/
 - ✅ Tests de componentes críticos
 - ✅ Mocks para servicios y stores
 - ✅ Cobertura mínima: validaciones, hooks, stores
+- ✅ Archivos de prueba deben vivir junto al componente/módulo que prueban
+- ❌ **PROHIBIDO** crear carpetas `__tests__` separadas
+- ✅ Convención: `ComponentName.test.tsx` junto a `ComponentName.tsx`
 
 ### 9. Manejo de Errores
 - ✅ Try-catch en operaciones asíncronas
