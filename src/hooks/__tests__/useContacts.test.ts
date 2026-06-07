@@ -26,6 +26,7 @@ describe('useContacts', () => {
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBeNull();
     expect(result.current.permissionGranted).toBe(false);
+    expect(result.current.canAskAgain).toBe(true);
   });
 
   it('should return isAvailable status from service', () => {
@@ -52,6 +53,7 @@ describe('useContacts', () => {
 
       expect(permissionResult).toBe(true);
       expect(result.current.permissionGranted).toBe(true);
+      expect(result.current.canAskAgain).toBe(true);
       expect(result.current.error).toBeNull();
     });
 
@@ -71,6 +73,7 @@ describe('useContacts', () => {
 
       expect(permissionResult).toBe(false);
       expect(result.current.permissionGranted).toBe(false);
+      expect(result.current.canAskAgain).toBe(true);
       expect(result.current.error).toBe('Permiso de contactos denegado');
     });
 
@@ -199,6 +202,62 @@ describe('useContacts', () => {
       expect(result.current.contacts).toEqual([]);
       expect(result.current.error).toBeNull();
       expect(result.current.isLoading).toBe(false);
+      expect(result.current.canAskAgain).toBe(true);
+    });
+
+    it('should reset canAskAgain when reset is called', async () => {
+      mockContactsService.requestPermission.mockResolvedValue({
+        granted: false,
+        canAskAgain: false,
+      });
+
+      const {result} = renderHook(() => useContacts());
+
+      await act(async () => {
+        await result.current.requestPermission();
+      });
+
+      expect(result.current.canAskAgain).toBe(false);
+
+      act(() => {
+        result.current.reset();
+      });
+
+      expect(result.current.canAskAgain).toBe(true);
+    });
+  });
+
+  describe('canAskAgain tracking', () => {
+    it('should track canAskAgain status when permission is denied permanently', async () => {
+      mockContactsService.requestPermission.mockResolvedValue({
+        granted: false,
+        canAskAgain: false,
+      });
+
+      const {result} = renderHook(() => useContacts());
+
+      await act(async () => {
+        await result.current.requestPermission();
+      });
+
+      expect(result.current.canAskAgain).toBe(false);
+      expect(result.current.permissionGranted).toBe(false);
+    });
+
+    it('should track canAskAgain status when permission can be requested again', async () => {
+      mockContactsService.requestPermission.mockResolvedValue({
+        granted: false,
+        canAskAgain: true,
+      });
+
+      const {result} = renderHook(() => useContacts());
+
+      await act(async () => {
+        await result.current.requestPermission();
+      });
+
+      expect(result.current.canAskAgain).toBe(true);
+      expect(result.current.permissionGranted).toBe(false);
     });
   });
 });

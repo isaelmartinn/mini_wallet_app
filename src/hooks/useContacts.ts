@@ -7,6 +7,7 @@ interface UseContactsReturn {
   isLoading: boolean;
   error: string | null;
   permissionGranted: boolean;
+  canAskAgain: boolean;
   isAvailable: boolean;
   requestPermission: () => Promise<boolean>;
   fetchContacts: () => Promise<void>;
@@ -18,6 +19,7 @@ export const useContacts = (): UseContactsReturn => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [permissionGranted, setPermissionGranted] = useState(false);
+  const [canAskAgain, setCanAskAgain] = useState(true);
 
   const isAvailable = contactsService.isAvailable();
 
@@ -33,6 +35,7 @@ export const useContacts = (): UseContactsReturn => {
       
       const result = await contactsService.requestPermission();
       setPermissionGranted(result.granted);
+      setCanAskAgain(result.canAskAgain);
       
       if (!result.granted) {
         setError('Permiso de contactos denegado');
@@ -80,6 +83,7 @@ export const useContacts = (): UseContactsReturn => {
     setContacts([]);
     setError(null);
     setIsLoading(false);
+    setCanAskAgain(true);
   }, []);
 
   return {
@@ -87,6 +91,7 @@ export const useContacts = (): UseContactsReturn => {
     isLoading,
     error,
     permissionGranted,
+    canAskAgain,
     isAvailable,
     requestPermission,
     fetchContacts,
