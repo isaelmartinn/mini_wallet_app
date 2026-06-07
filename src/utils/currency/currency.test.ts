@@ -1,4 +1,4 @@
-import {formatCurrency} from '../currency';
+import {formatCurrency} from './currency';
 
 describe('formatCurrency', () => {
   it('should format positive amounts correctly', () => {

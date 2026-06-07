@@ -4,7 +4,7 @@ import {
   validateIdentifier,
   EMAIL_REGEX,
   PHONE_REGEX,
-} from '../validation';
+} from './validation';
 
 describe('validation utils', () => {
   describe('EMAIL_REGEX', () => {

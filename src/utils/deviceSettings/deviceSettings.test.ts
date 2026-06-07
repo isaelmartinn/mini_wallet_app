@@ -1,5 +1,5 @@
 import {Linking, Platform} from 'react-native';
-import {openDeviceSettings} from '../deviceSettings';
+import {openDeviceSettings} from './deviceSettings';
 
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
   openSettings: jest.fn(),
