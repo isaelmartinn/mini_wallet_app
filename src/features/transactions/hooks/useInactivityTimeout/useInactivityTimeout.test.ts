@@ -1,5 +1,5 @@
 import {renderHook, act} from '@testing-library/react-native';
-import {useInactivityTimeout} from '../useInactivityTimeout';
+import {useInactivityTimeout} from './useInactivityTimeout';
 
 jest.useFakeTimers();
 
