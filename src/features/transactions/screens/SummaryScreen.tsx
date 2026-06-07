@@ -3,6 +3,7 @@ import {View, Text, SafeAreaView, ScrollView} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTransactionFlowStore} from '@/store/transactionFlowStore';
 import {Button} from '@/components';
+import {formatAmount} from '@/utils/currency';
 import {styles} from './SummaryScreen.styles';
 
 type SummaryScreenProps = {
@@ -46,11 +47,11 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({navigation}) => {
             <Text style={styles.sectionTitle}>Detalles del pago</Text>
             <View style={styles.row}>
               <Text style={styles.label}>Monto</Text>
-              <Text style={styles.value}>${draft.amount.toFixed(2)}</Text>
+              <Text style={styles.value}>${formatAmount(draft.amount)}</Text>
             </View>
             <View style={styles.row}>
               <Text style={styles.label}>Comisión</Text>
-              <Text style={styles.value}>${draft.fee.toFixed(2)}</Text>
+              <Text style={styles.value}>${formatAmount(draft.fee)}</Text>
             </View>
           </View>
 
@@ -58,7 +59,7 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({navigation}) => {
 
           <View style={styles.totalSection}>
             <Text style={styles.totalLabel}>Total a enviar</Text>
-            <Text style={styles.totalAmount}>${total.toFixed(2)}</Text>
+            <Text style={styles.totalAmount}>${formatAmount(total)}</Text>
           </View>
         </View>
       </ScrollView>

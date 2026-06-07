@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createDrawerNavigator, DrawerContentComponentProps} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import {HomeScreen} from '@/features/wallet/screens';
@@ -10,6 +10,7 @@ import {
 } from '@/features/transactions/screens';
 import {AppStackParamList} from './types';
 import {CustomDrawerContent} from './CustomDrawerContent';
+import {useWalletStore} from '@/store/walletStore';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator<AppStackParamList>();
@@ -30,7 +31,7 @@ const MainStack: React.FC = () => {
         options={{
           headerShown: true,
           title: 'Enviar dinero',
-          headerBackTitleVisible: false,
+          headerBackTitle: '',
         }}
       />
       <Stack.Screen
@@ -39,7 +40,7 @@ const MainStack: React.FC = () => {
         options={{
           headerShown: true,
           title: 'Destinatario',
-          headerBackTitleVisible: false,
+          headerBackTitle: '',
         }}
       />
       <Stack.Screen
@@ -48,7 +49,7 @@ const MainStack: React.FC = () => {
         options={{
           headerShown: true,
           title: 'Confirmar',
-          headerBackTitleVisible: false,
+          headerBackTitle: '',
         }}
       />
       <Stack.Screen
@@ -66,6 +67,12 @@ const MainStack: React.FC = () => {
 };
 
 export const AppStack: React.FC = () => {
+  const fetchWalletData = useWalletStore(state => state.fetchWalletData);
+
+  useEffect(() => {
+    fetchWalletData();
+  }, [fetchWalletData]);
+
   return (
     <Drawer.Navigator
       drawerContent={(props: DrawerContentComponentProps) => <CustomDrawerContent {...props} />}

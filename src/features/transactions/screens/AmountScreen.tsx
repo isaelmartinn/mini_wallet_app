@@ -5,10 +5,22 @@ import {useWalletStore} from '@/store/walletStore';
 import {useTransactionFlowStore} from '@/store/transactionFlowStore';
 import {validateAmount} from '../utils';
 import {Button, Input} from '@/components';
+import {formatCurrency} from '@/utils/currency';
 import {styles} from './AmountScreen.styles';
 
 type AmountScreenProps = {
   navigation: StackNavigationProp<any>;
+};
+
+const formatInputAmount = (value: string): string => {
+  if (!value) {
+    return '';
+  }
+  
+  const parts = value.split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  
+  return parts.join('.');
 };
 
 export const AmountScreen: React.FC<AmountScreenProps> = ({navigation}) => {
@@ -18,7 +30,22 @@ export const AmountScreen: React.FC<AmountScreenProps> = ({navigation}) => {
   const [error, setError] = useState<string | undefined>();
 
   const handleAmountChange = (text: string): void => {
-    const numericValue = text.replace(/[^0-9.]/g, '');
+    let numericValue = text.replace(/[^0-9.]/g, '');
+    
+    const parts = numericValue.split('.');
+    if (parts.length > 2) {
+      numericValue = parts[0] + '.' + parts.slice(1).join('');
+    }
+    
+    if (parts[1] && parts[1].length > 2) {
+      numericValue = parts[0] + '.' + parts[1].substring(0, 2);
+    }
+    
+    if (numericValue.startsWith('0') && numericValue.length > 1 && numericValue[1] !== '.') {
+      const withoutLeadingZeros = numericValue.replace(/^0+/, '');
+      numericValue = withoutLeadingZeros || '0';
+    }
+    
     setInputValue(numericValue);
     setError(undefined);
   };
@@ -53,13 +80,13 @@ export const AmountScreen: React.FC<AmountScreenProps> = ({navigation}) => {
           <View style={styles.header}>
             <Text style={styles.title}>¿Cuánto quieres enviar?</Text>
             <Text style={styles.balanceLabel}>Saldo disponible</Text>
-            <Text style={styles.balanceAmount}>${balance.toFixed(2)}</Text>
+            <Text style={styles.balanceAmount}>{formatCurrency(balance)}</Text>
           </View>
 
           <View style={styles.inputContainer}>
             <Text style={styles.currencySymbol}>$</Text>
             <Input
-              value={inputValue}
+              value={formatInputAmount(inputValue)}
               onChangeText={handleAmountChange}
               placeholder="0.00"
               keyboardType="decimal-pad"

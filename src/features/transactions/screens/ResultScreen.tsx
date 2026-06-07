@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {View, Text, SafeAreaView} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CheckCircle, XCircle, WifiOff, Clock, AlertCircle} from 'lucide-react-native';
 import {useTransactionFlowStore} from '@/store/transactionFlowStore';
 import {useWalletStore} from '@/store/walletStore';
 import {Button} from '@/components';
+import {formatAmount} from '@/utils/currency';
 import {Theme} from '@/theme';
 import {styles} from './ResultScreen.styles';
 
@@ -15,9 +16,10 @@ type ResultScreenProps = {
 export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
   const {result, draft, reset, processTransaction, isProcessing} = useTransactionFlowStore();
   const {addTransaction, updateBalance} = useWalletStore();
+  const transactionAddedRef = useRef(false);
 
   useEffect(() => {
-    if (result?.success && result.transactionId && draft.recipient) {
+    if (result?.success && result.transactionId && draft.recipient && !transactionAddedRef.current) {
       const newTransaction = {
         id: result.transactionId,
         amount: draft.amount,
@@ -30,10 +32,12 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
       
       addTransaction(newTransaction);
       updateBalance(draft.amount);
+      transactionAddedRef.current = true;
     }
-  }, [result?.success, result?.transactionId, draft, addTransaction, updateBalance]);
+  }, [result?.success, result?.transactionId]);
 
   const handleRetry = async (): Promise<void> => {
+    transactionAddedRef.current = false;
     await processTransaction();
   };
 
@@ -83,7 +87,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
             <View style={styles.receiptRow}>
               <Text style={styles.receiptLabel}>Monto enviado</Text>
               <Text style={[styles.receiptValue, styles.amountValue]}>
-                ${draft.amount.toFixed(2)}
+                ${formatAmount(draft.amount)}
               </Text>
             </View>
           </View>
