@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {Transaction} from '@/types';
-import {styles} from './TransactionItem.styles';
-import {formatCurrency} from '@/utils/currency';
+import { View, Text } from 'react-native';
+import { Transaction } from '@/types';
+import { styles } from './TransactionItem.styles';
+import { formatCurrency } from '@/utils/currency';
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -11,7 +11,9 @@ interface TransactionItemProps {
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   const now = new Date();
-  const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+  const diffInHours = Math.floor(
+    (now.getTime() - date.getTime()) / (1000 * 60 * 60),
+  );
 
   if (diffInHours < 1) {
     return 'Hace unos minutos';
@@ -29,13 +31,19 @@ const formatDate = (dateString: string): string => {
   });
 };
 
-export const TransactionItem: React.FC<TransactionItemProps> = ({transaction}) => {
+export const TransactionItem: React.FC<TransactionItemProps> = ({
+  transaction,
+}) => {
   const isIncoming = transaction.type === 'in';
   const isPending = transaction.status === 'pending';
 
   return (
     <View style={styles.container}>
-      <View style={[styles.iconContainer, isIncoming ? styles.iconIncoming : styles.iconOutgoing]}>
+      <View
+        style={[
+          styles.iconContainer,
+          isIncoming ? styles.iconIncoming : styles.iconOutgoing,
+        ]}>
         <Text style={styles.iconText}>{isIncoming ? '↓' : '↑'}</Text>
       </View>
 
@@ -50,8 +58,13 @@ export const TransactionItem: React.FC<TransactionItemProps> = ({transaction}) =
       </View>
 
       <View style={styles.amountContainer}>
-        <Text style={[styles.amount, isIncoming ? styles.amountIncoming : styles.amountOutgoing]}>
-          {isIncoming ? '+' : '-'}{formatCurrency(transaction.amount)}
+        <Text
+          style={[
+            styles.amount,
+            isIncoming ? styles.amountIncoming : styles.amountOutgoing,
+          ]}>
+          {isIncoming ? '+' : '-'}
+          {formatCurrency(transaction.amount)}
         </Text>
       </View>
     </View>

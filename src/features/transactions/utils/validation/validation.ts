@@ -1,5 +1,5 @@
-import {AmountValidation, RecipientValidation, Recipient} from '../../types';
-import {TRANSACTION_RULES, TRANSACTION_ERRORS} from '../../constants';
+import { AmountValidation, RecipientValidation, Recipient } from '../../types';
+import { TRANSACTION_RULES, TRANSACTION_ERRORS } from '../../constants';
 
 export const validateAmount = (
   amount: number,
@@ -19,7 +19,7 @@ export const validateAmount = (
     };
   }
 
-  return {isValid: true};
+  return { isValid: true };
 };
 
 export const validateRecipient = (
@@ -45,7 +45,10 @@ export const validateRecipient = (
     errors.name = TRANSACTION_ERRORS.RECIPIENT_NAME_TOO_SHORT;
   }
 
-  if (!recipient.accountOrPhone || recipient.accountOrPhone.trim().length === 0) {
+  if (
+    !recipient.accountOrPhone ||
+    recipient.accountOrPhone.trim().length === 0
+  ) {
     errors.accountOrPhone = TRANSACTION_ERRORS.RECIPIENT_ACCOUNT_REQUIRED;
   } else {
     const phoneNumber = recipient.accountOrPhone.trim().replace(/\D/g, '');

@@ -1,15 +1,22 @@
 import React from 'react';
-import {render, fireEvent} from '@testing-library/react-native';
-import {Text, RefreshControl, FlatList} from 'react-native';
-import {TransactionList} from './TransactionList';
-import {Transaction} from '@/types';
+import { render, fireEvent } from '@testing-library/react-native';
+import { RefreshControl, FlatList } from 'react-native';
+import { TransactionList } from './TransactionList';
+import { Transaction } from '@/types';
 
-jest.mock('../TransactionItem', () => ({
-  TransactionItem: ({transaction}: {transaction: Transaction}) => {
-    const MockText = require('react-native').Text;
-    return <MockText testID={`transaction-${transaction.id}`}>{transaction.description}</MockText>;
-  },
-}));
+jest.mock('../TransactionItem', () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { Text } = require('react-native');
+  return {
+    TransactionItem: ({ transaction }: { transaction: Transaction }) => {
+      return (
+        <Text testID={`transaction-${transaction.id}`}>
+          {transaction.description}
+        </Text>
+      );
+    },
+  };
+});
 
 describe('TransactionList', () => {
   const mockTransactions: Transaction[] = [
@@ -45,20 +52,20 @@ describe('TransactionList', () => {
 
   describe('Normal state', () => {
     it('should render header with title', () => {
-      const {getByText} = render(<TransactionList {...defaultProps} />);
+      const { getByText } = render(<TransactionList {...defaultProps} />);
 
       expect(getByText('Movimientos recientes')).toBeTruthy();
     });
 
     it('should render list of transactions', () => {
-      const {getByTestId} = render(<TransactionList {...defaultProps} />);
+      const { getByTestId } = render(<TransactionList {...defaultProps} />);
 
       expect(getByTestId('transaction-1')).toBeTruthy();
       expect(getByTestId('transaction-2')).toBeTruthy();
     });
 
     it('should render all transaction items', () => {
-      const {getByText} = render(<TransactionList {...defaultProps} />);
+      const { getByText } = render(<TransactionList {...defaultProps} />);
 
       expect(getByText('Pago recibido')).toBeTruthy();
       expect(getByText('Pago enviado')).toBeTruthy();
@@ -66,8 +73,8 @@ describe('TransactionList', () => {
 
     it('should call onRefresh when pull to refresh is triggered', () => {
       const onRefresh = jest.fn();
-      const {UNSAFE_getByType} = render(
-        <TransactionList {...defaultProps} onRefresh={onRefresh} />
+      const { UNSAFE_getByType } = render(
+        <TransactionList {...defaultProps} onRefresh={onRefresh} />,
       );
 
       const refreshControl = UNSAFE_getByType(RefreshControl);
@@ -79,8 +86,8 @@ describe('TransactionList', () => {
 
   describe('Empty state', () => {
     it('should render empty state when no transactions', () => {
-      const {getByText} = render(
-        <TransactionList {...defaultProps} transactions={[]} />
+      const { getByText } = render(
+        <TransactionList {...defaultProps} transactions={[]} />,
       );
 
       expect(getByText('💳')).toBeTruthy();
@@ -89,8 +96,8 @@ describe('TransactionList', () => {
     });
 
     it('should not render header when showing empty state', () => {
-      const {getByText} = render(
-        <TransactionList {...defaultProps} transactions={[]} />
+      const { getByText } = render(
+        <TransactionList {...defaultProps} transactions={[]} />,
       );
 
       expect(getByText('Movimientos recientes')).toBeTruthy();
@@ -99,8 +106,8 @@ describe('TransactionList', () => {
 
   describe('Error state', () => {
     it('should render error state when hasError is true and no transactions', () => {
-      const {getByText} = render(
-        <TransactionList {...defaultProps} transactions={[]} hasError={true} />
+      const { getByText } = render(
+        <TransactionList {...defaultProps} transactions={[]} hasError={true} />,
       );
 
       expect(getByText('⚠️')).toBeTruthy();
@@ -111,13 +118,13 @@ describe('TransactionList', () => {
 
     it('should call onRetry when retry button is pressed', () => {
       const onRetry = jest.fn();
-      const {getByText} = render(
+      const { getByText } = render(
         <TransactionList
           {...defaultProps}
           transactions={[]}
           hasError={true}
           onRetry={onRetry}
-        />
+        />,
       );
 
       const retryButton = getByText('Reintentar');
@@ -127,8 +134,8 @@ describe('TransactionList', () => {
     });
 
     it('should not render error state when hasError is true but has transactions', () => {
-      const {queryByText, getByText} = render(
-        <TransactionList {...defaultProps} hasError={true} />
+      const { queryByText, getByText } = render(
+        <TransactionList {...defaultProps} hasError={true} />,
       );
 
       expect(queryByText('Error al cargar transacciones')).toBeNull();
@@ -138,8 +145,8 @@ describe('TransactionList', () => {
 
   describe('Refresh state', () => {
     it('should show refreshing state', () => {
-      const {UNSAFE_getByType} = render(
-        <TransactionList {...defaultProps} isRefreshing={true} />
+      const { UNSAFE_getByType } = render(
+        <TransactionList {...defaultProps} isRefreshing={true} />,
       );
 
       const refreshControl = UNSAFE_getByType(RefreshControl);
@@ -148,8 +155,8 @@ describe('TransactionList', () => {
     });
 
     it('should not show refreshing state when isRefreshing is false', () => {
-      const {UNSAFE_getByType} = render(
-        <TransactionList {...defaultProps} isRefreshing={false} />
+      const { UNSAFE_getByType } = render(
+        <TransactionList {...defaultProps} isRefreshing={false} />,
       );
 
       const refreshControl = UNSAFE_getByType(RefreshControl);
@@ -161,8 +168,8 @@ describe('TransactionList', () => {
   describe('Edge cases', () => {
     it('should handle single transaction', () => {
       const singleTransaction = [mockTransactions[0]];
-      const {getByTestId, queryByTestId} = render(
-        <TransactionList {...defaultProps} transactions={singleTransaction} />
+      const { getByTestId, queryByTestId } = render(
+        <TransactionList {...defaultProps} transactions={singleTransaction} />,
       );
 
       expect(getByTestId('transaction-1')).toBeTruthy();
@@ -170,17 +177,20 @@ describe('TransactionList', () => {
     });
 
     it('should handle large number of transactions', () => {
-      const manyTransactions: Transaction[] = Array.from({length: 100}, (_, i) => ({
-        id: `${i}`,
-        amount: 100 * i,
-        date: new Date().toISOString(),
-        description: `Transaction ${i}`,
-        type: i % 2 === 0 ? 'in' : 'out',
-        status: 'completed',
-      }));
+      const manyTransactions: Transaction[] = Array.from(
+        { length: 100 },
+        (_, i) => ({
+          id: `${i}`,
+          amount: 100 * i,
+          date: new Date().toISOString(),
+          description: `Transaction ${i}`,
+          type: i % 2 === 0 ? 'in' : 'out',
+          status: 'completed',
+        }),
+      );
 
-      const {UNSAFE_getByType} = render(
-        <TransactionList {...defaultProps} transactions={manyTransactions} />
+      const { UNSAFE_getByType } = render(
+        <TransactionList {...defaultProps} transactions={manyTransactions} />,
       );
 
       const flatList = UNSAFE_getByType(FlatList);
@@ -191,7 +201,9 @@ describe('TransactionList', () => {
     });
 
     it('should use transaction id as key', () => {
-      const {UNSAFE_getByType} = render(<TransactionList {...defaultProps} />);
+      const { UNSAFE_getByType } = render(
+        <TransactionList {...defaultProps} />,
+      );
 
       const flatList = UNSAFE_getByType(FlatList);
 

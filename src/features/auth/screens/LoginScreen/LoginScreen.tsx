@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, Text, KeyboardAvoidingView, Platform} from 'react-native';
-import {Mail} from 'lucide-react-native';
-import {Input, Button} from '@/components';
-import {Theme} from '@/theme';
-import {useLogin} from '../../hooks/useLogin';
-import {styles} from './LoginScreen.styles';
+import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
+import { Mail } from 'lucide-react-native';
+import { Input, Button } from '@/components';
+import { Theme } from '@/theme';
+import { useLogin } from '../../hooks/useLogin';
+import { styles } from './LoginScreen.styles';
 
 export const LoginScreen: React.FC = () => {
-  const {identifier, handleIdentifierChange, handleLogin, isLoading, error} =
+  const { identifier, handleIdentifierChange, handleLogin, isLoading, error } =
     useLogin();
 
   return (

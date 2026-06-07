@@ -1,5 +1,5 @@
-import {validateAmount, validateRecipient} from './validation';
-import {TRANSACTION_ERRORS} from '../../constants';
+import { validateAmount, validateRecipient } from './validation';
+import { TRANSACTION_ERRORS } from '../../constants';
 
 describe('validateAmount', () => {
   it('should return valid for positive amount within balance', () => {
@@ -80,7 +80,9 @@ describe('validateRecipient', () => {
     };
     const result = validateRecipient(recipient);
     expect(result.isValid).toBe(false);
-    expect(result.errors.name).toBe(TRANSACTION_ERRORS.RECIPIENT_NAME_TOO_SHORT);
+    expect(result.errors.name).toBe(
+      TRANSACTION_ERRORS.RECIPIENT_NAME_TOO_SHORT,
+    );
   });
 
   it('should return valid for name with exactly 3 characters', () => {

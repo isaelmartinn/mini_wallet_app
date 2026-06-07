@@ -1,10 +1,10 @@
 import React from 'react';
-import {FlatList, RefreshControl, View, Text} from 'react-native';
-import {Transaction} from '@/types';
-import {TransactionItem} from '../TransactionItem';
-import {Button} from '@/components';
-import {styles} from './TransactionList.styles';
-import {Theme} from '@/theme';
+import { FlatList, RefreshControl, View, Text } from 'react-native';
+import { Transaction } from '@/types';
+import { TransactionItem } from '../TransactionItem';
+import { Button } from '@/components';
+import { styles } from './TransactionList.styles';
+import { Theme } from '@/theme';
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -22,7 +22,7 @@ const EmptyState: React.FC = () => (
   </View>
 );
 
-const ErrorState: React.FC<{onRetry: () => void}> = ({onRetry}) => (
+const ErrorState: React.FC<{ onRetry: () => void }> = ({ onRetry }) => (
   <View style={styles.errorContainer}>
     <Text style={styles.errorIcon}>⚠️</Text>
     <Text style={styles.errorTitle}>Error al cargar transacciones</Text>
@@ -50,7 +50,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
       <FlatList
         data={transactions}
         keyExtractor={item => item.id}
-        renderItem={({item}) => <TransactionItem transaction={item} />}
+        renderItem={({ item }) => <TransactionItem transaction={item} />}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}
@@ -61,7 +61,9 @@ export const TransactionList: React.FC<TransactionListProps> = ({
         }
         ListEmptyComponent={EmptyState}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={transactions.length === 0 ? styles.emptyList : undefined}
+        contentContainerStyle={
+          transactions.length === 0 ? styles.emptyList : undefined
+        }
       />
     </View>
   );

@@ -1,27 +1,24 @@
 import React from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {Clock} from 'lucide-react-native';
-import {useTransactionFlowStore} from '@/store/transactionFlowStore';
-import {Button} from '@/components';
-import {Theme} from '@/theme';
-import {styles} from './TimeoutScreen.styles';
+import { View, Text, SafeAreaView } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Clock } from 'lucide-react-native';
+import { useTransactionFlowStore } from '@/store/transactionFlowStore';
+import { Button } from '@/components';
+import { Theme } from '@/theme';
+import { styles } from './TimeoutScreen.styles';
 
 interface TimeoutScreenProps {
   navigation: StackNavigationProp<Record<string, object | undefined>>;
 }
 
-export const TimeoutScreen: React.FC<TimeoutScreenProps> = ({navigation}) => {
-  const {reset} = useTransactionFlowStore();
+export const TimeoutScreen: React.FC<TimeoutScreenProps> = ({ navigation }) => {
+  const { reset } = useTransactionFlowStore();
 
   const handleTryAgain = (): void => {
     reset();
     navigation.reset({
       index: 1,
-      routes: [
-        {name: 'Home'},
-        {name: 'Amount'},
-      ],
+      routes: [{ name: 'Home' }, { name: 'Amount' }],
     });
   };
 
@@ -29,7 +26,7 @@ export const TimeoutScreen: React.FC<TimeoutScreenProps> = ({navigation}) => {
     reset();
     navigation.reset({
       index: 0,
-      routes: [{name: 'Home'}],
+      routes: [{ name: 'Home' }],
     });
   };
 

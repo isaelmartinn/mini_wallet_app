@@ -1,34 +1,45 @@
 import React from 'react';
-import {render, fireEvent, waitFor} from '@testing-library/react-native';
-import {ContactPicker} from './ContactPicker';
-import {useContacts} from '@/hooks/useContacts';
-import {openDeviceSettings} from '@/utils/deviceSettings';
-import {Contact} from '@/types/contacts';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { ContactPicker } from './ContactPicker';
+import { useContacts } from '@/hooks/useContacts';
+import { openDeviceSettings } from '@/utils/deviceSettings';
+import { Contact } from '@/types/contacts';
 
 jest.mock('@/hooks/useContacts');
 jest.mock('@/utils/deviceSettings');
-jest.mock('@/components', () => ({
-  Button: ({children, onPress}: {children: React.ReactNode; onPress: () => void}) => {
-    const {TouchableOpacity, Text} = require('react-native');
-    return (
-      <TouchableOpacity onPress={onPress} testID="mock-button">
-        <Text>{children}</Text>
-      </TouchableOpacity>
-    );
-  },
-}));
+jest.mock('@/components', () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { TouchableOpacity, Text } = require('react-native');
+  return {
+    Button: ({
+      children,
+      onPress,
+    }: {
+      children: React.ReactNode;
+      onPress: () => void;
+    }) => {
+      return (
+        <TouchableOpacity onPress={onPress} testID="mock-button">
+          <Text>{children}</Text>
+        </TouchableOpacity>
+      );
+    },
+  };
+});
 
 describe('ContactPicker', () => {
   const mockOnClose = jest.fn();
   const mockOnSelectContact = jest.fn();
   const mockFetchContacts = jest.fn();
   const mockReset = jest.fn();
-  const mockOpenDeviceSettings = openDeviceSettings as jest.MockedFunction<typeof openDeviceSettings>;
+  const mockOpenDeviceSettings = openDeviceSettings as jest.MockedFunction<
+    typeof openDeviceSettings
+  >;
 
   const mockContacts: Contact[] = [
-    {id: '1', name: 'John Doe', phoneNumber: '1234567890'},
-    {id: '2', name: 'Jane Smith', phoneNumber: '0987654321'},
-    {id: '3', name: 'Bob Johnson', phoneNumber: '5555555555'},
+    { id: '1', name: 'John Doe', phoneNumber: '1234567890' },
+    { id: '2', name: 'Jane Smith', phoneNumber: '0987654321' },
+    { id: '3', name: 'Bob Johnson', phoneNumber: '5555555555' },
   ];
 
   const defaultUseContactsReturn = {
@@ -55,7 +66,7 @@ describe('ContactPicker', () => {
         isAvailable: false,
       });
 
-      const {queryByText} = render(
+      const { queryByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -67,7 +78,7 @@ describe('ContactPicker', () => {
     });
 
     it('should render modal when visible and isAvailable is true', () => {
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -80,7 +91,7 @@ describe('ContactPicker', () => {
     });
 
     it('should render search input', () => {
-      const {getByPlaceholderText} = render(
+      const { getByPlaceholderText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -94,7 +105,7 @@ describe('ContactPicker', () => {
 
   describe('Contact Loading', () => {
     it('should call fetchContacts when modal becomes visible', async () => {
-      const {rerender} = render(
+      const { rerender } = render(
         <ContactPicker
           visible={false}
           onClose={mockOnClose}
@@ -121,7 +132,7 @@ describe('ContactPicker', () => {
         isLoading: true,
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -138,7 +149,7 @@ describe('ContactPicker', () => {
         contacts: mockContacts,
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -160,7 +171,7 @@ describe('ContactPicker', () => {
         contacts: mockContacts,
       });
 
-      const {getByPlaceholderText, getByText, queryByText} = render(
+      const { getByPlaceholderText, getByText, queryByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -182,7 +193,7 @@ describe('ContactPicker', () => {
         contacts: mockContacts,
       });
 
-      const {getByPlaceholderText, getByText, queryByText} = render(
+      const { getByPlaceholderText, getByText, queryByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -203,7 +214,7 @@ describe('ContactPicker', () => {
         contacts: mockContacts,
       });
 
-      const {getByPlaceholderText, getByText} = render(
+      const { getByPlaceholderText, getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -223,7 +234,7 @@ describe('ContactPicker', () => {
         contacts: mockContacts,
       });
 
-      const {getByPlaceholderText, getByText} = render(
+      const { getByPlaceholderText, getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -245,7 +256,7 @@ describe('ContactPicker', () => {
         contacts: mockContacts,
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -264,7 +275,7 @@ describe('ContactPicker', () => {
         contacts: mockContacts,
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -283,7 +294,7 @@ describe('ContactPicker', () => {
         contacts: mockContacts,
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -299,7 +310,7 @@ describe('ContactPicker', () => {
 
   describe('Modal Close', () => {
     it('should call onClose when close button is pressed', () => {
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -313,7 +324,7 @@ describe('ContactPicker', () => {
     });
 
     it('should reset state when modal is closed', () => {
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -332,7 +343,7 @@ describe('ContactPicker', () => {
         contacts: mockContacts,
       });
 
-      const {getByText, getByPlaceholderText} = render(
+      const { getByText, getByPlaceholderText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -356,7 +367,7 @@ describe('ContactPicker', () => {
         error: 'Permiso de contactos denegado',
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -375,7 +386,7 @@ describe('ContactPicker', () => {
         canAskAgain: false,
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -393,7 +404,7 @@ describe('ContactPicker', () => {
         canAskAgain: true,
       });
 
-      const {queryByText} = render(
+      const { queryByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -411,7 +422,7 @@ describe('ContactPicker', () => {
         canAskAgain: false,
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -432,7 +443,7 @@ describe('ContactPicker', () => {
         error: 'Permiso de contactos denegado',
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -449,7 +460,7 @@ describe('ContactPicker', () => {
         error: 'Permiso de contactos denegado',
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -470,7 +481,7 @@ describe('ContactPicker', () => {
         contacts: [],
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -489,7 +500,7 @@ describe('ContactPicker', () => {
         contacts: mockContacts,
       });
 
-      const {getAllByText, getByText} = render(
+      const { getAllByText, getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}
@@ -504,10 +515,10 @@ describe('ContactPicker', () => {
     it('should uppercase the avatar letter', () => {
       (useContacts as jest.Mock).mockReturnValue({
         ...defaultUseContactsReturn,
-        contacts: [{id: '1', name: 'alice', phoneNumber: '1234567890'}],
+        contacts: [{ id: '1', name: 'alice', phoneNumber: '1234567890' }],
       });
 
-      const {getByText} = render(
+      const { getByText } = render(
         <ContactPicker
           visible={true}
           onClose={mockOnClose}

@@ -93,21 +93,29 @@ describe('validation utils', () => {
     it('should reject phone with less than 10 digits', () => {
       const result = validatePhone('+52331453032');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('El teléfono debe tener 10 dígitos después de +52');
+      expect(result.error).toBe(
+        'El teléfono debe tener 10 dígitos después de +52',
+      );
     });
 
     it('should reject phone with more than 10 digits', () => {
       const result1 = validatePhone('+52331453032299');
       expect(result1.isValid).toBe(false);
-      expect(result1.error).toBe('El teléfono debe tener 10 dígitos después de +52');
+      expect(result1.error).toBe(
+        'El teléfono debe tener 10 dígitos después de +52',
+      );
 
       const result2 = validatePhone('+5233145303229988');
       expect(result2.isValid).toBe(false);
-      expect(result2.error).toBe('El teléfono debe tener 10 dígitos después de +52');
+      expect(result2.error).toBe(
+        'El teléfono debe tener 10 dígitos después de +52',
+      );
 
       const result3 = validatePhone('+523314530322998877');
       expect(result3.isValid).toBe(false);
-      expect(result3.error).toBe('El teléfono debe tener 10 dígitos después de +52');
+      expect(result3.error).toBe(
+        'El teléfono debe tener 10 dígitos después de +52',
+      );
     });
 
     it('should reject phone with non-numeric characters', () => {
@@ -157,15 +165,21 @@ describe('validation utils', () => {
     it('should reject phone numbers with more than 10 digits', () => {
       const result1 = validateIdentifier('+52331453032299');
       expect(result1.isValid).toBe(false);
-      expect(result1.error).toBe('El teléfono debe tener 10 dígitos después de +52');
+      expect(result1.error).toBe(
+        'El teléfono debe tener 10 dígitos después de +52',
+      );
 
       const result2 = validateIdentifier('+5233145303229988');
       expect(result2.isValid).toBe(false);
-      expect(result2.error).toBe('El teléfono debe tener 10 dígitos después de +52');
+      expect(result2.error).toBe(
+        'El teléfono debe tener 10 dígitos después de +52',
+      );
 
       const result3 = validateIdentifier('+523314530322998877');
       expect(result3.isValid).toBe(false);
-      expect(result3.error).toBe('El teléfono debe tener 10 dígitos después de +52');
+      expect(result3.error).toBe(
+        'El teléfono debe tener 10 dígitos después de +52',
+      );
     });
 
     it('should reject phone without +52 prefix when starting with digit', () => {
@@ -177,7 +191,9 @@ describe('validation utils', () => {
     it('should detect phone when starting with +52', () => {
       const result = validateIdentifier('+52331453032');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('El teléfono debe tener 10 dígitos después de +52');
+      expect(result.error).toBe(
+        'El teléfono debe tener 10 dígitos después de +52',
+      );
     });
 
     it('should detect email when starting with letter', () => {

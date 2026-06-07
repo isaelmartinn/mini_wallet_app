@@ -27,7 +27,7 @@ export interface TransactionFlowState {
   draft: TransactionDraft;
   isProcessing: boolean;
   result: TransactionResult | null;
-  
+
   setAmount: (amount: number) => void;
   setRecipient: (recipient: Recipient) => void;
   processTransaction: () => Promise<TransactionResult>;

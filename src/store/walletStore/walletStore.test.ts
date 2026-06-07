@@ -1,6 +1,6 @@
-import {renderHook, act, waitFor} from '@testing-library/react-native';
-import {useWalletStore} from './walletStore';
-import {walletApi} from '@/api/wallet';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
+import { useWalletStore } from './walletStore';
+import { walletApi } from '@/api/wallet';
 
 jest.mock('@/api/wallet');
 
@@ -35,7 +35,7 @@ describe('walletStore', () => {
 
       (walletApi.getWalletData as jest.Mock).mockResolvedValue(mockData);
 
-      const {result} = renderHook(() => useWalletStore());
+      const { result } = renderHook(() => useWalletStore());
 
       await act(async () => {
         await result.current.fetchWalletData();
@@ -59,7 +59,7 @@ describe('walletStore', () => {
 
       (walletApi.getWalletData as jest.Mock).mockResolvedValue(mockError);
 
-      const {result} = renderHook(() => useWalletStore());
+      const { result } = renderHook(() => useWalletStore());
 
       await act(async () => {
         await result.current.fetchWalletData();
@@ -72,25 +72,29 @@ describe('walletStore', () => {
     });
 
     it('should handle network error', async () => {
-      (walletApi.getWalletData as jest.Mock).mockRejectedValue(new Error('Network error'));
+      (walletApi.getWalletData as jest.Mock).mockRejectedValue(
+        new Error('Network error'),
+      );
 
-      const {result} = renderHook(() => useWalletStore());
+      const { result } = renderHook(() => useWalletStore());
 
       await act(async () => {
         await result.current.fetchWalletData();
       });
 
       await waitFor(() => {
-        expect(result.current.error).toBe('Error de conexión. Intenta de nuevo.');
+        expect(result.current.error).toBe(
+          'Error de conexión. Intenta de nuevo.',
+        );
         expect(result.current.isLoading).toBe(false);
       });
     });
 
     it('should not fetch if already loading', async () => {
-      const {result} = renderHook(() => useWalletStore());
+      const { result } = renderHook(() => useWalletStore());
 
       act(() => {
-        useWalletStore.setState({isLoading: true});
+        useWalletStore.setState({ isLoading: true });
       });
 
       await act(async () => {
@@ -111,7 +115,7 @@ describe('walletStore', () => {
 
       (walletApi.getWalletData as jest.Mock).mockResolvedValue(mockData);
 
-      const {result} = renderHook(() => useWalletStore());
+      const { result } = renderHook(() => useWalletStore());
 
       await act(async () => {
         await result.current.refreshWalletData();
@@ -125,10 +129,10 @@ describe('walletStore', () => {
     });
 
     it('should not refresh if already refreshing', async () => {
-      const {result} = renderHook(() => useWalletStore());
+      const { result } = renderHook(() => useWalletStore());
 
       act(() => {
-        useWalletStore.setState({isRefreshing: true});
+        useWalletStore.setState({ isRefreshing: true });
       });
 
       await act(async () => {
@@ -141,10 +145,10 @@ describe('walletStore', () => {
 
   describe('clearError', () => {
     it('should clear error', () => {
-      const {result} = renderHook(() => useWalletStore());
+      const { result } = renderHook(() => useWalletStore());
 
       act(() => {
-        useWalletStore.setState({error: 'Test error'});
+        useWalletStore.setState({ error: 'Test error' });
       });
 
       expect(result.current.error).toBe('Test error');

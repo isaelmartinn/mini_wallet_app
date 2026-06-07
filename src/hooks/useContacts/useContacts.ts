@@ -1,6 +1,6 @@
-import {useState, useCallback} from 'react';
-import {Contact} from '@/types/contacts';
-import {contactsService} from '@/services/ContactsService';
+import { useState, useCallback } from 'react';
+import { Contact } from '@/types/contacts';
+import { contactsService } from '@/services/ContactsService';
 
 interface UseContactsReturn {
   contacts: Contact[];
@@ -32,18 +32,19 @@ export const useContacts = (): UseContactsReturn => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const result = await contactsService.requestPermission();
       setPermissionGranted(result.granted);
       setCanAskAgain(result.canAskAgain);
-      
+
       if (!result.granted) {
         setError('Permiso de contactos denegado');
       }
-      
+
       return result.granted;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error al solicitar permiso';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Error al solicitar permiso';
       setError(errorMessage);
       return false;
     } finally {
@@ -67,11 +68,12 @@ export const useContacts = (): UseContactsReturn => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const fetchedContacts = await contactsService.getContacts();
       setContacts(fetchedContacts);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error al obtener contactos';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Error al obtener contactos';
       setError(errorMessage);
       setContacts([]);
     } finally {

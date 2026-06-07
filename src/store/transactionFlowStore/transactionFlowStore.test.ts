@@ -1,6 +1,6 @@
-import {renderHook, act} from '@testing-library/react-native';
-import {useTransactionFlowStore} from './transactionFlowStore';
-import {TransactionErrorType} from '@/types';
+import { renderHook, act } from '@testing-library/react-native';
+import { useTransactionFlowStore } from './transactionFlowStore';
+import { TransactionErrorType } from '@/types';
 
 jest.mock('@/api/transactions', () => ({
   transactionsApi: {
@@ -8,11 +8,11 @@ jest.mock('@/api/transactions', () => ({
   },
 }));
 
-import {transactionsApi} from '@/api/transactions';
+import { transactionsApi } from '@/api/transactions';
 
 describe('useTransactionFlowStore', () => {
   beforeEach(() => {
-    const {result} = renderHook(() => useTransactionFlowStore());
+    const { result } = renderHook(() => useTransactionFlowStore());
     act(() => {
       result.current.reset();
     });
@@ -20,7 +20,7 @@ describe('useTransactionFlowStore', () => {
   });
 
   it('should initialize with default values', () => {
-    const {result} = renderHook(() => useTransactionFlowStore());
+    const { result } = renderHook(() => useTransactionFlowStore());
 
     expect(result.current.draft.amount).toBe(0);
     expect(result.current.draft.recipient).toBeNull();
@@ -30,7 +30,7 @@ describe('useTransactionFlowStore', () => {
   });
 
   it('should set amount correctly', () => {
-    const {result} = renderHook(() => useTransactionFlowStore());
+    const { result } = renderHook(() => useTransactionFlowStore());
 
     act(() => {
       result.current.setAmount(150);
@@ -40,7 +40,7 @@ describe('useTransactionFlowStore', () => {
   });
 
   it('should set recipient correctly', () => {
-    const {result} = renderHook(() => useTransactionFlowStore());
+    const { result } = renderHook(() => useTransactionFlowStore());
     const recipient = {
       name: 'Juan Pérez',
       accountOrPhone: '1234567890',
@@ -60,7 +60,7 @@ describe('useTransactionFlowStore', () => {
     };
     (transactionsApi.sendMoney as jest.Mock).mockResolvedValue(mockResult);
 
-    const {result} = renderHook(() => useTransactionFlowStore());
+    const { result } = renderHook(() => useTransactionFlowStore());
 
     act(() => {
       result.current.setAmount(100);
@@ -88,7 +88,7 @@ describe('useTransactionFlowStore', () => {
     };
     (transactionsApi.sendMoney as jest.Mock).mockResolvedValue(mockError);
 
-    const {result} = renderHook(() => useTransactionFlowStore());
+    const { result } = renderHook(() => useTransactionFlowStore());
 
     act(() => {
       result.current.setAmount(100);
@@ -103,12 +103,14 @@ describe('useTransactionFlowStore', () => {
     });
 
     expect(result.current.result?.success).toBe(false);
-    expect(result.current.result?.errorType).toBe(TransactionErrorType.NETWORK_ERROR);
+    expect(result.current.result?.errorType).toBe(
+      TransactionErrorType.NETWORK_ERROR,
+    );
     expect(result.current.isProcessing).toBe(false);
   });
 
   it('should reset store to initial state', () => {
-    const {result} = renderHook(() => useTransactionFlowStore());
+    const { result } = renderHook(() => useTransactionFlowStore());
 
     act(() => {
       result.current.setAmount(100);
@@ -129,7 +131,7 @@ describe('useTransactionFlowStore', () => {
   });
 
   it('should handle missing recipient on process', async () => {
-    const {result} = renderHook(() => useTransactionFlowStore());
+    const { result } = renderHook(() => useTransactionFlowStore());
 
     act(() => {
       result.current.setAmount(100);

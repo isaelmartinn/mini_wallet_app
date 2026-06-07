@@ -7,8 +7,8 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import {styles} from './Button.styles';
-import {Theme} from '@/theme';
+import { styles } from './Button.styles';
+import { Theme } from '@/theme';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
 export type ButtonSize = 'small' | 'medium' | 'large';

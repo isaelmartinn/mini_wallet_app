@@ -1,19 +1,19 @@
-import {create} from 'zustand';
-import {persist, createJSONStorage} from 'zustand/middleware';
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {AuthStore, LoginCredentials} from '@/types';
-import {authApi} from '@/api/auth';
+import { AuthStore, LoginCredentials } from '@/types';
+import { authApi } from '@/api/auth';
 
 export const useAuthStore = create<AuthStore>()(
   persist(
-    (set, get) => ({
+    (set, _get) => ({
       user: null,
       isAuthenticated: false,
       isLoading: false,
       error: null,
 
       login: async (credentials: LoginCredentials) => {
-        set({isLoading: true, error: null});
+        set({ isLoading: true, error: null });
 
         try {
           const response = await authApi.login(credentials);
@@ -48,7 +48,7 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       clearError: () => {
-        set({error: null});
+        set({ error: null });
       },
     }),
     {

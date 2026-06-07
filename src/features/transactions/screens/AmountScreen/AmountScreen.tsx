@@ -1,38 +1,46 @@
-import React, {useState} from 'react';
-import {View, Text, SafeAreaView, KeyboardAvoidingView, Platform, TextInput} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useWalletStore} from '@/store/walletStore';
-import {useTransactionFlowStore} from '@/store/transactionFlowStore';
-import {validateAmount} from '@/features/transactions/utils';
-import {Button} from '@/components';
-import {formatCurrency} from '@/utils/currency';
-import {useInactivityTimeout} from '@/features/transactions/hooks/useInactivityTimeout';
-import {TRANSACTION_TIMEOUT_MS} from '@/features/transactions/constants';
-import {Theme} from '@/theme';
-import {styles} from './AmountScreen.styles';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+  TextInput,
+} from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useWalletStore } from '@/store/walletStore';
+import { useTransactionFlowStore } from '@/store/transactionFlowStore';
+import { validateAmount } from '@/features/transactions/utils';
+import { Button } from '@/components';
+import { formatCurrency } from '@/utils/currency';
+import { useInactivityTimeout } from '@/features/transactions/hooks/useInactivityTimeout';
+import { TRANSACTION_TIMEOUT_MS } from '@/features/transactions/constants';
+import { AppStackParamList } from '@/navigation/types';
+import { Theme } from '@/theme';
+import { styles } from './AmountScreen.styles';
 
 type AmountScreenProps = {
-  navigation: StackNavigationProp<any>;
+  navigation: StackNavigationProp<AppStackParamList, 'Amount'>;
 };
 
 const formatInputAmount = (value: string): string => {
   if (!value) {
     return '';
   }
-  
+
   const parts = value.split('.');
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  
+
   return parts.join('.');
 };
 
-export const AmountScreen: React.FC<AmountScreenProps> = ({navigation}) => {
-  const {balance} = useWalletStore();
-  const {setAmount} = useTransactionFlowStore();
+export const AmountScreen: React.FC<AmountScreenProps> = ({ navigation }) => {
+  const { balance } = useWalletStore();
+  const { setAmount } = useTransactionFlowStore();
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState<string | undefined>();
 
-  const {resetTimer} = useInactivityTimeout({
+  const { resetTimer } = useInactivityTimeout({
     timeoutMs: TRANSACTION_TIMEOUT_MS,
     onTimeout: () => {
       navigation.replace('Timeout');
@@ -42,30 +50,34 @@ export const AmountScreen: React.FC<AmountScreenProps> = ({navigation}) => {
 
   const handleAmountChange = (text: string): void => {
     resetTimer();
-    
+
     let numericValue = text.replace(/[^0-9.]/g, '');
-    
+
     const parts = numericValue.split('.');
     if (parts.length > 2) {
       numericValue = parts[0] + '.' + parts.slice(1).join('');
     }
-    
+
     if (parts[1] && parts[1].length > 2) {
       numericValue = parts[0] + '.' + parts[1].substring(0, 2);
     }
-    
-    if (numericValue.startsWith('0') && numericValue.length > 1 && numericValue[1] !== '.') {
+
+    if (
+      numericValue.startsWith('0') &&
+      numericValue.length > 1 &&
+      numericValue[1] !== '.'
+    ) {
       const withoutLeadingZeros = numericValue.replace(/^0+/, '');
       numericValue = withoutLeadingZeros || '0';
     }
-    
+
     setInputValue(numericValue);
     setError(undefined);
   };
 
   const handleContinue = (): void => {
     resetTimer();
-    
+
     const amount = parseFloat(inputValue);
 
     if (isNaN(amount)) {

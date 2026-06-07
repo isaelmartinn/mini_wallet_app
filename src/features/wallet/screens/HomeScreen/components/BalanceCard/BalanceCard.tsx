@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {Send} from 'lucide-react-native';
-import {styles} from './BalanceCard.styles';
-import {formatCurrency} from '@/utils/currency';
-import {Button} from '@/components';
-import {Theme} from '@/theme';
+import { View, Text } from 'react-native';
+import { Send } from 'lucide-react-native';
+import { styles } from './BalanceCard.styles';
+import { formatCurrency } from '@/utils/currency';
+import { Button } from '@/components';
+import { Theme } from '@/theme';
 
 interface BalanceCardProps {
   balance: number;

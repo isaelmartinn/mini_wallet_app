@@ -1,1 +1,1 @@
-export {ContactPicker} from './ContactPicker';
+export { ContactPicker } from './ContactPicker';

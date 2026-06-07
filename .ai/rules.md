@@ -24,7 +24,13 @@ This file contains the mandatory rules that **ALL** code implementations must fo
 - ✅ Keep imports ordered: external → aliases → relative
 - ✅ Group imports by type (React, libraries, components, types, styles)
 
-### 4. Folder Architecture
+### 4. Dependencies and Package Management
+- ✅ **This project uses FIXED package versions** (no `^` or `~` prefixes)
+- ✅ All dependencies in `package.json` must have exact versions (e.g., `"1.2.3"` not `"^1.2.3"`)
+- ✅ This ensures consistent builds across environments and prevents unexpected breaking changes
+- ❌ **FORBIDDEN** to add dependencies with version ranges
+
+### 5. Folder Architecture
 ```
 src/
 ├── api/           # Services and API calls (mock or real)
@@ -44,7 +50,7 @@ src/
 └── App.tsx
 ```
 
-#### 4.1 Component, Hook, and Screen Structure
+#### 5.1 Component, Hook, and Screen Structure
 **MANDATORY**: Each component, hook, and screen must be organized in its own folder:
 
 ```
@@ -76,26 +82,26 @@ features/auth/screens/
 - ✅ Barrel exports should re-export the main module: `export { Button } from './Button';`
 - ✅ Import from the folder, not the file: `import { Button } from '@/components/Button';`
 
-### 5. Components
+### 6. Components
 - ✅ Separate logic from presentation (custom hooks)
 - ✅ Typed props with interfaces
 - ✅ Small components with single responsibility
 - ✅ Use composition over inheritance
 - ✅ Memoization when necessary (React.memo, useMemo, useCallback)
 
-### 6. Global State (Zustand)
+### 7. Global State (Zustand)
 - ✅ One store per domain (authStore, walletStore, transactionsStore)
 - ✅ Typed and descriptive actions
 - ✅ Use persist middleware for data that must survive restarts
 - ✅ Selectors to avoid unnecessary re-renders
 
-### 7. Validations and Business Rules
+### 8. Validations and Business Rules
 - ✅ Validations in services/hooks, NOT only in UI
 - ✅ Descriptive and centralized error messages
 - ✅ State handling: loading, error, success, empty
 - ✅ Implement business rules in domain layer
 
-### 8. Testing
+### 9. Testing
 - ✅ Unit tests for validations and business logic
 - ✅ Tests for critical components
 - ✅ Mocks for services and stores
@@ -104,19 +110,19 @@ features/auth/screens/
 - ❌ **FORBIDDEN** to create separate `__tests__` folders
 - ✅ Convention: `ComponentName.test.tsx` next to `ComponentName.tsx`
 
-### 9. Error Handling
+### 10. Error Handling
 - ✅ Try-catch in asynchronous operations
 - ✅ Visual feedback to user (toast, inline messages)
 - ✅ Error logging for debugging
 - ✅ Defined fallbacks and error states
 
-### 10. Accessibility
+### 11. Accessibility
 - ✅ Descriptive labels on inputs
 - ✅ Tactile and visual feedback
 - ✅ Adequate touch target sizes (minimum 44x44)
 - ✅ Appropriate color contrast
 
-### 11. Performance
+### 12. Performance
 - ✅ Lists with FlatList/SectionList (not ScrollView with map)
 - ✅ Unique and stable KeyExtractor
 - ✅ Optimize re-renders with React.memo

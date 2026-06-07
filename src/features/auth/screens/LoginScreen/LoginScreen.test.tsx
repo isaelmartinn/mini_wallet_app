@@ -1,7 +1,8 @@
 import React from 'react';
-import {render, fireEvent} from '@testing-library/react-native';
-import {LoginScreen} from './LoginScreen';
-import {useLogin} from '../../hooks/useLogin';
+import { render, fireEvent } from '@testing-library/react-native';
+import { ActivityIndicator } from 'react-native';
+import { LoginScreen } from './LoginScreen';
+import { useLogin } from '../../hooks/useLogin';
 
 jest.mock('../../hooks/useLogin');
 
@@ -21,10 +22,12 @@ describe('LoginScreen', () => {
   });
 
   it('debe renderizar correctamente', () => {
-    const {getByText, getByPlaceholderText} = render(<LoginScreen />);
+    const { getByText, getByPlaceholderText } = render(<LoginScreen />);
 
     expect(getByText('Bienvenido')).toBeTruthy();
-    expect(getByText('Ingresa tu email o teléfono para continuar')).toBeTruthy();
+    expect(
+      getByText('Ingresa tu email o teléfono para continuar'),
+    ).toBeTruthy();
     expect(getByText('Email o Teléfono')).toBeTruthy();
     expect(
       getByPlaceholderText('ejemplo@email.com o +523314530322'),
@@ -33,7 +36,7 @@ describe('LoginScreen', () => {
   });
 
   it('debe llamar handleIdentifierChange cuando el usuario escribe', () => {
-    const {getByPlaceholderText} = render(<LoginScreen />);
+    const { getByPlaceholderText } = render(<LoginScreen />);
 
     const input = getByPlaceholderText('ejemplo@email.com o +523314530322');
     fireEvent.changeText(input, 'test@example.com');
@@ -42,7 +45,7 @@ describe('LoginScreen', () => {
   });
 
   it('debe llamar handleLogin cuando se presiona el botón', () => {
-    const {getByText} = render(<LoginScreen />);
+    const { getByText } = render(<LoginScreen />);
 
     const button = getByText('Iniciar Sesión');
     fireEvent.press(button);
@@ -59,7 +62,7 @@ describe('LoginScreen', () => {
       error: 'Identificador inválido',
     });
 
-    const {getByText} = render(<LoginScreen />);
+    const { getByText } = render(<LoginScreen />);
 
     expect(getByText('Identificador inválido')).toBeTruthy();
   });
@@ -73,7 +76,7 @@ describe('LoginScreen', () => {
       error: null,
     });
 
-    const {getByPlaceholderText} = render(<LoginScreen />);
+    const { getByPlaceholderText } = render(<LoginScreen />);
 
     const input = getByPlaceholderText('ejemplo@email.com o +523314530322');
     expect(input.props.editable).toBe(false);
@@ -88,8 +91,7 @@ describe('LoginScreen', () => {
       error: null,
     });
 
-    const {UNSAFE_getByType} = render(<LoginScreen />);
-    const {ActivityIndicator} = require('react-native');
+    const { UNSAFE_getByType } = render(<LoginScreen />);
 
     const loader = UNSAFE_getByType(ActivityIndicator);
     expect(loader).toBeTruthy();
@@ -104,14 +106,14 @@ describe('LoginScreen', () => {
       error: null,
     });
 
-    const {getByPlaceholderText} = render(<LoginScreen />);
+    const { getByPlaceholderText } = render(<LoginScreen />);
 
     const input = getByPlaceholderText('ejemplo@email.com o +523314530322');
     expect(input.props.value).toBe('test@example.com');
   });
 
   it('debe tener el teclado configurado correctamente', () => {
-    const {getByPlaceholderText} = render(<LoginScreen />);
+    const { getByPlaceholderText } = render(<LoginScreen />);
 
     const input = getByPlaceholderText('ejemplo@email.com o +523314530322');
     expect(input.props.keyboardType).toBe('email-address');

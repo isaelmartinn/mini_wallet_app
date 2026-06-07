@@ -1,17 +1,18 @@
 import React from 'react';
-import {View, Text, SafeAreaView, ScrollView} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useTransactionFlowStore} from '@/store/transactionFlowStore';
-import {Button} from '@/components';
-import {formatAmount} from '@/utils/currency';
-import {styles} from './SummaryScreen.styles';
+import { View, Text, SafeAreaView, ScrollView } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useTransactionFlowStore } from '@/store/transactionFlowStore';
+import { Button } from '@/components';
+import { formatAmount } from '@/utils/currency';
+import { AppStackParamList } from '@/navigation/types';
+import { styles } from './SummaryScreen.styles';
 
 type SummaryScreenProps = {
-  navigation: StackNavigationProp<any>;
+  navigation: StackNavigationProp<AppStackParamList, 'Summary'>;
 };
 
-export const SummaryScreen: React.FC<SummaryScreenProps> = ({navigation}) => {
-  const {draft, processTransaction, isProcessing} = useTransactionFlowStore();
+export const SummaryScreen: React.FC<SummaryScreenProps> = ({ navigation }) => {
+  const { draft, processTransaction, isProcessing } = useTransactionFlowStore();
 
   const handleConfirm = async (): Promise<void> => {
     await processTransaction();
@@ -22,10 +23,14 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.content}>
         <View style={styles.header}>
           <Text style={styles.title}>Resumen de transacción</Text>
-          <Text style={styles.subtitle}>Revisa los detalles antes de confirmar</Text>
+          <Text style={styles.subtitle}>
+            Revisa los detalles antes de confirmar
+          </Text>
         </View>
 
         <View style={styles.card}>
@@ -37,7 +42,9 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({navigation}) => {
             </View>
             <View style={styles.row}>
               <Text style={styles.label}>Cuenta</Text>
-              <Text style={styles.value}>{draft.recipient?.accountOrPhone}</Text>
+              <Text style={styles.value}>
+                {draft.recipient?.accountOrPhone}
+              </Text>
             </View>
           </View>
 

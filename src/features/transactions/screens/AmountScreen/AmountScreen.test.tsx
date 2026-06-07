@@ -1,10 +1,11 @@
 import React from 'react';
-import {render, fireEvent, waitFor} from '@testing-library/react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {AmountScreen} from '../AmountScreen';
-import {useWalletStore} from '@/store/walletStore';
-import {useTransactionFlowStore} from '@/store/transactionFlowStore';
-import {useInactivityTimeout} from '@/features/transactions/hooks/useInactivityTimeout';
+import { render, fireEvent } from '@testing-library/react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { AmountScreen } from '../AmountScreen';
+import { useWalletStore } from '@/store/walletStore';
+import { useTransactionFlowStore } from '@/store/transactionFlowStore';
+import { useInactivityTimeout } from '@/features/transactions/hooks/useInactivityTimeout';
+import { AppStackParamList } from '@/navigation/types';
 
 jest.mock('@/store/walletStore');
 jest.mock('@/store/transactionFlowStore');
@@ -13,7 +14,7 @@ jest.mock('@/features/transactions/hooks/useInactivityTimeout');
 const mockNavigation = {
   navigate: jest.fn(),
   replace: jest.fn(),
-} as unknown as StackNavigationProp<Record<string, object | undefined>>;
+} as unknown as StackNavigationProp<AppStackParamList, 'Amount'>;
 
 describe('AmountScreen', () => {
   const mockSetAmount = jest.fn();
@@ -28,7 +29,7 @@ describe('AmountScreen', () => {
     (useTransactionFlowStore as unknown as jest.Mock).mockReturnValue({
       setAmount: mockSetAmount,
     });
-    (useInactivityTimeout as jest.Mock).mockImplementation(({onTimeout}) => {
+    (useInactivityTimeout as jest.Mock).mockImplementation(({ onTimeout }) => {
       mockOnTimeout = onTimeout;
       return {
         resetTimer: mockResetTimer,
@@ -39,7 +40,7 @@ describe('AmountScreen', () => {
   });
 
   it('should render correctly', () => {
-    const {getByText, getByPlaceholderText} = render(
+    const { getByText, getByPlaceholderText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -49,13 +50,13 @@ describe('AmountScreen', () => {
   });
 
   it('should format balance with currency format', () => {
-    const {getByText} = render(<AmountScreen navigation={mockNavigation} />);
+    const { getByText } = render(<AmountScreen navigation={mockNavigation} />);
 
     expect(getByText(/10,000\.00/)).toBeTruthy();
   });
 
   it('should handle multiple leading zeros by keeping only one', () => {
-    const {getByPlaceholderText} = render(
+    const { getByPlaceholderText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -67,7 +68,7 @@ describe('AmountScreen', () => {
   });
 
   it('should remove leading zeros from numbers', () => {
-    const {getByPlaceholderText} = render(
+    const { getByPlaceholderText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -79,7 +80,7 @@ describe('AmountScreen', () => {
   });
 
   it('should allow decimal values with leading zero', () => {
-    const {getByPlaceholderText} = render(
+    const { getByPlaceholderText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -91,7 +92,7 @@ describe('AmountScreen', () => {
   });
 
   it('should limit decimal places to 2 digits', () => {
-    const {getByPlaceholderText} = render(
+    const { getByPlaceholderText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -103,7 +104,7 @@ describe('AmountScreen', () => {
   });
 
   it('should prevent multiple decimal points', () => {
-    const {getByPlaceholderText} = render(
+    const { getByPlaceholderText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -115,7 +116,7 @@ describe('AmountScreen', () => {
   });
 
   it('should format input with thousand separators', () => {
-    const {getByPlaceholderText} = render(
+    const { getByPlaceholderText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -127,7 +128,7 @@ describe('AmountScreen', () => {
   });
 
   it('should format input with thousand separators and decimals', () => {
-    const {getByPlaceholderText} = render(
+    const { getByPlaceholderText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -139,7 +140,7 @@ describe('AmountScreen', () => {
   });
 
   it('should only accept numeric characters and decimal point', () => {
-    const {getByPlaceholderText} = render(
+    const { getByPlaceholderText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -151,7 +152,7 @@ describe('AmountScreen', () => {
   });
 
   it('should not navigate when input is empty', () => {
-    const {getByText} = render(<AmountScreen navigation={mockNavigation} />);
+    const { getByText } = render(<AmountScreen navigation={mockNavigation} />);
 
     const button = getByText('Continuar');
     fireEvent.press(button);
@@ -160,7 +161,7 @@ describe('AmountScreen', () => {
   });
 
   it('should not navigate when amount is zero', () => {
-    const {getByPlaceholderText, getByText} = render(
+    const { getByPlaceholderText, getByText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -174,7 +175,7 @@ describe('AmountScreen', () => {
   });
 
   it('should navigate when valid amount is entered', () => {
-    const {getByPlaceholderText, getByText} = render(
+    const { getByPlaceholderText, getByText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -189,7 +190,7 @@ describe('AmountScreen', () => {
   });
 
   it('should show error when amount exceeds balance', () => {
-    const {getByPlaceholderText, getByText, getAllByText} = render(
+    const { getByPlaceholderText, getByText, getAllByText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -204,7 +205,7 @@ describe('AmountScreen', () => {
   });
 
   it('should navigate to Recipient screen when valid amount is submitted', () => {
-    const {getByPlaceholderText, getByText} = render(
+    const { getByPlaceholderText, getByText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -219,7 +220,7 @@ describe('AmountScreen', () => {
   });
 
   it('should clear error when user starts typing again', () => {
-    const {getByPlaceholderText, getByText, queryAllByText} = render(
+    const { getByPlaceholderText, getByText, queryAllByText } = render(
       <AmountScreen navigation={mockNavigation} />,
     );
 
@@ -250,7 +251,7 @@ describe('AmountScreen', () => {
     });
 
     it('should call resetTimer when user types in input', () => {
-      const {getByPlaceholderText} = render(
+      const { getByPlaceholderText } = render(
         <AmountScreen navigation={mockNavigation} />,
       );
 
@@ -261,7 +262,7 @@ describe('AmountScreen', () => {
     });
 
     it('should call resetTimer when continue button is pressed', () => {
-      const {getByPlaceholderText, getByText} = render(
+      const { getByPlaceholderText, getByText } = render(
         <AmountScreen navigation={mockNavigation} />,
       );
 

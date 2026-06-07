@@ -1,8 +1,8 @@
 import React from 'react';
-import {render, fireEvent} from '@testing-library/react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {TimeoutScreen} from '../TimeoutScreen';
-import {useTransactionFlowStore} from '@/store/transactionFlowStore';
+import { render, fireEvent } from '@testing-library/react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { TimeoutScreen } from '../TimeoutScreen';
+import { useTransactionFlowStore } from '@/store/transactionFlowStore';
 
 jest.mock('@/store/transactionFlowStore');
 
@@ -23,11 +23,15 @@ describe('TimeoutScreen', () => {
 
   describe('Renderizado', () => {
     it('should render correctly', () => {
-      const {getByText} = render(<TimeoutScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <TimeoutScreen navigation={mockNavigation} />,
+      );
 
       expect(getByText('Tiempo agotado')).toBeTruthy();
       expect(
-        getByText('La sesión ha expirado por inactividad. Por favor, intenta nuevamente.')
+        getByText(
+          'La sesión ha expirado por inactividad. Por favor, intenta nuevamente.',
+        ),
       ).toBeTruthy();
       expect(getByText('Intentar de nuevo')).toBeTruthy();
       expect(getByText('Volver al inicio')).toBeTruthy();
@@ -36,22 +40,23 @@ describe('TimeoutScreen', () => {
 
   describe('Navegación - Botón "Intentar de nuevo"', () => {
     it('should navigate to AmountScreen when "Intentar de nuevo" is pressed', () => {
-      const {getByText} = render(<TimeoutScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <TimeoutScreen navigation={mockNavigation} />,
+      );
 
       const tryAgainButton = getByText('Intentar de nuevo');
       fireEvent.press(tryAgainButton);
 
       expect(mockNavigation.reset).toHaveBeenCalledWith({
         index: 1,
-        routes: [
-          {name: 'Home'},
-          {name: 'Amount'},
-        ],
+        routes: [{ name: 'Home' }, { name: 'Amount' }],
       });
     });
 
     it('should reset transaction store when navigating to AmountScreen', () => {
-      const {getByText} = render(<TimeoutScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <TimeoutScreen navigation={mockNavigation} />,
+      );
 
       const tryAgainButton = getByText('Intentar de nuevo');
       fireEvent.press(tryAgainButton);
@@ -62,19 +67,23 @@ describe('TimeoutScreen', () => {
 
   describe('Navegación - Botón "Volver al inicio"', () => {
     it('should navigate to Home when "Volver al inicio" is pressed', () => {
-      const {getByText} = render(<TimeoutScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <TimeoutScreen navigation={mockNavigation} />,
+      );
 
       const goHomeButton = getByText('Volver al inicio');
       fireEvent.press(goHomeButton);
 
       expect(mockNavigation.reset).toHaveBeenCalledWith({
         index: 0,
-        routes: [{name: 'Home'}],
+        routes: [{ name: 'Home' }],
       });
     });
 
     it('should reset transaction store when navigating to Home', () => {
-      const {getByText} = render(<TimeoutScreen navigation={mockNavigation} />);
+      const { getByText } = render(
+        <TimeoutScreen navigation={mockNavigation} />,
+      );
 
       const goHomeButton = getByText('Volver al inicio');
       fireEvent.press(goHomeButton);
