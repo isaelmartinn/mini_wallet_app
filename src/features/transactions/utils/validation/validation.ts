@@ -1,5 +1,5 @@
-import {AmountValidation, RecipientValidation, Recipient} from '../types';
-import {TRANSACTION_RULES, TRANSACTION_ERRORS} from '../constants';
+import {AmountValidation, RecipientValidation, Recipient} from '../../types';
+import {TRANSACTION_RULES, TRANSACTION_ERRORS} from '../../constants';
 
 export const validateAmount = (
   amount: number,

@@ -1,4 +1,4 @@
-import {validateAmount, validateRecipient} from '../validation';
+import {validateAmount, validateRecipient} from './validation';
 import {TRANSACTION_ERRORS} from '../../constants';
 
 describe('validateAmount', () => {
