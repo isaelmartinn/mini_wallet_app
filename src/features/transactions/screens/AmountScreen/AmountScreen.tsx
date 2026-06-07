@@ -3,11 +3,11 @@ import {View, Text, SafeAreaView, KeyboardAvoidingView, Platform, TextInput} fro
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useWalletStore} from '@/store/walletStore';
 import {useTransactionFlowStore} from '@/store/transactionFlowStore';
-import {validateAmount} from '../utils';
+import {validateAmount} from '@/features/transactions/utils';
 import {Button} from '@/components';
 import {formatCurrency} from '@/utils/currency';
-import {useInactivityTimeout} from '../hooks/useInactivityTimeout';
-import {TRANSACTION_TIMEOUT_MS} from '../constants';
+import {useInactivityTimeout} from '@/features/transactions/hooks/useInactivityTimeout';
+import {TRANSACTION_TIMEOUT_MS} from '@/features/transactions/constants';
 import {Theme} from '@/theme';
 import {styles} from './AmountScreen.styles';
 

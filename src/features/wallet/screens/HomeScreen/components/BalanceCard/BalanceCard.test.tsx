@@ -1,6 +1,6 @@
 import React from 'react';
 import {render} from '@testing-library/react-native';
-import {BalanceCard} from '../BalanceCard';
+import {BalanceCard} from './BalanceCard';
 
 describe('BalanceCard', () => {
   it('should render balance correctly', () => {

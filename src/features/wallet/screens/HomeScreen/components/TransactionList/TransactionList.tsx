@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList, RefreshControl, View, Text} from 'react-native';
 import {Transaction} from '@/types';
-import {TransactionItem} from './TransactionItem';
+import {TransactionItem} from '../TransactionItem';
 import {Button} from '@/components';
 import {styles} from './TransactionList.styles';
 import {Theme} from '@/theme';

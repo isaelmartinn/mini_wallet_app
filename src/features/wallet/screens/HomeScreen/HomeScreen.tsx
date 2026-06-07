@@ -3,8 +3,8 @@ import {SafeAreaView, View, ActivityIndicator, TouchableOpacity, Text} from 'rea
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Menu} from 'lucide-react-native';
 import {useAuthStore} from '@/store/authStore';
-import {BalanceCard, TransactionList} from '../components';
-import {useWallet} from '../hooks';
+import {BalanceCard, TransactionList} from './components';
+import {useWallet} from '../../hooks';
 import {styles} from './HomeScreen.styles';
 import {Theme} from '@/theme';
 import {AppStackParamList} from '@/navigation/types';
@@ -24,7 +24,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   if (isLoading && transactions.length === 0) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Theme.colors.primary} />
+        <ActivityIndicator size="large" color={Theme.colors.primary} testID="activity-indicator" />
       </SafeAreaView>
     );
   }
@@ -36,7 +36,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         <TouchableOpacity
           onPress={() => navigation.openDrawer()}
           style={styles.menuButton}
-          activeOpacity={0.7}>
+          activeOpacity={0.7}
+          testID="menu-button">
           <Menu size={24} color={Theme.colors.text} />
         </TouchableOpacity>
       </View>

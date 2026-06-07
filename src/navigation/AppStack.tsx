@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {createDrawerNavigator, DrawerContentComponentProps} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
-import {HomeScreen} from '@/features/wallet/screens';
+import {HomeScreen} from '@/features/wallet/screens/HomeScreen';
 import {
   AmountScreen,
   RecipientScreen,
