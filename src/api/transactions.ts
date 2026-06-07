@@ -1,5 +1,12 @@
 import {TransactionResult, TransactionErrorType} from '@/types';
 
+const generateId = (): string => {
+  const timestamp = Date.now();
+  const random1 = Math.random().toString(36).substring(2, 15);
+  const random2 = Math.random().toString(36).substring(2, 15);
+  return `TXN-${timestamp}-${random1}${random2}`;
+};
+
 const delay = (ms: number): Promise<void> =>
   new Promise(resolve => setTimeout(resolve, ms));
 
@@ -40,7 +47,7 @@ export const transactionsApi = {
     if (outcome.success) {
       return {
         success: true,
-        transactionId: `TXN-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        transactionId: generateId(),
       };
     }
 

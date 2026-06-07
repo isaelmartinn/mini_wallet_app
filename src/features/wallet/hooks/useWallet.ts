@@ -1,4 +1,3 @@
-import {useEffect} from 'react';
 import {useWalletStore} from '@/store';
 
 export const useWallet = () => {
@@ -12,10 +11,6 @@ export const useWallet = () => {
     refreshWalletData,
     clearError,
   } = useWalletStore();
-
-  useEffect(() => {
-    fetchWalletData();
-  }, [fetchWalletData]);
 
   const handleRefresh = () => {
     refreshWalletData();
