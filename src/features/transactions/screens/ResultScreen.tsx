@@ -49,12 +49,21 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({navigation}) => {
 
   const handleGoHome = (): void => {
     reset();
-    navigation.navigate('Home');
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Home'}],
+    });
   };
 
   const handleNewTransaction = (): void => {
     reset();
-    navigation.navigate('Amount');
+    navigation.reset({
+      index: 1,
+      routes: [
+        {name: 'Home'},
+        {name: 'Amount'},
+      ],
+    });
   };
 
   if (!result) {

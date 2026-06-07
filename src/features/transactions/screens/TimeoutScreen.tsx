@@ -16,12 +16,21 @@ export const TimeoutScreen: React.FC<TimeoutScreenProps> = ({navigation}) => {
 
   const handleTryAgain = (): void => {
     reset();
-    navigation.replace('Amount');
+    navigation.reset({
+      index: 1,
+      routes: [
+        {name: 'Home'},
+        {name: 'Amount'},
+      ],
+    });
   };
 
   const handleGoHome = (): void => {
     reset();
-    navigation.replace('Home');
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Home'}],
+    });
   };
 
   return (
