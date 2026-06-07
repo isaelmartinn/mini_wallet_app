@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
-import {View, Text, SafeAreaView, KeyboardAvoidingView, Platform} from 'react-native';
+import {View, Text, SafeAreaView, KeyboardAvoidingView, Platform, TextInput} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useWalletStore} from '@/store/walletStore';
 import {useTransactionFlowStore} from '@/store/transactionFlowStore';
 import {validateAmount} from '../utils';
-import {Button, Input} from '@/components';
+import {Button} from '@/components';
 import {formatCurrency} from '@/utils/currency';
 import {useInactivityTimeout} from '../hooks/useInactivityTimeout';
 import {TRANSACTION_TIMEOUT_MS} from '../constants';
+import {Theme} from '@/theme';
 import {styles} from './AmountScreen.styles';
 
 type AmountScreenProps = {
@@ -99,14 +100,14 @@ export const AmountScreen: React.FC<AmountScreenProps> = ({navigation}) => {
 
           <View style={styles.inputContainer}>
             <Text style={styles.currencySymbol}>$</Text>
-            <Input
+            <TextInput
               value={formatInputAmount(inputValue)}
               onChangeText={handleAmountChange}
               placeholder="0.00"
               keyboardType="decimal-pad"
-              error={error}
               autoFocus
               style={styles.amountInput}
+              placeholderTextColor={Theme.colors.textTertiary}
             />
           </View>
 
