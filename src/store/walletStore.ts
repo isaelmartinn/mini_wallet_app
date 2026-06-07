@@ -86,4 +86,14 @@ export const useWalletStore = create<WalletState>((set, get) => ({
   clearError: () => {
     set({error: null});
   },
+
+  reset: () => {
+    set({
+      balance: 0,
+      transactions: [],
+      isLoading: false,
+      isRefreshing: false,
+      error: null,
+    });
+  },
 }));
