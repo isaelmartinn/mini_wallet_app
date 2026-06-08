@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { WalletState } from '@/types';
 import { walletApi } from '@/api/wallet';
+import { useAuthStore } from '@/store/authStore/authStore';
 
 export const useWalletStore = create<WalletState>((set, get) => ({
   balance: 0,
@@ -17,7 +18,8 @@ export const useWalletStore = create<WalletState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await walletApi.getWalletData();
+      const userId = useAuthStore.getState().user?.id;
+      const response = await walletApi.getWalletData(userId);
 
       if (response.success) {
         set({
@@ -48,7 +50,8 @@ export const useWalletStore = create<WalletState>((set, get) => ({
     set({ isRefreshing: true, error: null });
 
     try {
-      const response = await walletApi.getWalletData();
+      const userId = useAuthStore.getState().user?.id;
+      const response = await walletApi.getWalletData(userId);
 
       if (response.success) {
         set({

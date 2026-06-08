@@ -1,0 +1,129 @@
+🚀 Frontend Challenge — Mini Wallet App
+¡Hola! Bienvenido(a) al challenge técnico de mobile de Spin. Estamos emocionados de
+que estés en este proceso y queremos conocer tu forma de pensar y construir software.
+🎯 El reto
+Vas a construir una mini app mobile en React Native + TypeScript que simule un flujo
+básico de una wallet financiera:
+Login → Home → Nueva Transacción → Confirmación / Comprobante
+La app no necesita conectarse a servicios reales — los datos serán mockeados. Lo que
+buscamos es ver cómo resuelves decisiones reales de desarrollo mobile: tipado,
+arquitectura, estado, permisos, manejo de errores, componentes reutilizables e
+interacción con APIs nativas del dispositivo.
+Contexto: El sistema opera en un entorno de alto volumen con millones de
+usuarios activos. Tus decisiones de diseño deben considerar escalabilidad y
+mantenibilidad.
+📱 Pantallas requeridas
+1. Login
+Aspecto Detalle
+Formulario Teléfono o email
+Validaciones Formato de entrada, campos requeridos
+Estados Carga, error simulado
+Sesión Persistencia simple de sesión mockeada
+Navegación Al Home después del login exitoso
+No se busca seguridad ni autenticación real. Se busca validar estructura, estado,
+validación, navegación y separación de responsabilidades.
+2. Home
+Aspecto Detalle
+Datos Saldo disponible + nombre del usuario (mockeado)
+Movimientos Lista de movimientos recientes
+Estados Carga, vacío y error
+Acción Botón para iniciar nueva transacción
+Aquí se valida composición de componentes, listas, estado, diseño responsivo y manejo
+de información asincrónica
+3. Nueva Transacción
+El candidato debe implementar un flujo de envío de dinero:
+Funcionalidad base:
+• Ingresar monto.
+• Seleccionar destinatario de forma manual.
+• Mostrar resumen antes de confirmar.
+• Confirmar transacción con respuesta mockeada.
+• Mostrar comprobante o pantalla de éxito.
+Bonus técnico — Módulo nativo de contactos (Opcional)
+Queremos ver tu manejo de la capa nativa. Implementa un módulo nativo propio (no una
+librería de terceros) que liste los contactos de la agenda del dispositivo, funcionando tanto
+en iOS como en Android. Tienes libertad total de arquitectura: TurboModules, Nitro
+Modules o la arquitectura legacy — elige la que prefieras y justifica el porqué.
+📏 Reglas de Negocio
+Tu app debe implementar las siguientes validaciones antes de confirmar la transacción:
+1. Monto mínimo: No se permite monto cero ni negativo.
+2. Saldo suficiente: El monto no puede superar el saldo disponible.
+3. Destinatario obligatorio: No se puede confirmar sin destinatario.
+4. Permisos denegados: Si el usuario niega el permiso de contactos, debe existir un
+fallback manual funcional. El flujo no debe romperse.
+El cómo y dónde implementes estas reglas forma parte de la evaluación.
+4. Confirmación
+El candidato deberá generar una pantalla de confirmación que debe funcionar de manera
+aleatoria.
+Escenario Comportamiento esperado
+Éxito Transacción confirmada, mostrar comprobante
+Error de red Mostrar estado de error con opción de reintentar
+Fondos insuficientes Mostrar error descriptivo
+Timeout Manejar espera excesiva
+Error desconocido Fallback genérico
+Tu app debe manejar estos escenarios — no solo el happy path.
+🛠 Requerimientos técnicos
+Aspecto Detalle
+Framework React Native + TypeScript
+Navegación Librería a tu elección (React Navigation, Expo Router, etc.)
+Estado A tu elección (Context, Zustand, Redux, etc.). Justifica tu decisión.
+Persistencia Datos mockeados. No se requiere backend real.
+Testing Se valora testing unitario de validaciones, hooks y componentes críticos.
+Documentación README.md con instrucciones claras para levantar el proyecto.
+📐 Capabilities Nativos
+Tu app debe interactuar con al menos una capability nativa del dispositivo (cámara,
+contactos, etc.). Lo importante no es que la implementación sea perfecta, sino que
+demuestres:
+• Encapsulamiento: Las llamadas nativas no deben estar acopladas directamente
+a la UI.
+• Manejo de permisos: Solicitar, manejar denegación y ofrecer fallback.
+• Testabilidad: La capability debe poder mockearse en tests.
+Importante: El flujo completo debe funcionar aunque el usuario niegue todos
+los permisos. Siempre debe existir una alternativa manual.
+✅ Entregables
+1. Código fuente en un repositorio Git.
+2. README.md con instrucciones para ejecutar el proyecto, librerías usadas y
+limitaciones conocidas.
+3. DECISIONS.md con tus decisiones de diseño: por qué estructuraste el proyecto
+así, cómo separaste UI y lógica de negocio, qué edge cases consideraste y qué
+harías diferente con más tiempo.
+4. Nota sobre uso de IA (ver sección abajo).
+Todo lo adicional que decidas incluir (tests, abstracciones de capabilities, manejo
+avanzado de estados, etc.) es bienvenido y será considerado en la evaluación según el
+nivel al que apliques.
+💡 ¿Qué valoramos?
+• TypeScript con intención — Tipos claros, modelos de dominio, evitar any,
+contratos bien definidos.
+• Composición React — Componentes limpios, hooks, separación UI/lógica,
+renderizado condicional.
+• Experiencia mobile real — Navegación, listas, inputs, feedback visual,
+loading/error/empty states.
+• Capabilities nativos — Permisos, cámara/contactos, fallback, abstracción
+testeable.
+• Reglas de negocio — Validaciones en el lugar correcto, no solo en la UI.
+• Pragmatismo — Resolver de forma simple y extensible, sin sobre-ingenierizar.
+Aplica las mejores prácticas que conozcas. Esperamos un código con la
+calidad que usarías en un entorno profesional de producción.
+🤖 Uso de Inteligencia Artificial
+El uso de herramientas de IA (Copilot, ChatGPT, Claude, etc.) está permitido. La IA
+es parte del flujo de trabajo moderno y no penalizamos su uso.
+Te pedimos que documentes en un archivo AI_USAGE.md:
+1. Qué herramientas usaste y en qué partes del proyecto.
+2. Qué aceptaste directamente y qué corregiste o rechazaste.
+3. Qué decisiones tomaste tú y no la IA.
+La IA es una herramienta; el criterio de ingeniería sigue siendo tuyo. En la
+siguiente etapa del proceso podremos hacerte preguntas sobre tus decisiones
+y pedirte modificaciones en vivo sobre tu código.
+⏰ Plazo de entrega
+3 días calendario desde la recepción de este challenge.
+Envía el link a tu repositorio (si es privado, otorga acceso al correo que te indicará el
+equipo de People).
+Te pedimos que declares en el README cuánto tiempo real invertiste en el challenge.
+🚀 ¿Por qué Spin?
+• Trabajamos con React Native y TypeScript en una app financiera usada por
+millones de personas.
+• Valoramos ingenieros que escriben código con intención — que no solo
+funcione, sino que comunique.
+• Aquí los capabilities nativos importan de verdad — cámara, permisos, biometría,
+contactos son parte del día a día.
+• La IA es aliada, no enemiga — la usamos para amplificar el talento del equipo.
+Que la Fuerza te acompañe en este challenge. 🫡

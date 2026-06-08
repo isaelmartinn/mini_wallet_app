@@ -1,6 +1,10 @@
 import { LoginCredentials, User } from '@/types';
 import { validateIdentifier } from '@/utils/validation';
-import { MOCK_USERS, MOCK_LOGIN_DELAY } from '@/utils/constants';
+import {
+  MOCK_USERS,
+  MOCK_LOGIN_DELAY,
+  DEFAULT_BALANCE_IN_CENTS,
+} from '@/utils/constants';
 
 export interface LoginResponse {
   success: boolean;
@@ -50,6 +54,7 @@ export const authApi = {
         phone: !credentials.identifier.includes('@')
           ? credentials.identifier
           : undefined,
+        balanceInCents: DEFAULT_BALANCE_IN_CENTS,
       },
     };
   },

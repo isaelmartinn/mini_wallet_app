@@ -13,3 +13,11 @@ export const formatAmount = (amount: number): string => {
     maximumFractionDigits: 2,
   }).format(amount);
 };
+
+export const centsToPesos = (cents: number): number => {
+  return cents / 100;
+};
+
+export const pesosToCents = (pesos: number): number => {
+  return Math.round(pesos * 100);
+};

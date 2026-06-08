@@ -1,8 +1,10 @@
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { useWalletStore } from './walletStore';
 import { walletApi } from '@/api/wallet';
+import { useAuthStore } from '@/store/authStore/authStore';
 
 jest.mock('@/api/wallet');
+jest.mock('@/store/authStore/authStore');
 
 describe('walletStore', () => {
   beforeEach(() => {
@@ -13,6 +15,11 @@ describe('walletStore', () => {
       isRefreshing: false,
       error: null,
     });
+
+    (useAuthStore.getState as jest.Mock) = jest.fn().mockReturnValue({
+      user: { id: '1', name: 'Test User', balanceInCents: 583501 },
+    });
+
     jest.clearAllMocks();
   });
 
@@ -103,6 +110,24 @@ describe('walletStore', () => {
 
       expect(walletApi.getWalletData).not.toHaveBeenCalled();
     });
+
+    it('should call getWalletData with userId from authStore', async () => {
+      const mockData = {
+        success: true,
+        balance: 5835.01,
+        transactions: [],
+      };
+
+      (walletApi.getWalletData as jest.Mock).mockResolvedValue(mockData);
+
+      const { result } = renderHook(() => useWalletStore());
+
+      await act(async () => {
+        await result.current.fetchWalletData();
+      });
+
+      expect(walletApi.getWalletData).toHaveBeenCalledWith('1');
+    });
   });
 
   describe('refreshWalletData', () => {
@@ -140,6 +165,24 @@ describe('walletStore', () => {
       });
 
       expect(walletApi.getWalletData).not.toHaveBeenCalled();
+    });
+
+    it('should call getWalletData with userId from authStore', async () => {
+      const mockData = {
+        success: true,
+        balance: 5835.01,
+        transactions: [],
+      };
+
+      (walletApi.getWalletData as jest.Mock).mockResolvedValue(mockData);
+
+      const { result } = renderHook(() => useWalletStore());
+
+      await act(async () => {
+        await result.current.refreshWalletData();
+      });
+
+      expect(walletApi.getWalletData).toHaveBeenCalledWith('1');
     });
   });
 

@@ -3,6 +3,7 @@ export interface User {
   name: string;
   email?: string;
   phone?: string;
+  balanceInCents: number;
 }
 
 export interface LoginCredentials {
