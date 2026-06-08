@@ -142,7 +142,12 @@ describe('authStore', () => {
 
       act(() => {
         useAuthStore.setState({
-          user: { id: '1', name: 'Test User', email: 'test@example.com' },
+          user: {
+            id: '1',
+            name: 'Test User',
+            email: 'test@example.com',
+            balanceInCents: 583501,
+          },
           isAuthenticated: true,
           error: 'Some error',
         });
@@ -198,6 +203,7 @@ describe('authStore', () => {
         id: '1',
         name: 'Test User',
         email: 'test@example.com',
+        balanceInCents: 583501,
       };
 
       act(() => {

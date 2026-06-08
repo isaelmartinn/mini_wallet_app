@@ -1,4 +1,9 @@
 import { Transaction } from '@/types';
+import {
+  MOCK_USERS,
+  DEFAULT_BALANCE_IN_CENTS,
+} from '@/utils/constants/constants';
+import { centsToPesos } from '@/utils/currency/currency';
 
 interface WalletDataResponse {
   success: boolean;
@@ -98,8 +103,6 @@ const MOCK_TRANSACTIONS: Transaction[] = [
   },
 ];
 
-const MOCK_BALANCE = 5835.01;
-
 const simulateNetworkDelay = (): Promise<void> => {
   return new Promise(resolve => {
     setTimeout(resolve, 800 + Math.random() * 700);
@@ -111,7 +114,7 @@ const shouldSimulateError = (): boolean => {
 };
 
 export const walletApi = {
-  getWalletData: async (): Promise<WalletDataResponse> => {
+  getWalletData: async (userId?: string): Promise<WalletDataResponse> => {
     await simulateNetworkDelay();
 
     if (shouldSimulateError()) {
@@ -123,9 +126,17 @@ export const walletApi = {
       };
     }
 
+    const mockUser = MOCK_USERS.find(user => user.id === userId);
+
+    const balanceInCents = mockUser
+      ? mockUser.balanceInCents
+      : DEFAULT_BALANCE_IN_CENTS;
+
+    const balanceInPesos = centsToPesos(balanceInCents);
+
     return {
       success: true,
-      balance: MOCK_BALANCE,
+      balance: balanceInPesos,
       transactions: MOCK_TRANSACTIONS,
     };
   },

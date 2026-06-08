@@ -196,12 +196,19 @@ Centralized in `src/theme/Theme.ts`:
 
 ### Mock Data
 
-Test credentials in `src/utils/constants.ts`:
-- `juan@example.com` / `+52 55 1234 5678`
-- `maria@example.com` / `+52 55 8765 4321`
-- `carlos@example.com` / `+52 55 5555 5555`
+#### Test Users
 
-Or use any valid email/phone format for demo user.
+Each user has a different balance to test various scenarios:
+
+| Usuario | Email | Teléfono | Balance |
+|---------|-------|----------|---------|
+| **Juan Pérez** | `juan@example.com` | `+52 55 1234 5678` | **$5,835.01** |
+| **María García** | `maria@example.com` | `+52 55 8765 4321` | **$12,500.00** |
+| **Carlos López** | `carlos@example.com` | `+52 55 5555 5555` | **$7,500.50** |
+
+**Usuario Demo**: Si ingresas con cualquier otro email o teléfono válido, se creará un usuario demo con un balance de **$10,000.00**.
+
+**Nota**: Los balances se almacenan internamente en centavos para precisión, y se convierten a pesos para el UI.
 
 ## License
 
