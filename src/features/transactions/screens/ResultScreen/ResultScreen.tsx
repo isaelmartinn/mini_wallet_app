@@ -40,8 +40,14 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ navigation }) => {
       updateBalance(draft.amount);
       processedTransactionIdRef.current = result.transactionId;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result?.success, result?.transactionId]);
+  }, [
+    result?.success,
+    result?.transactionId,
+    draft.amount,
+    draft.recipient,
+    addTransaction,
+    updateBalance,
+  ]);
 
   const handleRetry = async (): Promise<void> => {
     await processTransaction();
