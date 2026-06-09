@@ -41,7 +41,7 @@ lerna-debug.log*
 android/.gradle/
 android/app/build/
 android/build/
-android/.cxx/
+android/app/.cxx/
 android/local.properties
 *.apk
 *.aab
