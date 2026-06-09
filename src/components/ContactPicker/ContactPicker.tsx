@@ -12,6 +12,8 @@ import {
 import { Contact } from '@/types/contacts';
 import { useContacts } from '@/hooks/useContacts';
 import { openDeviceSettings } from '@/utils/deviceSettings';
+import { PermissionDeniedState } from './components/PermissionDeniedState';
+import { ContactItem } from './components/ContactItem';
 import { styles } from './ContactPicker.styles';
 
 interface ContactPickerProps {
@@ -90,37 +92,6 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
     handleClose();
   };
 
-  const renderPermissionDeniedState = (): React.ReactElement => (
-    <View style={styles.permissionDeniedContainer}>
-      <Text style={styles.permissionIcon}>📱</Text>
-      <Text style={styles.permissionTitle}>Permiso de contactos denegado</Text>
-      <Text style={styles.permissionMessage}>
-        Para seleccionar contactos, necesitamos acceso a tu lista de contactos.
-        {canAskAgain
-          ? ' Puedes continuar ingresando los datos manualmente.'
-          : ' Puedes habilitar el permiso en la configuración de tu dispositivo o continuar manualmente.'}
-      </Text>
-
-      {!canAskAgain && (
-        <TouchableOpacity
-          style={styles.permissionButtonPrimary}
-          onPress={handleOpenSettings}
-          activeOpacity={0.8}>
-          <Text style={styles.permissionButtonTextPrimary}>
-            Abrir Configuración
-          </Text>
-        </TouchableOpacity>
-      )}
-
-      <TouchableOpacity
-        style={styles.permissionButtonSecondary}
-        onPress={handleManualEntry}
-        activeOpacity={0.8}>
-        <Text style={styles.permissionButtonText}>Ingresar manualmente</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
   const renderEmptyState = (): React.ReactElement => {
     if (isLoading) {
       return (
@@ -132,7 +103,13 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
     }
 
     if (permissionDenied) {
-      return renderPermissionDeniedState();
+      return (
+        <PermissionDeniedState
+          canAskAgain={canAskAgain}
+          onOpenSettings={handleOpenSettings}
+          onManualEntry={handleManualEntry}
+        />
+      );
     }
 
     if (searchQuery && filteredContacts.length === 0) {
@@ -153,27 +130,6 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
 
     return <></>;
   };
-
-  const renderContactItem = ({
-    item,
-  }: {
-    item: Contact;
-  }): React.ReactElement => (
-    <TouchableOpacity
-      style={styles.contactItem}
-      onPress={() => handleSelectContact(item)}
-      activeOpacity={0.7}>
-      <View style={styles.contactAvatar}>
-        <Text style={styles.contactAvatarText}>
-          {item.name.charAt(0).toUpperCase()}
-        </Text>
-      </View>
-      <View style={styles.contactInfo}>
-        <Text style={styles.contactName}>{item.name}</Text>
-        <Text style={styles.contactPhone}>{item.phoneNumber}</Text>
-      </View>
-    </TouchableOpacity>
-  );
 
   if (!isAvailable) {
     return null;
@@ -206,7 +162,9 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
 
         <FlatList
           data={filteredContacts}
-          renderItem={renderContactItem}
+          renderItem={({ item }) => (
+            <ContactItem contact={item} onPress={handleSelectContact} />
+          )}
           keyExtractor={item => item.id}
           contentContainerStyle={styles.listContent}
           ListEmptyComponent={renderEmptyState}
