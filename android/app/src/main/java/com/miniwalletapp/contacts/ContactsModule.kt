@@ -130,12 +130,19 @@ class ContactsModule(reactContext: ReactApplicationContext) :
         grantResults: IntArray
     ): Boolean {
         if (requestCode == PERMISSION_REQUEST_CODE) {
+            val activity = currentActivity
             val granted = grantResults.isNotEmpty() &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
 
+            val canAskAgain = if (activity != null && !granted) {
+                activity.shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)
+            } else {
+                true
+            }
+
             val result = Arguments.createMap().apply {
                 putBoolean("granted", granted)
-                putBoolean("canAskAgain", true)
+                putBoolean("canAskAgain", canAskAgain)
             }
 
             permissionPromise?.resolve(result)
