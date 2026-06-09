@@ -1,20 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import {
-  CheckCircle,
-  XCircle,
-  WifiOff,
-  Clock,
-  AlertCircle,
-} from 'lucide-react-native';
 import { useTransactionFlowStore } from '@/store/transactionFlowStore';
 import { useWalletStore } from '@/store/walletStore';
 import { TransactionErrorType } from '@/types';
-import { Button } from '@/components';
-import { formatAmount } from '@/utils/currency';
 import { AppStackParamList } from '@/navigation/types';
-import { Theme } from '@/theme';
+import { TransactionSuccess } from './components/TransactionSuccess';
+import { TransactionError } from './components/TransactionError';
 import { styles } from './ResultScreen.styles';
 
 type ResultScreenProps = {
@@ -83,88 +75,28 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ navigation }) => {
 
   if (result.success) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
-          <View style={styles.iconContainer}>
-            <CheckCircle size={80} color={Theme.colors.success} />
-          </View>
-
-          <Text style={styles.title}>¡Transacción exitosa!</Text>
-          <Text style={styles.message}>
-            Tu dinero ha sido enviado correctamente
-          </Text>
-
-          <View style={styles.receiptCard}>
-            <View style={styles.receiptRow}>
-              <Text style={styles.receiptLabel}>ID de transacción</Text>
-              <Text style={styles.receiptValue}>{result.transactionId}</Text>
-            </View>
-            <View style={styles.divider} />
-            <View style={styles.receiptRow}>
-              <Text style={styles.receiptLabel}>Destinatario</Text>
-              <Text style={styles.receiptValue}>{draft.recipient?.name}</Text>
-            </View>
-            <View style={styles.receiptRow}>
-              <Text style={styles.receiptLabel}>Monto enviado</Text>
-              <Text style={[styles.receiptValue, styles.amountValue]}>
-                ${formatAmount(draft.amount)}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.actions}>
-            <Button title="Volver al inicio" onPress={handleGoHome} />
-            <Button
-              title="Nueva transacción"
-              onPress={handleNewTransaction}
-              variant="secondary"
-            />
-          </View>
-        </View>
-      </SafeAreaView>
+      <TransactionSuccess
+        transactionId={result.transactionId || ''}
+        recipientName={draft.recipient?.name || ''}
+        amount={draft.amount}
+        onGoHome={handleGoHome}
+        onNewTransaction={handleNewTransaction}
+      />
     );
   }
-
-  const getErrorIcon = (): JSX.Element => {
-    switch (result.errorType) {
-      case TransactionErrorType.INSUFFICIENT_FUNDS:
-        return <AlertCircle size={80} color={Theme.colors.error} />;
-      case TransactionErrorType.NETWORK_ERROR:
-        return <WifiOff size={80} color={Theme.colors.error} />;
-      case TransactionErrorType.TIMEOUT:
-        return <Clock size={80} color={Theme.colors.warning} />;
-      default:
-        return <XCircle size={80} color={Theme.colors.error} />;
-    }
-  };
 
   const canRetry =
     result.errorType === TransactionErrorType.NETWORK_ERROR ||
     result.errorType === TransactionErrorType.TIMEOUT;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.iconContainer}>{getErrorIcon()}</View>
-
-        <Text style={styles.title}>Transacción fallida</Text>
-        <Text style={styles.message}>{result.errorMessage}</Text>
-
-        <View style={styles.actions}>
-          {canRetry && (
-            <Button
-              title={isProcessing ? 'Reintentando...' : 'Reintentar'}
-              onPress={handleRetry}
-              disabled={isProcessing}
-            />
-          )}
-          <Button
-            title="Volver al inicio"
-            onPress={handleGoHome}
-            variant={canRetry ? 'secondary' : 'primary'}
-          />
-        </View>
-      </View>
-    </SafeAreaView>
+    <TransactionError
+      errorType={result.errorType || TransactionErrorType.UNKNOWN}
+      errorMessage={result.errorMessage || 'Error desconocido'}
+      canRetry={canRetry}
+      isProcessing={isProcessing}
+      onRetry={handleRetry}
+      onGoHome={handleGoHome}
+    />
   );
 };
