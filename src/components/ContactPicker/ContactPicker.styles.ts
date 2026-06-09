@@ -48,23 +48,4 @@ export const styles = StyleSheet.create({
   listContent: {
     flexGrow: 1,
   },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: Theme.spacing.xl,
-    paddingVertical: Theme.spacing.xxl,
-  },
-  emptyText: {
-    ...Theme.typography.body,
-    color: Theme.colors.textSecondary,
-    textAlign: 'center',
-    marginTop: Theme.spacing.md,
-  },
-  errorText: {
-    ...Theme.typography.body,
-    color: Theme.colors.error,
-    textAlign: 'center',
-    marginBottom: Theme.spacing.lg,
-  },
 });

@@ -18,6 +18,7 @@ export const useInactivityTimeout = ({
   enabled = true,
 }: UseInactivityTimeoutParams): UseInactivityTimeoutReturn => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const hasTimedOutRef = useRef<boolean>(false);
   const [remainingTime, setRemainingTime] = useState<number>(timeoutMs);
   const [isActive, setIsActive] = useState<boolean>(enabled);
 
@@ -31,7 +32,7 @@ export const useInactivityTimeout = ({
   const startTimer = useCallback((): void => {
     clearTimer();
 
-    if (!enabled) {
+    if (!enabled || hasTimedOutRef.current) {
       return;
     }
 
@@ -40,16 +41,19 @@ export const useInactivityTimeout = ({
 
     timerRef.current = setTimeout(() => {
       setIsActive(false);
+      hasTimedOutRef.current = true;
       onTimeout();
     }, timeoutMs);
   }, [timeoutMs, onTimeout, enabled, clearTimer]);
 
   const resetTimer = useCallback((): void => {
-    startTimer();
+    if (!hasTimedOutRef.current) {
+      startTimer();
+    }
   }, [startTimer]);
 
   useEffect(() => {
-    if (enabled) {
+    if (enabled && !hasTimedOutRef.current) {
       startTimer();
     } else {
       clearTimer();

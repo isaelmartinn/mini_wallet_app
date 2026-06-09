@@ -194,4 +194,72 @@ describe('useInactivityTimeout', () => {
       expect(mockOnTimeout).not.toHaveBeenCalled();
     });
   });
+
+  describe('Prevención de reinicio después del timeout', () => {
+    it('should not restart timer after timeout has occurred', () => {
+      const { result } = renderHook(() =>
+        useInactivityTimeout({
+          timeoutMs: 5000,
+          onTimeout: mockOnTimeout,
+          enabled: true,
+        }),
+      );
+
+      act(() => {
+        jest.advanceTimersByTime(5000);
+      });
+
+      expect(mockOnTimeout).toHaveBeenCalledTimes(1);
+
+      act(() => {
+        result.current.resetTimer();
+      });
+
+      act(() => {
+        jest.advanceTimersByTime(5000);
+      });
+
+      expect(mockOnTimeout).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not call onTimeout multiple times', () => {
+      renderHook(() =>
+        useInactivityTimeout({
+          timeoutMs: 5000,
+          onTimeout: mockOnTimeout,
+          enabled: true,
+        }),
+      );
+
+      act(() => {
+        jest.advanceTimersByTime(5000);
+      });
+
+      expect(mockOnTimeout).toHaveBeenCalledTimes(1);
+
+      act(() => {
+        jest.advanceTimersByTime(10000);
+      });
+
+      expect(mockOnTimeout).toHaveBeenCalledTimes(1);
+    });
+
+    it('should set isActive to false after timeout', () => {
+      const { result } = renderHook(() =>
+        useInactivityTimeout({
+          timeoutMs: 5000,
+          onTimeout: mockOnTimeout,
+          enabled: true,
+        }),
+      );
+
+      expect(result.current.isActive).toBe(true);
+
+      act(() => {
+        jest.advanceTimersByTime(5000);
+      });
+
+      expect(result.current.isActive).toBe(false);
+    });
+  });
 });

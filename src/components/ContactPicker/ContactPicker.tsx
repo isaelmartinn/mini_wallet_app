@@ -6,7 +6,6 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
-  ActivityIndicator,
   SafeAreaView,
 } from 'react-native';
 import { Contact } from '@/types/contacts';
@@ -14,6 +13,9 @@ import { useContacts } from '@/hooks/useContacts';
 import { openDeviceSettings } from '@/utils/deviceSettings';
 import { PermissionDeniedState } from './components/PermissionDeniedState';
 import { ContactItem } from './components/ContactItem';
+import { LoadingState } from './components/LoadingState';
+import { NoResultsState } from './components/NoResultsState';
+import { NoContactsState } from './components/NoContactsState';
 import { styles } from './ContactPicker.styles';
 
 interface ContactPickerProps {
@@ -94,12 +96,7 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
 
   const renderEmptyState = (): React.ReactElement => {
     if (isLoading) {
-      return (
-        <View style={styles.emptyContainer}>
-          <ActivityIndicator size="large" color="#6366F1" />
-          <Text style={styles.emptyText}>Cargando contactos...</Text>
-        </View>
-      );
+      return <LoadingState />;
     }
 
     if (permissionDenied) {
@@ -113,19 +110,11 @@ export const ContactPicker: React.FC<ContactPickerProps> = ({
     }
 
     if (searchQuery && filteredContacts.length === 0) {
-      return (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No se encontraron contactos</Text>
-        </View>
-      );
+      return <NoResultsState />;
     }
 
     if (contacts.length === 0) {
-      return (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No hay contactos disponibles</Text>
-        </View>
-      );
+      return <NoContactsState />;
     }
 
     return <></>;

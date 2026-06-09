@@ -13,10 +13,24 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  iconContainer: {
+    marginBottom: Theme.spacing.xl,
+  },
   title: {
     ...Theme.typography.h2,
     color: Theme.colors.text,
     marginBottom: Theme.spacing.md,
     textAlign: 'center',
+  },
+  message: {
+    ...Theme.typography.body,
+    color: Theme.colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: Theme.spacing.xl,
+    paddingHorizontal: Theme.spacing.md,
+  },
+  actions: {
+    width: '100%',
+    gap: Theme.spacing.md,
   },
 });

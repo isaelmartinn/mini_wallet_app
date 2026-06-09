@@ -1,30 +1,30 @@
-# Refactoring: Extracción de Componentes
+# Refactoring: Component Extraction
 
-## Contexto
+## Context
 
-Durante la revisión del código se identificó el patrón de funciones `render*` que retornan JSX y que podrían ser extraídas como componentes independientes, siguiendo el mismo patrón aplicado en `ContactPicker`.
+During code review, a pattern of `render*` functions returning JSX was identified that could be extracted as independent components, following the same pattern applied in `ContactPicker`.
 
-## Patrón Aplicado en ContactPicker
+## Pattern Applied in ContactPicker
 
-### ✅ Completado
+### ✅ Completed
 
 1. **`renderPermissionDeniedState`** → `PermissionDeniedState`
-   - Ubicación: `src/components/ContactPicker/components/PermissionDeniedState/`
-   - Archivos: `.tsx`, `.styles.ts`, `.test.tsx`, `index.ts`
+   - Location: `src/components/ContactPicker/components/PermissionDeniedState/`
+   - Files: `.tsx`, `.styles.ts`, `.test.tsx`, `index.ts`
 
 2. **`renderContactItem`** → `ContactItem`
-   - Ubicación: `src/components/ContactPicker/components/ContactItem/`
-   - Archivos: `.tsx`, `.styles.ts`, `.test.tsx`, `index.ts`
+   - Location: `src/components/ContactPicker/components/ContactItem/`
+   - Files: `.tsx`, `.styles.ts`, `.test.tsx`, `index.ts`
 
-## Componentes Candidatos para Extracción
+## Component Candidates for Extraction
 
-### 1. TransactionList - Estados Vacíos y de Error
+### 1. TransactionList - Empty and Error States
 
-**Archivo:** `src/features/wallet/screens/HomeScreen/components/TransactionList/TransactionList.tsx`
+**File:** `src/features/wallet/screens/HomeScreen/components/TransactionList/TransactionList.tsx`
 
-**Componentes inline encontrados:**
+**Inline components found:**
 
-#### a) `EmptyState` (líneas 17-23)
+#### a) `EmptyState` (lines 17-23)
 ```tsx
 const EmptyState: React.FC = () => (
   <View style={styles.emptyContainer}>
@@ -35,12 +35,12 @@ const EmptyState: React.FC = () => (
 );
 ```
 
-**Acción sugerida:**
-- ✅ **Ya es un componente separado** dentro del mismo archivo
-- ⚠️ **Podría mejorarse:** Moverlo a su propia carpeta siguiendo el patrón
-- Ubicación propuesta: `src/features/wallet/screens/HomeScreen/components/TransactionList/components/EmptyState/`
+**Suggested action:**
+- ✅ **Already a separate component** within the same file
+- ⚠️ **Could be improved:** Move it to its own folder following the pattern
+- Proposed location: `src/features/wallet/screens/HomeScreen/components/TransactionList/components/EmptyState/`
 
-#### b) `ErrorState` (líneas 25-32)
+#### b) `ErrorState` (lines 25-32)
 ```tsx
 const ErrorState: React.FC<{ onRetry: () => void }> = ({ onRetry }) => (
   <View style={styles.errorContainer}>
@@ -52,18 +52,18 @@ const ErrorState: React.FC<{ onRetry: () => void }> = ({ onRetry }) => (
 );
 ```
 
-**Acción sugerida:**
-- ✅ **Ya es un componente separado** dentro del mismo archivo
-- ⚠️ **Podría mejorarse:** Moverlo a su propia carpeta siguiendo el patrón
-- Ubicación propuesta: `src/features/wallet/screens/HomeScreen/components/TransactionList/components/ErrorState/`
+**Suggested action:**
+- ✅ **Already a separate component** within the same file
+- ⚠️ **Could be improved:** Move it to its own folder following the pattern
+- Proposed location: `src/features/wallet/screens/HomeScreen/components/TransactionList/components/ErrorState/`
 
 ---
 
-### 2. ResultScreen - Función getErrorIcon
+### 2. ResultScreen - getErrorIcon Function
 
-**Archivo:** `src/features/transactions/screens/ResultScreen/ResultScreen.tsx`
+**File:** `src/features/transactions/screens/ResultScreen/ResultScreen.tsx`
 
-**Función encontrada (líneas 128-139):**
+**Function found (lines 128-139):**
 ```tsx
 const getErrorIcon = (): JSX.Element => {
   switch (result.errorType) {
@@ -79,19 +79,19 @@ const getErrorIcon = (): JSX.Element => {
 };
 ```
 
-**Acción sugerida:**
-- ⚠️ **NO extraer como componente separado**
-- **Razón:** Es una función helper simple que retorna iconos basados en tipo de error
-- **Alternativa:** Podría ser un helper/utility si se reutiliza en otros lugares
-- Si se extrae: `src/features/transactions/components/ErrorIcon/ErrorIcon.tsx`
+**Suggested action:**
+- ⚠️ **DO NOT extract as separate component**
+- **Reason:** It's a simple helper function that returns icons based on error type
+- **Alternative:** Could be a helper/utility if reused elsewhere
+- If extracted: `src/features/transactions/components/ErrorIcon/ErrorIcon.tsx`
 
 ---
 
-### 3. ResultScreen - Estados de Éxito y Error
+### 3. ResultScreen - Success and Error States
 
-**Archivo:** `src/features/transactions/screens/ResultScreen/ResultScreen.tsx`
+**File:** `src/features/transactions/screens/ResultScreen/ResultScreen.tsx`
 
-#### a) Estado de Éxito (líneas 84-125)
+#### a) Success State (lines 84-125)
 ```tsx
 if (result.success) {
   return (
@@ -108,13 +108,13 @@ if (result.success) {
 }
 ```
 
-**Acción sugerida:**
-- ✅ **Extraer como componente**
-- Nombre: `TransactionSuccess`
-- Ubicación: `src/features/transactions/screens/ResultScreen/components/TransactionSuccess/`
+**Suggested action:**
+- ✅ **Extract as component**
+- Name: `TransactionSuccess`
+- Location: `src/features/transactions/screens/ResultScreen/components/TransactionSuccess/`
 - Props: `{ transactionId: string; recipientName: string; amount: number; onGoHome: () => void; onNewTransaction: () => void }`
 
-#### b) Estado de Error (líneas 145-169)
+#### b) Error State (lines 145-169)
 ```tsx
 return (
   <SafeAreaView style={styles.container}>
@@ -127,19 +127,19 @@ return (
 );
 ```
 
-**Acción sugerida:**
-- ✅ **Extraer como componente**
-- Nombre: `TransactionError`
-- Ubicación: `src/features/transactions/screens/ResultScreen/components/TransactionError/`
+**Suggested action:**
+- ✅ **Extract as component**
+- Name: `TransactionError`
+- Location: `src/features/transactions/screens/ResultScreen/components/TransactionError/`
 - Props: `{ errorType: TransactionErrorType; errorMessage: string; canRetry: boolean; isProcessing: boolean; onRetry: () => void; onGoHome: () => void }`
 
 ---
 
 ### 4. ContactPicker - renderEmptyState
 
-**Archivo:** `src/components/ContactPicker/ContactPicker.tsx`
+**File:** `src/components/ContactPicker/ContactPicker.tsx`
 
-**Función encontrada (líneas 94-132):**
+**Function found (lines 94-132):**
 ```tsx
 const renderEmptyState = (): React.ReactElement => {
   if (isLoading) {
@@ -181,21 +181,21 @@ const renderEmptyState = (): React.ReactElement => {
 };
 ```
 
-**Acción sugerida:**
-- ⚠️ **NO extraer completamente**
-- **Razón:** Es una función de lógica condicional que orquesta diferentes estados
-- **Alternativa:** Extraer los estados individuales:
+**Suggested action:**
+- ⚠️ **DO NOT extract completely**
+- **Reason:** It's a conditional logic function that orchestrates different states
+- **Alternative:** Extract individual states:
   - `LoadingState` → `src/components/ContactPicker/components/LoadingState/`
   - `NoResultsState` → `src/components/ContactPicker/components/NoResultsState/`
   - `NoContactsState` → `src/components/ContactPicker/components/NoContactsState/`
 
 ---
 
-### 5. RecipientScreen - Botón de Contactos
+### 5. RecipientScreen - Contacts Button
 
-**Archivo:** `src/features/transactions/screens/RecipientScreen/RecipientScreen.tsx`
+**File:** `src/features/transactions/screens/RecipientScreen/RecipientScreen.tsx`
 
-**Código inline (líneas 118-127):**
+**Inline code (lines 118-127):**
 ```tsx
 {isContactsAvailable && (
   <TouchableOpacity
@@ -209,33 +209,33 @@ const renderEmptyState = (): React.ReactElement => {
 )}
 ```
 
-**Acción sugerida:**
-- ⚠️ **NO extraer**
-- **Razón:** Es demasiado simple (un solo botón con texto)
-- **Alternativa:** Si se reutiliza, usar el componente `Button` con variante personalizada
+**Suggested action:**
+- ⚠️ **DO NOT extract**
+- **Reason:** Too simple (single button with text)
+- **Alternative:** If reused, use `Button` component with custom variant
 
 ---
 
-## Resumen de Acciones Recomendadas
+## Summary of Recommended Actions
 
-### Alta Prioridad (Extraer)
+### High Priority (Extract)
 1. ✅ `ResultScreen` → `TransactionSuccess` component
 2. ✅ `ResultScreen` → `TransactionError` component
 3. ✅ `ContactPicker` → `LoadingState` component
 4. ✅ `ContactPicker` → `NoResultsState` component
 5. ✅ `ContactPicker` → `NoContactsState` component
 
-### Media Prioridad (Mejorar estructura existente)
-6. ⚠️ `TransactionList` → Mover `EmptyState` a carpeta separada
-7. ⚠️ `TransactionList` → Mover `ErrorState` a carpeta separada
+### Medium Priority (Improve existing structure)
+6. ⚠️ `TransactionList` → Move `EmptyState` to separate folder
+7. ⚠️ `TransactionList` → Move `ErrorState` to separate folder
 
-### Baja Prioridad (Mantener como está)
-8. ❌ `ResultScreen.getErrorIcon` → Mantener como función helper
-9. ❌ `RecipientScreen` botón de contactos → Demasiado simple
+### Low Priority (Keep as is)
+8. ❌ `ResultScreen.getErrorIcon` → Keep as helper function
+9. ❌ `RecipientScreen` contacts button → Too simple
 
 ---
 
-## Estructura de Carpetas Propuesta
+## Proposed Folder Structure
 
 ```
 src/
@@ -244,9 +244,9 @@ src/
 │       ├── components/
 │       │   ├── ContactItem/
 │       │   ├── PermissionDeniedState/
-│       │   ├── LoadingState/          ← NUEVO
-│       │   ├── NoResultsState/        ← NUEVO
-│       │   └── NoContactsState/       ← NUEVO
+│       │   ├── LoadingState/          ← NEW
+│       │   ├── NoResultsState/        ← NEW
+│       │   └── NoContactsState/       ← NEW
 │       ├── ContactPicker.tsx
 │       └── ContactPicker.styles.ts
 │
@@ -255,8 +255,8 @@ src/
     │   └── screens/
     │       └── ResultScreen/
     │           ├── components/
-    │           │   ├── TransactionSuccess/  ← NUEVO
-    │           │   └── TransactionError/    ← NUEVO
+    │           │   ├── TransactionSuccess/  ← NEW
+    │           │   └── TransactionError/    ← NEW
     │           ├── ResultScreen.tsx
     │           └── ResultScreen.styles.ts
     │
@@ -266,36 +266,36 @@ src/
                 └── components/
                     └── TransactionList/
                         ├── components/
-                        │   ├── EmptyState/    ← MOVER
-                        │   └── ErrorState/    ← MOVER
+                        │   ├── EmptyState/    ← MOVE
+                        │   └── ErrorState/    ← MOVE
                         ├── TransactionList.tsx
                         └── TransactionList.styles.ts
 ```
 
 ---
 
-## Criterios para Extracción de Componentes
+## Criteria for Component Extraction
 
-### ✅ Extraer cuando:
-1. El código JSX tiene más de 15-20 líneas
-2. Tiene su propia lógica de presentación
-3. Podría ser reutilizable en el futuro
-4. Mejora la legibilidad del componente padre
-5. Tiene múltiples elementos y estilos propios
+### ✅ Extract when:
+1. JSX code has more than 15-20 lines
+2. Has its own presentation logic
+3. Could be reusable in the future
+4. Improves parent component readability
+5. Has multiple elements and its own styles
 
-### ❌ NO extraer cuando:
-1. Es un elemento simple (< 10 líneas)
-2. Es solo lógica condicional sin JSX complejo
-3. Está fuertemente acoplado al componente padre
-4. Es una función helper que retorna primitivos o iconos simples
-5. La extracción no mejora la legibilidad
+### ❌ DO NOT extract when:
+1. It's a simple element (< 10 lines)
+2. It's only conditional logic without complex JSX
+3. It's tightly coupled to the parent component
+4. It's a helper function that returns primitives or simple icons
+5. Extraction doesn't improve readability
 
 ---
 
-## Notas Adicionales
+## Additional Notes
 
-- Todos los componentes extraídos deben seguir las reglas de `.ai/rules.md`
-- Cada componente debe tener su archivo de tests
-- Los estilos deben estar en archivos `.styles.ts` separados
-- Usar TypeScript con tipos estrictos (no `any`)
-- Incluir archivo `index.ts` para exports limpios
+- All extracted components must follow `.ai/rules.md` rules
+- Each component must have its test file
+- Styles must be in separate `.styles.ts` files
+- Use TypeScript with strict types (no `any`)
+- Include `index.ts` file for clean exports
