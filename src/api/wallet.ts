@@ -103,21 +103,26 @@ const MOCK_TRANSACTIONS: Transaction[] = [
   },
 ];
 
+const WALLET_API_OUTCOME_PERCENTAGES = {
+  SUCCESS: 90,
+};
+
 const simulateNetworkDelay = (): Promise<void> => {
   return new Promise(resolve => {
     setTimeout(resolve, 800 + Math.random() * 700);
   });
 };
 
-const shouldSimulateError = (): boolean => {
-  return Math.random() < 0.1;
+const isSuccessfulRequest = (): boolean => {
+  const random = Math.random() * 100;
+  return random < WALLET_API_OUTCOME_PERCENTAGES.SUCCESS;
 };
 
 export const walletApi = {
   getWalletData: async (userId?: string): Promise<WalletDataResponse> => {
     await simulateNetworkDelay();
 
-    if (shouldSimulateError()) {
+    if (!isSuccessfulRequest()) {
       return {
         success: false,
         balance: 0,
