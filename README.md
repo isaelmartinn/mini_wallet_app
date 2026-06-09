@@ -200,16 +200,14 @@ Centralized in `src/theme/Theme.ts`:
 
 Each user has a different balance to test various scenarios:
 
-| Usuario | Email | Teléfono | Balance |
+| User | Email | Phone | Balance |
 |---------|-------|----------|---------|
 | **Juan Pérez** | `juan@example.com` | `+52 55 1234 5678` | **$5,835.01** |
 | **María García** | `maria@example.com` | `+52 55 8765 4321` | **$12,500.00** |
 | **Carlos López** | `carlos@example.com` | `+52 55 5555 5555` | **$7,500.50** |
 
-**Usuario Demo**: Si ingresas con cualquier otro email o teléfono válido, se creará un usuario demo con un balance de **$10,000.00**.
+**Demo User**: If you log in with any other valid email or phone number, a demo user will be created with a balance of **$10,000.00**.
 
-**Nota**: Los balances se almacenan internamente en centavos para precisión, y se convierten a pesos para el UI.
+**Note**: Balances are stored internally in cents for precision and converted to pesos for the UI.
 
-## License
-
-Private project
+This project required all Friday afternoon, a few hours on Saturday night, Sunday afternoon, and Monday afternoon to fine-tune the details.
