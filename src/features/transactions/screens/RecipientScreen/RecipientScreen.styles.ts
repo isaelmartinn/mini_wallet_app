@@ -9,8 +9,13 @@ export const styles = StyleSheet.create({
   keyboardView: {
     flex: 1,
   },
-  content: {
+  scrollView: {
     flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  content: {
     paddingHorizontal: Theme.spacing.lg,
     paddingTop: Theme.spacing.xl,
   },
