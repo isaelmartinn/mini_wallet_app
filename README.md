@@ -78,64 +78,21 @@ yarn test --watch
 yarn test --coverage
 ```
 
-### Linting
+### Code Quality
 
 ```bash
 # Run ESLint
 yarn lint
+
+# Run ESLint and auto-fix issues
+yarn lint:fix
+
+# Format code with Prettier
+yarn format
+
+# Check code formatting without modifying files
+yarn format:check
 ```
-
-## Features
-
-### ✅ Plan 02: Authentication & Session (Completed)
-
-- **Login Screen**: Modern UI with email/phone validation
-- **Session Persistence**: AsyncStorage integration via Zustand persist
-- **Navigation Guard**: Conditional rendering (AuthStack vs AppStack)
-- **Mock Authentication**: Simulated API with validation
-- **Error Handling**: Inline validation feedback
-- **Logout Functionality**: Clear session and redirect
-
-### ✅ Plan 03: Wallet Core - Balance & History (Completed)
-
-- **Balance Card**: Apple Wallet-style display with MXN formatting
-- **Transaction List**: FlatList with pull-to-refresh and virtualización
-- **Transaction Items**: Visual icons, relative dates, status badges
-- **State Management**: walletStore with Zustand (loading, error, empty states)
-- **Mock API**: Realistic network simulation with 10 diverse transactions
-- **Custom Hook**: `useWallet` for clean UI/logic separation
-- **Tests**: 18 tests covering store, utils, and components
-- **Performance**: Optimized with FlatList, prevented duplicate calls
-
-**Quick Start**: `./scripts/verify-wallet.sh`
-
-### ✅ Infrastructure
-
-- TypeScript strict mode (no `any` allowed)
-- Path aliases (`@/`) configured in Babel, Metro, and TypeScript
-- Feature-based architecture
-- Centralized theme system
-- Reusable components (Input, Button, BalanceCard, TransactionItem, TransactionList)
-- Development rules documented in `.ai/rules.md`
-- Automated testing with Jest & React Native Testing Library
-
-### ✅ Plan 05: Native Contacts Module (Completed)
-
-- **Custom Native Module**: Legacy Bridge implementation for iOS & Android
-- **Contact Picker**: Modal with search, FlatList optimization, avatar initials
-- **Permission Handling**: Runtime permission requests with graceful fallback
-- **Service Layer**: `ContactsService` abstraction over NativeModules
-- **Custom Hook**: `useContacts` for state management (contacts, loading, error, permissions)
-- **Fallback Support**: Manual input always available if permission denied
-- **Performance**: Limited to 100 contacts, local search, deduplication
-- **Tests**: Unit tests for service and hook with mocked NativeModules
-- **Documentation**: Complete setup guide in `NATIVE_MODULE_SETUP.md`
-
-**⚠️ iOS Setup Required**: See `NATIVE_MODULE_SETUP.md` for Xcode configuration
-
-### 🚧 Upcoming Features
-
-- Plan 04: Transaction Flow & Validations (In Progress)
 
 ## Development
 
@@ -179,21 +136,6 @@ Centralized in `src/theme/Theme.ts`:
 - **Border Radius**: sm → full
 - **Shadows**: sm, md, lg
 
-### State Management
-
-**Zustand** stores with TypeScript:
-- `authStore`: User session, login/logout
-- `walletStore`: Balance, transactions, fetch/refresh actions
-- Persist middleware for AsyncStorage (authStore)
-- Optimized selectors to prevent re-renders
-- Separate loading states (initial vs refresh)
-
-### Components
-
-**Reusable UI Components**:
-- `Input`: Labeled input with validation, icons, error states
-- `Button`: Variants (primary, secondary, outline, ghost), sizes, loading state
-
 ### Mock Data
 
 #### Test Users
@@ -209,5 +151,7 @@ Each user has a different balance to test various scenarios:
 **Demo User**: If you log in with any other valid email or phone number, a demo user will be created with a balance of **$10,000.00**.
 
 **Note**: Balances are stored internally in cents for precision and converted to pesos for the UI.
+
+### Time Invested
 
 This project required all Friday afternoon, a few hours on Saturday night, Sunday afternoon, and Monday afternoon to fine-tune the details.
