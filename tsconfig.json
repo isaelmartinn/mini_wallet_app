@@ -15,8 +15,13 @@
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
+    "types": ["jest", "@testing-library/react-native"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@contexts/*": ["src/contexts/*"],
+      "@shared/*": ["src/shared/*"],
+      "@core/*": ["src/core/*"],
+      "@dependency-injection/*": ["src/core/dependency-injection/*"]
     }
   },
   "include": ["src/**/*", "index.js"],
