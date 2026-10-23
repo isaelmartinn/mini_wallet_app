@@ -8,8 +8,8 @@ import {
   TextInput,
   SafeAreaView,
 } from 'react-native';
-import { Contact } from '@/types/contacts';
 import { useContacts } from '@/hooks/useContacts';
+import { Contact } from '@/contexts/contacts/domain/entities/Contact';
 import { openDeviceSettings } from '@/utils/deviceSettings';
 import { PermissionDeniedState } from './components/PermissionDeniedState';
 import { ContactItem } from './components/ContactItem';

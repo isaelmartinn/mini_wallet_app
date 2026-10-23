@@ -1,14 +1,10 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { ContactItem } from './ContactItem';
-import { Contact } from '@/types/contacts';
+import { Contact } from '@/contexts/contacts/domain/entities/Contact';
 
 describe('ContactItem', () => {
-  const mockContact: Contact = {
-    id: '1',
-    name: 'John Doe',
-    phoneNumber: '+1234567890',
-  };
+  const mockContact = new Contact('1', 'John Doe', '+1234567890');
 
   const mockOnPress = jest.fn();
 
@@ -35,11 +31,7 @@ describe('ContactItem', () => {
   });
 
   it('displays first letter uppercase in avatar', () => {
-    const lowercaseContact: Contact = {
-      id: '2',
-      name: 'jane smith',
-      phoneNumber: '+9876543210',
-    };
+    const lowercaseContact = new Contact('2', 'jane smith', '+9876543210');
 
     const { getByText } = render(
       <ContactItem contact={lowercaseContact} onPress={mockOnPress} />,
@@ -61,11 +53,7 @@ describe('ContactItem', () => {
   });
 
   it('renders correctly with empty phone number', () => {
-    const contactWithoutPhone: Contact = {
-      id: '3',
-      name: 'No Phone',
-      phoneNumber: '',
-    };
+    const contactWithoutPhone = new Contact('3', 'No Phone', '');
 
     const { getByText } = render(
       <ContactItem contact={contactWithoutPhone} onPress={mockOnPress} />,

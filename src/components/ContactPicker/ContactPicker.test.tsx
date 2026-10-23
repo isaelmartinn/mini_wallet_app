@@ -3,7 +3,7 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { ContactPicker } from './ContactPicker';
 import { useContacts } from '@/hooks/useContacts';
 import { openDeviceSettings } from '@/utils/deviceSettings';
-import { Contact } from '@/types/contacts';
+import { Contact } from '@/contexts/contacts/domain/entities/Contact';
 
 jest.mock('@/hooks/useContacts');
 jest.mock('@/utils/deviceSettings');
@@ -37,9 +37,9 @@ describe('ContactPicker', () => {
   >;
 
   const mockContacts: Contact[] = [
-    { id: '1', name: 'John Doe', phoneNumber: '1234567890' },
-    { id: '2', name: 'Jane Smith', phoneNumber: '0987654321' },
-    { id: '3', name: 'Bob Johnson', phoneNumber: '5555555555' },
+    new Contact('1', 'John Doe', '1234567890'),
+    new Contact('2', 'Jane Smith', '0987654321'),
+    new Contact('3', 'Bob Johnson', '5555555555'),
   ];
 
   const defaultUseContactsReturn = {
@@ -515,7 +515,7 @@ describe('ContactPicker', () => {
     it('should uppercase the avatar letter', () => {
       (useContacts as jest.Mock).mockReturnValue({
         ...defaultUseContactsReturn,
-        contacts: [{ id: '1', name: 'alice', phoneNumber: '1234567890' }],
+        contacts: [new Contact('1', 'alice', '1234567890')],
       });
 
       const { getByText } = render(

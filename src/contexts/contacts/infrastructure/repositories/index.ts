@@ -1,0 +1,1 @@
+export { NativeContactsRepository } from './NativeContactsRepository';

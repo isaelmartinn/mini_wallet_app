@@ -1,8 +1,16 @@
+import { NativeContactsRepository } from '@/contexts/contacts/infrastructure/repositories/NativeContactsRepository';
+import { RequestContactsPermissionUseCase } from '@/contexts/contacts/application/use-cases/RequestContactsPermissionUseCase';
+import { GetContactsUseCase } from '@/contexts/contacts/application/use-cases/GetContactsUseCase';
+
 /**
  * Contacts context provider.
- * Placeholder for future dependency injection of contacts-related use cases and repositories.
+ * Provides dependency injection for contacts-related use cases and repositories.
  */
+const repository = new NativeContactsRepository();
+
 export const ContactsProvider = {
-  // Placeholder for contacts dependencies
-  // To be populated in future phases
+  repository,
+  requestPermissionUseCase: new RequestContactsPermissionUseCase(repository),
+  getContactsUseCase: new GetContactsUseCase(repository),
+  isAvailable: repository.isAvailable(),
 };

@@ -16,8 +16,8 @@ import {
 } from '@/features/transactions/utils';
 import { Recipient } from '@/features/transactions/types';
 import { Button, Input, ContactPicker } from '@/components';
-import { Contact } from '@/types/contacts';
-import { contactsService } from '@/services/ContactsService';
+import { Contact } from '@/contexts/contacts/domain/entities/Contact';
+import { useContacts } from '@/hooks/useContacts';
 import { AppStackParamList } from '@/navigation/types';
 import { styles } from './RecipientScreen.styles';
 
@@ -37,7 +37,7 @@ export const RecipientScreen: React.FC<RecipientScreenProps> = ({
   }>({});
   const [showContactPicker, setShowContactPicker] = useState(false);
   const [isFromContact, setIsFromContact] = useState(false);
-  const isContactsAvailable = contactsService.isAvailable();
+  const { isAvailable: isContactsAvailable } = useContacts();
 
   const handleContinue = (): void => {
     const normalizedPhone = normalizePhoneNumber(accountOrPhone.trim());

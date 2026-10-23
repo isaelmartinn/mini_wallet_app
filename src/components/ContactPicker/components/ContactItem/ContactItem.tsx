@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Contact } from '@/types/contacts';
+import { Contact } from '@/contexts/contacts/domain/entities/Contact';
 import { styles } from './ContactItem.styles';
 
 interface ContactItemProps {

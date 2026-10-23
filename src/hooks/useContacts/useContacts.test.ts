@@ -1,24 +1,41 @@
-import { renderHook, act, waitFor } from '@testing-library/react-native';
-import { useContacts } from './useContacts';
-import { contactsService } from '@/services/ContactsService';
-import { Contact } from '@/types/contacts';
+/**
+ * Wrapper Hook Test
+ * Tests the wrapper hook in src/hooks/useContacts/useContacts.ts
+ * which bridges the old hook location to the new hexagonal context.
+ *
+ * This test verifies that the wrapper correctly injects dependencies
+ * from the DI container and delegates to the core hook.
+ */
 
-jest.mock('@/services/ContactsService', () => ({
-  contactsService: {
-    isAvailable: jest.fn(),
-    requestPermission: jest.fn(),
-    getContacts: jest.fn(),
+import { renderHook, act } from '@testing-library/react-native';
+import { useContacts } from './useContacts';
+import { di } from '@/core/dependency-injection';
+import { Contact } from '@/contexts/contacts/domain/entities/Contact';
+import { ContactsPermissionStatus } from '@/contexts/contacts/domain/value-objects/ContactsPermissionStatus';
+import { Result } from '@/shared/domain/result/Result';
+
+jest.mock('@/core/dependency-injection', () => ({
+  di: {
+    contacts: {
+      requestPermissionUseCase: {
+        execute: jest.fn(),
+      },
+      getContactsUseCase: {
+        execute: jest.fn(),
+      },
+      isAvailable: true,
+    },
   },
 }));
 
-describe('useContacts', () => {
-  const mockContactsService = contactsService as jest.Mocked<
-    typeof contactsService
-  >;
+describe('useContacts (Wrapper Hook)', () => {
+  let mockRequestPermissionUseCase: any;
+  let mockGetContactsUseCase: any;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockContactsService.isAvailable.mockReturnValue(true);
+    mockRequestPermissionUseCase = di.contacts.requestPermissionUseCase;
+    mockGetContactsUseCase = di.contacts.getContactsUseCase;
   });
 
   it('should initialize with default values', () => {
@@ -29,243 +46,78 @@ describe('useContacts', () => {
     expect(result.current.error).toBeNull();
     expect(result.current.permissionGranted).toBe(false);
     expect(result.current.canAskAgain).toBe(true);
-  });
-
-  it('should return isAvailable status from service', () => {
-    mockContactsService.isAvailable.mockReturnValue(true);
-    const { result } = renderHook(() => useContacts());
-
     expect(result.current.isAvailable).toBe(true);
   });
 
-  describe('requestPermission', () => {
-    it('should request permission and update state on success', async () => {
-      mockContactsService.requestPermission.mockResolvedValue({
-        granted: true,
-        canAskAgain: true,
-      });
+  it('should request permission successfully', async () => {
+    const permissionStatus = new ContactsPermissionStatus(true, false);
+    mockRequestPermissionUseCase.execute.mockResolvedValue(
+      Result.ok(permissionStatus),
+    );
 
-      const { result } = renderHook(() => useContacts());
+    const { result } = renderHook(() => useContacts());
 
-      let permissionResult: boolean = false;
-
-      await act(async () => {
-        permissionResult = await result.current.requestPermission();
-      });
-
-      expect(permissionResult).toBe(true);
-      expect(result.current.permissionGranted).toBe(true);
-      expect(result.current.canAskAgain).toBe(true);
-      expect(result.current.error).toBeNull();
+    let permissionGranted = false;
+    await act(async () => {
+      permissionGranted = await result.current.requestPermission();
     });
 
-    it('should handle permission denial', async () => {
-      mockContactsService.requestPermission.mockResolvedValue({
-        granted: false,
-        canAskAgain: true,
-      });
-
-      const { result } = renderHook(() => useContacts());
-
-      let permissionResult: boolean = false;
-
-      await act(async () => {
-        permissionResult = await result.current.requestPermission();
-      });
-
-      expect(permissionResult).toBe(false);
-      expect(result.current.permissionGranted).toBe(false);
-      expect(result.current.canAskAgain).toBe(true);
-      expect(result.current.error).toBe('Permiso de contactos denegado');
-    });
-
-    it('should handle errors when module is not available', async () => {
-      mockContactsService.isAvailable.mockReturnValue(false);
-
-      const { result } = renderHook(() => useContacts());
-
-      let permissionResult: boolean = false;
-
-      await act(async () => {
-        permissionResult = await result.current.requestPermission();
-      });
-
-      expect(permissionResult).toBe(false);
-      expect(result.current.error).toBe(
-        'El módulo de contactos no está disponible',
-      );
-    });
+    expect(permissionGranted).toBe(true);
+    expect(result.current.permissionGranted).toBe(true);
+    expect(result.current.canAskAgain).toBe(false);
+    expect(result.current.error).toBeNull();
   });
 
-  describe('fetchContacts', () => {
-    it('should fetch contacts successfully when permission is granted', async () => {
-      const mockContacts: Contact[] = [
-        { id: '1', name: 'John Doe', phoneNumber: '1234567890' },
-        { id: '2', name: 'Jane Smith', phoneNumber: '0987654321' },
-      ];
+  it('should handle permission denial', async () => {
+    const permissionStatus = new ContactsPermissionStatus(false, true);
+    mockRequestPermissionUseCase.execute.mockResolvedValue(
+      Result.ok(permissionStatus),
+    );
 
-      mockContactsService.requestPermission.mockResolvedValue({
-        granted: true,
-        canAskAgain: true,
-      });
-      mockContactsService.getContacts.mockResolvedValue(mockContacts);
+    const { result } = renderHook(() => useContacts());
 
-      const { result } = renderHook(() => useContacts());
-
-      await act(async () => {
-        await result.current.fetchContacts();
-      });
-
-      await waitFor(() => {
-        expect(result.current.contacts).toEqual(mockContacts);
-        expect(result.current.isLoading).toBe(false);
-        expect(result.current.error).toBeNull();
-      });
+    let permissionGranted = false;
+    await act(async () => {
+      permissionGranted = await result.current.requestPermission();
     });
 
-    it('should request permission before fetching if not granted', async () => {
-      const mockContacts: Contact[] = [
-        { id: '1', name: 'John Doe', phoneNumber: '1234567890' },
-      ];
-
-      mockContactsService.requestPermission.mockResolvedValue({
-        granted: true,
-        canAskAgain: true,
-      });
-      mockContactsService.getContacts.mockResolvedValue(mockContacts);
-
-      const { result } = renderHook(() => useContacts());
-
-      await act(async () => {
-        await result.current.fetchContacts();
-      });
-
-      expect(mockContactsService.requestPermission).toHaveBeenCalled();
-      expect(mockContactsService.getContacts).toHaveBeenCalled();
-    });
-
-    it('should handle fetch errors', async () => {
-      mockContactsService.requestPermission.mockResolvedValue({
-        granted: true,
-        canAskAgain: true,
-      });
-      mockContactsService.getContacts.mockRejectedValue(
-        new Error('Fetch error'),
-      );
-
-      const { result } = renderHook(() => useContacts());
-
-      await act(async () => {
-        await result.current.fetchContacts();
-      });
-
-      await waitFor(() => {
-        expect(result.current.error).toBe('Fetch error');
-        expect(result.current.contacts).toEqual([]);
-      });
-    });
-
-    it('should not fetch if module is not available', async () => {
-      mockContactsService.isAvailable.mockReturnValue(false);
-
-      const { result } = renderHook(() => useContacts());
-
-      await act(async () => {
-        await result.current.fetchContacts();
-      });
-
-      expect(result.current.error).toBe(
-        'El módulo de contactos no está disponible',
-      );
-      expect(mockContactsService.getContacts).not.toHaveBeenCalled();
-    });
+    expect(permissionGranted).toBe(false);
+    expect(result.current.permissionGranted).toBe(false);
+    expect(result.current.error).toBe('Permiso de contactos denegado');
   });
 
-  describe('reset', () => {
-    it('should reset all state to initial values', async () => {
-      const mockContacts: Contact[] = [
-        { id: '1', name: 'John Doe', phoneNumber: '1234567890' },
-      ];
+  it('should fetch contacts successfully', async () => {
+    const contacts = [
+      new Contact('1', 'John Doe', '+1234567890'),
+      new Contact('2', 'Jane Doe', '+0987654321'),
+    ];
+    const permissionStatus = new ContactsPermissionStatus(true, false);
 
-      mockContactsService.requestPermission.mockResolvedValue({
-        granted: true,
-        canAskAgain: true,
-      });
-      mockContactsService.getContacts.mockResolvedValue(mockContacts);
+    mockRequestPermissionUseCase.execute.mockResolvedValue(
+      Result.ok(permissionStatus),
+    );
+    mockGetContactsUseCase.execute.mockResolvedValue(Result.ok(contacts));
 
-      const { result } = renderHook(() => useContacts());
+    const { result } = renderHook(() => useContacts());
 
-      await act(async () => {
-        await result.current.fetchContacts();
-      });
-
-      await waitFor(() => {
-        expect(result.current.contacts.length).toBeGreaterThan(0);
-      });
-
-      act(() => {
-        result.current.reset();
-      });
-
-      expect(result.current.contacts).toEqual([]);
-      expect(result.current.error).toBeNull();
-      expect(result.current.isLoading).toBe(false);
-      expect(result.current.canAskAgain).toBe(true);
+    await act(async () => {
+      await result.current.fetchContacts();
     });
 
-    it('should reset canAskAgain when reset is called', async () => {
-      mockContactsService.requestPermission.mockResolvedValue({
-        granted: false,
-        canAskAgain: false,
-      });
-
-      const { result } = renderHook(() => useContacts());
-
-      await act(async () => {
-        await result.current.requestPermission();
-      });
-
-      expect(result.current.canAskAgain).toBe(false);
-
-      act(() => {
-        result.current.reset();
-      });
-
-      expect(result.current.canAskAgain).toBe(true);
-    });
+    expect(result.current.contacts).toEqual(contacts);
+    expect(result.current.error).toBeNull();
   });
 
-  describe('canAskAgain tracking', () => {
-    it('should track canAskAgain status when permission is denied permanently', async () => {
-      mockContactsService.requestPermission.mockResolvedValue({
-        granted: false,
-        canAskAgain: false,
-      });
+  it('should reset state', () => {
+    const { result } = renderHook(() => useContacts());
 
-      const { result } = renderHook(() => useContacts());
-
-      await act(async () => {
-        await result.current.requestPermission();
-      });
-
-      expect(result.current.canAskAgain).toBe(false);
-      expect(result.current.permissionGranted).toBe(false);
+    act(() => {
+      result.current.reset();
     });
 
-    it('should track canAskAgain status when permission can be requested again', async () => {
-      mockContactsService.requestPermission.mockResolvedValue({
-        granted: false,
-        canAskAgain: true,
-      });
-
-      const { result } = renderHook(() => useContacts());
-
-      await act(async () => {
-        await result.current.requestPermission();
-      });
-
-      expect(result.current.canAskAgain).toBe(true);
-      expect(result.current.permissionGranted).toBe(false);
-    });
+    expect(result.current.contacts).toEqual([]);
+    expect(result.current.error).toBeNull();
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.canAskAgain).toBe(true);
   });
 });
